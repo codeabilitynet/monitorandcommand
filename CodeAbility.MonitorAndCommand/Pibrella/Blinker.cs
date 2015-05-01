@@ -46,7 +46,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		private Timer aTimer;
 
         PibrellaBoard pibrella = new PibrellaBoard();
-        MessageClient client = null; 
+        MessageClient messageClient = null; 
 
         public Blinker(int period) 
         {
@@ -55,7 +55,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
             Running = false; 
 			Blinking = false;
 
-            client = new MessageClient(Environment.Devices.PIBRELLA, ipAddress, portNumber);
+            messageClient = new MessageClient(Environment.Devices.PIBRELLA);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
 			pibrella.Connection.Open();            
@@ -67,7 +67,8 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			string parameter = e.Parameter.ToString();
             string content = e.Content.ToString();
 
-			if (commandName.Equals(Environment.Pibrella.COMMAND_TOGGLE_LED)) {
+			if (commandName.Equals(Environment.Pibrella.COMMAND_TOGGLE_LED))
+            {
 				if (parameter.Equals(Environment.Pibrella.OBJECT_GREEN_LED))
 					ToggleGreenLed();
                 else if (parameter.Equals(Environment.Pibrella.OBJECT_YELLOW_LED))
@@ -95,9 +96,9 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
         private void ButtonPressedSimulator()
         {
-            client.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_ON);
+            messageClient.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_ON);
             System.Threading.Thread.Sleep(BUTTON_PRESSED_DURATION);
-            client.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_OFF);           
+            messageClient.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_OFF);           
         }
 
         public void Start()
@@ -105,21 +106,20 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			Running = true;
 			Blinking = true;
 
-            client.CommandReceived += client_CommandReceived;
-            client.Start();
+            messageClient.CommandReceived += client_CommandReceived;
+            messageClient.Start(ipAddress, portNumber);
 
-			if (pibrella.Connection.IsOpened) {
+			if (pibrella.Connection.IsOpened)
+            {
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_GREEN_LED, Environment.Pibrella.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_YELLOW_LED, Environment.Pibrella.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_RED_LED, Environment.Pibrella.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS);
 
-                //Simulating a Pibrella device
-                client.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_GREEN_LED, Environment.Pibrella.DATA_LED_STATUS);
-                client.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_YELLOW_LED, Environment.Pibrella.DATA_LED_STATUS);
-                client.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_RED_LED, Environment.Pibrella.DATA_LED_STATUS);
-                client.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS);
-
-                client.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_GREEN_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
-                client.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_YELLOW_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
-                client.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_RED_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
-                client.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.COMMAND_BUTTON_PRESSED);
+                messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_GREEN_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_YELLOW_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_RED_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.COMMAND_BUTTON_PRESSED);
 
                 aTimer = new Timer(500);
 				// Hook up the Elapsed event for the timer. 
@@ -131,8 +131,8 @@ namespace CodeAbility.RaspberryPi.Pibrella
         int state = 3;
 		private void OnTimedEvent(Object source, ElapsedEventArgs e)
 		{
-			if (Blinking) {
-
+			if (Blinking) 
+            {
 				if ((state) % 3 == 0)
                 { 
 					ToggleGreenLed ();
@@ -160,7 +160,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		{
 			pibrella.Connection.Toggle (pibrella.LedPinGreen);
             greenLedStatus = !greenLedStatus;
-            client.SendData(Environment.Devices.ALL, 
+            messageClient.SendData(Environment.Devices.ALL, 
                             Environment.Pibrella.OBJECT_GREEN_LED, 
                             Environment.Pibrella.DATA_LED_STATUS,
                             greenLedStatus ? 
@@ -173,7 +173,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		{
 			pibrella.Connection.Toggle (pibrella.LedPinYellow);
             yellowLedStatus = !yellowLedStatus;
-            client.SendData(Environment.Devices.ALL, 
+            messageClient.SendData(Environment.Devices.ALL, 
                             Environment.Pibrella.OBJECT_YELLOW_LED, 
                             Environment.Pibrella.DATA_LED_STATUS,
                             yellowLedStatus ?
@@ -186,7 +186,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		{
 			pibrella.Connection.Toggle (pibrella.LedPinRed);            
             redLedStatus = !redLedStatus;
-            client.SendData(Environment.Devices.ALL, 
+            messageClient.SendData(Environment.Devices.ALL, 
                             Environment.Pibrella.OBJECT_RED_LED, 
                             Environment.Pibrella.DATA_LED_STATUS,
                             redLedStatus ?

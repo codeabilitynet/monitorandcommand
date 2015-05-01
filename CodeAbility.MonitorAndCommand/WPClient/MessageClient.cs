@@ -81,6 +81,7 @@ namespace CodeAbility.MonitorAndCommand.WPClient
             if (DataReceived != null)
                 DataReceived(this, new MessageEventArgs(message));          
         }
+
         #region Public methods
 
         public bool Start(string ipAddress, int portNumber)

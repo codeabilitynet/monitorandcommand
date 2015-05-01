@@ -112,21 +112,21 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-            MessageClient client = new MessageClient(Devices.WPF_MONITOR, ipAddress, portNumber);
+            MessageClient messageClient = new MessageClient(Devices.WPF_MONITOR);
 
-            client.HealthInfoReceived += client_HealthInfoReceived;
-            client.DataReceived += client_MessageReceived;
-            client.CommandReceived += client_MessageReceived;
+            messageClient.HealthInfoReceived += client_HealthInfoReceived;
+            messageClient.DataReceived += client_MessageReceived;
+            messageClient.CommandReceived += client_MessageReceived;
 
-            client.Start();
+            messageClient.Start(ipAddress, portNumber);
 
             System.Threading.Thread.Sleep(10);
 
-            client.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
-            client.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+            messageClient.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
 
-            client.SubscribeToTraffic(Devices.NETDUINO, Devices.WINDOWS_PHONE);
-            client.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO);
 
         }
 

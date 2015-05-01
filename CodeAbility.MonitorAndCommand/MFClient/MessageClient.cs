@@ -64,25 +64,26 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         private Thread receiveThread = null;
 
-        public MessageClient(string deviceName, string ipAddress, int port)
+        public MessageClient(string deviceName)
         { 
             DeviceName = deviceName;
-            IpAddress = ipAddress;
-            PortNumber = port;
 
             receiveThread = new Thread(new ThreadStart(Receiver));
         }
 
         #region Public Methods
 
-        public void Start()
+        public void Start(string ipAddress, int port)
         {
+            IpAddress = ipAddress;
+            PortNumber = port;
+
             try
             {
                 IPHostEntry ipHostEntry = Dns.GetHostEntry(IpAddress);
-                IPAddress ipAddress = ipHostEntry.AddressList[0];
+                IPAddress _ipAddress = ipHostEntry.AddressList[0];
 
-                IPEndPoint endpoint = new IPEndPoint(ipAddress, PortNumber);
+                IPEndPoint endpoint = new IPEndPoint(_ipAddress, PortNumber);
                 this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 this.socket.Connect(endpoint);
 
