@@ -64,10 +64,10 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 {
                     autoEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO, ipAddress, port);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO);
 
                     messageClient.CommandReceived += socketClient_CommandReceived;
-                    messageClient.Start();
+                    messageClient.Start(ipAddress, port);
 
                     messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS);
                     messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.DATA_BUTTON_STATUS);

@@ -92,11 +92,9 @@ namespace CodeAbility.MonitorAndCommand.Client
         // ManualResetEvent instances signal completion.
         private ManualResetEvent sendDone = new ManualResetEvent(false);
 
-        public MessageClient(string deviceName, string ipAddress, int port)
+        public MessageClient(string deviceName)
         {
             DeviceName = deviceName;
-            IpAddress = ipAddress;
-            PortNumber = port;
 
             receiveThread = new Thread(new ThreadStart(Receiver));
             sendThread = new Thread(new ThreadStart(Sender));
@@ -104,8 +102,11 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #region Public Methods
 
-        public void Start()
+        public void Start(string ipAddress, int port)
         {
+            IpAddress = ipAddress;
+            PortNumber = port;
+
             // Connect to a remote device.
             try
             {
@@ -141,18 +142,6 @@ namespace CodeAbility.MonitorAndCommand.Client
             receiveThread.Abort();
             client.Shutdown(SocketShutdown.Both);
             sendThread.Abort();
-        }
-
-        public void Register()
-        {
-            Message message = Message.InstanciateRegisterMessage(DeviceName);
-            EnqueueMessage(message);
-        }
-
-        public void Unregister()
-        {
-            Message message = Message.InstanciateUnregisterMessage(DeviceName);
-            EnqueueMessage(message);
         }
 
         public void PublishCommand(string toDevice, string commandTarget, string commandName)
@@ -208,6 +197,18 @@ namespace CodeAbility.MonitorAndCommand.Client
         #endregion 
 
         #region Internals
+
+        public void Register()
+        {
+            Message message = Message.InstanciateRegisterMessage(DeviceName);
+            EnqueueMessage(message);
+        }
+
+        public void Unregister()
+        {
+            Message message = Message.InstanciateUnregisterMessage(DeviceName);
+            EnqueueMessage(message);
+        }
 
         protected void EnqueueMessage(Message message)
         {

@@ -30,7 +30,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     class Program
     {
-        static MessageClient client; 
+        static MessageClient messageClient; 
 
         static void Main(string[] args)
         {
@@ -41,30 +41,31 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             bool GreenLedStatus = false;
             bool YellowLedStatus = false;
 
-            client = new MessageClient(Devices.PIBRELLA, ipAddress, portNumber);
+            messageClient = new MessageClient(Devices.PIBRELLA);
 
-            client.DataReceived += client_DataReceived;
-            client.CommandReceived += client_CommandReceived;
+            messageClient.DataReceived += client_DataReceived;
+            messageClient.CommandReceived += client_CommandReceived;
 
             Console.WriteLine("Device console.");
             Console.WriteLine("Hit a key to start, hit [0,3] to send Pibrella data, hit ESC to exit.");
             Console.ReadKey();
-            client.Start();
+
+            messageClient.Start(ipAddress, portNumber);
 
             bool running = true;
 
             Console.WriteLine("Running.");
 
             //Simulating a Pibrella device
-            client.PublishData(Devices.ALL, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-            client.PublishData(Devices.ALL, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-            client.PublishData(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-            client.PublishData(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+            messageClient.PublishData(Devices.ALL, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.PublishData(Devices.ALL, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.PublishData(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.PublishData(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-            client.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            messageClient.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
 
             while (running)
             {
@@ -78,7 +79,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 else if (keyInfo.Key == ConsoleKey.NumPad1)
                 {
                     RedLedStatus = !RedLedStatus;
-                    client.SendData(Devices.ALL, 
+                    messageClient.SendData(Devices.ALL, 
                                     Pibrella.OBJECT_RED_LED, 
                                     Pibrella.DATA_LED_STATUS, RedLedStatus ? 
                                         Pibrella.CONTENT_LED_STATUS_ON :
@@ -87,7 +88,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 else if (keyInfo.Key == ConsoleKey.NumPad2)
                 {
                     YellowLedStatus = !YellowLedStatus;
-                    client.SendData(Devices.ALL, 
+                    messageClient.SendData(Devices.ALL, 
                                     Pibrella.OBJECT_YELLOW_LED, 
                                     Pibrella.DATA_LED_STATUS, YellowLedStatus ? 
                                         Pibrella.CONTENT_LED_STATUS_ON :
@@ -96,7 +97,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 else if (keyInfo.Key == ConsoleKey.NumPad3)
                 {
                     GreenLedStatus = !GreenLedStatus;
-                    client.SendData(Devices.ALL, 
+                    messageClient.SendData(Devices.ALL, 
                                     Pibrella.OBJECT_GREEN_LED, 
                                     Pibrella.DATA_LED_STATUS, 
                                     GreenLedStatus ? 
@@ -112,14 +113,14 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
             Console.WriteLine("Stopped.");
 
-            client.Stop(); 
+            messageClient.Stop(); 
         }
 
         static void PibrellaButtonPressedSimulator()
         {
-            client.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_ON);
+            messageClient.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_ON);
             Thread.Sleep(500);
-            client.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_OFF);
+            messageClient.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_OFF);
         }
 
         static void client_CommandReceived(object sender, MessageEventArgs e)

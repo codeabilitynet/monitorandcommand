@@ -36,29 +36,30 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-            MessageClient client = new MessageClient(DEVICE_NAME, ipAddress, portNumber);
+            MessageClient messageClient = new MessageClient(DEVICE_NAME);
 
-            client.DataReceived += client_DataReceived;
+            messageClient.DataReceived += client_DataReceived;
 
             Console.WriteLine("Remote console.");
             Console.WriteLine("Hit a key to start, hit [0,3] to send Pibrella commands, hit ESC to exit.");
             Console.ReadKey();
-            client.Start();
+
+            messageClient.Start(ipAddress, portNumber);
 
             bool running = true;
 
             Console.WriteLine("Running.");
 
             //Pibrella
-            client.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-            client.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-            client.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-            client.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-            client.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-            client.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
 
             while (running)
             {
@@ -66,19 +67,19 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
                 if (keyInfo.Key == ConsoleKey.NumPad0)
                 {
-                    client.SendCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, null);
+                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, null);
                 }
 				if (keyInfo.Key == ConsoleKey.NumPad1)
 				{
-                    client.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,  null);
+                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,  null);
 				}
 				else if (keyInfo.Key == ConsoleKey.NumPad2)
 				{
-                    client.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
+                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
 				}
 				else if (keyInfo.Key == ConsoleKey.NumPad3)
 				{
-                    client.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
+                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
 				}
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {
@@ -89,7 +90,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Stopped.");
 
-            client.Stop(); 
+            messageClient.Stop(); 
         }
 
         static void client_DataReceived(object sender, MessageEventArgs e)
