@@ -30,7 +30,7 @@ using CodeAbility.MonitorAndCommand.Models;
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
-    //https://msdn.microsoft.com/en-us/library/fx6588te(v=vs.110).aspx
+    //Inspired from : https://msdn.microsoft.com/en-us/library/fx6588te(v=vs.110).aspx
 
     public class MessageListener
     {
@@ -87,9 +87,6 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         public void StartListening()
         {
-            // Establish the local endpoint for the socket.
-            // The DNS name of the computer
-            // running the listener is "host.contoso.com".
             IPAddress ipAddress = CodeAbility.MonitorAndCommand.Server.NetworkHelper.GetLocalIPAddress();
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, PortNumber);
 
@@ -367,43 +364,5 @@ namespace CodeAbility.MonitorAndCommand.Server
         }
 
         #endregion 
-
-        //private void CountMessages(Message message)
-        //{
-        //    string deviceName = message.FromDevice;
-        //    messageHeartbeatCounters.AddOrUpdate(deviceName, 0, (key, oldValue) => oldValue + 1);
-
-        //}
-
-        //private double GetDeviceMessageCount(string deviceName)
-        //{
-        //    double deviceMessagesPerMinute = 0; 
-
-        //    int deviceHeartbeatCounter;
-        //    Queue<int> deviceMinutesCounters;
-        //    if (messageMinutesCounters.TryGetValue(deviceName, out deviceMinutesCounters) && 
-        //        messageHeartbeatCounters.TryGetValue(deviceName, out deviceHeartbeatCounter))
-        //    {
-        //        deviceMessagesPerMinute = ComputeMessagesPerMinute(deviceMinutesCounters, deviceHeartbeatCounter);
-        //    }
-
-        //    return deviceMessagesPerMinute;
-        //}
-
-        //private double ComputeMessagesPerMinute(Queue<int> minutesCounters, int heartbeatCounter)
-        //{
-        //    //Remove oldest value
-        //    minutesCounters.Dequeue();
-        //    //Add newest one
-        //    minutesCounters.Enqueue(heartbeatCounter);
-
-        //    int messageCount = 0;
-        //    foreach(int minuteCounter in minutesCounters)
-        //        messageCount += minuteCounter;
-
-        //    double messagesPerMinutes = messageCount / (minutesCounters.Count * HeartbeatPeriod);
-
-        //    return messagesPerMinutes;
-        //}
     }
 }
