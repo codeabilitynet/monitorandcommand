@@ -31,7 +31,7 @@ using CodeAbility.MonitorAndCommand.Helpers;
 
 namespace CodeAbility.MonitorAndCommand.Client
 {
-    //https://msdn.microsoft.com/en-us/library/bew39x2a(v=vs.110).aspx
+    //Inspired from : https://msdn.microsoft.com/en-us/library/bew39x2a(v=vs.110).aspx
 
     public class MessageClient
     {

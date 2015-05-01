@@ -51,7 +51,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         AutoResetEvent autoEvent = new AutoResetEvent(false);
 
-        Thread boardLedThread = null;
+        //Thread boardLedThread = null;
         ManualResetEvent boardLedEvent = new ManualResetEvent(false);
 
         public bool ledState = false;
