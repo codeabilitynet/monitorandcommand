@@ -66,11 +66,11 @@ namespace CodeAbility.MonitorAndCommand.WPClient
             client.DataStringReceived += client_DataStringReceived;
         }
 
-        public MessageClient(string deviceName, string ipAddress, int portNumber) : this(deviceName)
-        {
-            IpAddress = ipAddress;
-            PortNumber = portNumber;
-        }
+        //public MessageClient(string deviceName, string ipAddress, int portNumber) : this(deviceName)
+        //{
+        //    IpAddress = ipAddress;
+        //    PortNumber = portNumber;
+        //}
 
         void client_DataStringReceived(object sender, DataStringEventArgs e)
         {
@@ -88,6 +88,9 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 
         public bool Start(string ipAddress, int portNumber)
         {
+            IpAddress = ipAddress;
+            PortNumber = portNumber;
+
             client.Connect(IpAddress, PortNumber);
 
             Register();

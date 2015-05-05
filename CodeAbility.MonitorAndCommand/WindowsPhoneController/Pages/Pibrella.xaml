@@ -17,6 +17,7 @@
     <UserControl.Resources>
         <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"></converters:BooleanToOpacityConverter>
         <converters:BooleanToBrushConverter x:Key="BooleanToBrush"></converters:BooleanToBrushConverter>
+        <converters:BooleanToOnOffConverter x:Key="BooleanToOnOff"></converters:BooleanToOnOffConverter>
     </UserControl.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -57,8 +58,10 @@
                      Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Button Content="Button" Grid.Row="3" 
-                    FontSize="28" BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
+            <Button Grid.Row="3" 
+                    FontSize="36" Width="120"
+                    BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
+                    Content="{Binding ButtonPressed, Converter={StaticResource BooleanToOnOff}, FallbackValue=Off}"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" />
             
         </Grid>

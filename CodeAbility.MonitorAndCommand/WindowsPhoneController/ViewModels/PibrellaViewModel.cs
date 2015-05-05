@@ -138,7 +138,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
                     YellowLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
                 else if (dataName.Equals(Pibrella.OBJECT_GREEN_LED))
                     GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
-                else if (dataName.Equals(Pibrella.DATA_BUTTON_STATUS))
+                else if (dataName.Equals(Pibrella.OBJECT_BUTTON))
                 {
                     ButtonPressed = e.Content.Equals(Pibrella.CONTENT_BUTTON_ON);
                 }

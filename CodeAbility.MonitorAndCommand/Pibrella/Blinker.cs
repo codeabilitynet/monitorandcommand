@@ -74,7 +74,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 				if (parameter.Equals(Environment.Pibrella.OBJECT_GREEN_LED))
 					ToggleGreenLed();
                 else if (parameter.Equals(Environment.Pibrella.OBJECT_YELLOW_LED))
-					ToggleBlueLed();
+					ToggleYellowLed();
                 else if (parameter.Equals(Environment.Pibrella.OBJECT_RED_LED))
 					ToggleRedLed();
             }
@@ -142,7 +142,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
 				if ((state) % 3 == 1)
                 { 
-					ToggleBlueLed ();
+					ToggleYellowLed ();
                 }
 
 				if ((state) % 3 == 2)
@@ -171,7 +171,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		}
 
         bool yellowLedStatus = false;
-		protected void ToggleBlueLed()
+		protected void ToggleYellowLed()
 		{
 			pibrella.Connection.Toggle (pibrella.LedPinYellow);
             yellowLedStatus = !yellowLedStatus;

@@ -74,7 +74,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             PortNumber = ApplicationSettings.PortNumber.HasValue ? ApplicationSettings.PortNumber.Value : 11000 ;
         }
 
-        public void Connect()
+        public void Start()
         {
             MessageClient messageClient = App.Current.Resources["MessageClient"] as MessageClient;
 

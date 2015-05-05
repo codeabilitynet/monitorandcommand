@@ -172,6 +172,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                     //Close socket and abort thread
                     Thread thread = null;
                     Address address = new Address(socket.RemoteEndPoint.ToString());
+                    devicesManager.RemoveDevice(devicesManager.GetDeviceNameFromAddress(address));
+
                     if (receiveThreads.TryRemove(address, out thread))
                     {
                         Socket _socket = null;
@@ -349,18 +351,20 @@ namespace CodeAbility.MonitorAndCommand.Server
             byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
 
             Address destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
-            Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
-
-            if (socket != null && socket.Connected)
-                socket.Send(byteData, 0, byteData.Length, 0);
-            else
+            if (destinationAddress != null)
             {
-                clientsSockets.TryRemove(destinationAddress, out socket);
-                Thread receiveThread = null;
-                if (receiveThreads.TryGetValue(destinationAddress, out receiveThread))
+                Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
+                if (socket != null && socket.Connected)
+                    socket.Send(byteData, 0, byteData.Length, 0);
+                else
                 {
-                    receiveThread.Abort();
-                    receiveThreads.TryRemove(destinationAddress, out receiveThread);
+                    clientsSockets.TryRemove(destinationAddress, out socket);
+                    Thread receiveThread = null;
+                    if (receiveThreads.TryGetValue(destinationAddress, out receiveThread))
+                    {
+                        receiveThread.Abort();
+                        receiveThreads.TryRemove(destinationAddress, out receiveThread);
+                    }
                 }
             }
         }
