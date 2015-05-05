@@ -21,6 +21,12 @@ namespace CodeAbility.MonitorAndCommand.Helpers
 {
     public static class JsonHelpers
     {
+        /// <summary>
+        /// Pads a serialized Json message with '.' to ensure its size is equals to given buffer size
+        /// </summary>
+        /// <param name="serializedMessage"></param>
+        /// <param name="bufferSize"></param>
+        /// <returns></returns>
         public static string PadSerializedMessage(string serializedMessage, int bufferSize)
         {
 #if !MF_FRAMEWORK_VERSION_V4_2
@@ -36,7 +42,12 @@ namespace CodeAbility.MonitorAndCommand.Helpers
             return paddedSerializedData;
         }
 
-        public static string CleanUpSerializedData(string paddedSerializedData)
+        /// <summary>
+        /// Removes '.' from a "padded" serialized message
+        /// </summary>
+        /// <param name="paddedSerializedData"></param>
+        /// <returns></returns>
+        public static string CleanUpPaddedSerializedData(string paddedSerializedData)
         {
             int firstBraceIndex = paddedSerializedData.IndexOf('{');
             int lastBraceIndex = paddedSerializedData.LastIndexOf('}');

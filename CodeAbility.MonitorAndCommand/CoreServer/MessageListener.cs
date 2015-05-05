@@ -15,10 +15,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -28,12 +28,11 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-using CodeAbility.MonitorAndCommand.Models; 
+using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Helpers; 
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
-    //Inspired from : https://msdn.microsoft.com/en-us/library/fx6588te(v=vs.110).aspx
-
     public class MessageListener
     {
         const string ALL = "*";
@@ -48,17 +47,16 @@ namespace CodeAbility.MonitorAndCommand.Server
         private ManualResetEvent processDone = new ManualResetEvent(false);
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
-        //
+        
         private ConcurrentDictionary<Address, Thread> receiveThreads = new ConcurrentDictionary<Address, Thread>();
         private ConcurrentDictionary<Address, Socket> clientsSockets = new ConcurrentDictionary<Address, Socket>();
 
         private ConcurrentDictionary<string, int> messageHeartbeatCounters = new ConcurrentDictionary<string, int>();
         private ConcurrentDictionary<string, Queue<int>> messageMinutesCounters = new ConcurrentDictionary<string, Queue<int>>();
-        //
+        
         private ConcurrentQueue<Message> messagesReceived = new ConcurrentQueue<Message>();
         private ConcurrentQueue<Message> messagesToSend = new ConcurrentQueue<Message>();
-        
-        //
+       
         DevicesManager devicesManager = new DevicesManager();
         RulesManager rulesManager = new RulesManager(); 
 
@@ -87,6 +85,9 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
         }
 
+        /// <summary>
+        /// Start listening for messages
+        /// </summary>
         public void StartListening()
         {
             IPAddress ipAddress = CodeAbility.MonitorAndCommand.Server.NetworkHelper.GetLocalIPAddress();
@@ -133,8 +134,12 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         }
 
-        #region Threads Methods
+        #region Receiving messages
 
+        /// <summary>
+        /// Message receiving thread method
+        /// </summary>
+        /// <param name="socketObject">receiving socket</param>
         public void Receiver(object socketObject)
         {
             Socket socket = socketObject as Socket;
@@ -148,30 +153,29 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
 
-                    string serializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);                    
-                    int firstBraceIndex = serializedData.IndexOf('{');
-                    int lastBraceIndex = serializedData.LastIndexOf('}');
-                    string cleanedUpSerializedData = serializedData.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
-
+                    string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
+                    string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
                     Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
                     //HACK : we pass the ip:port address in the Property argument
                     if (receivedMessage.Name.Equals(ControlActions.REGISTER))
                         receivedMessage.Content = new Address(socket.RemoteEndPoint.ToString());
 
-                    Console.WriteLine(receivedMessage);
+                    Debug.WriteLine(receivedMessage);
 
                     messagesReceived.Enqueue(receivedMessage);
 
                     processDone.Set();
                 }
-                catch(Exception exception)
+                catch(Exception)
                 {
-                    Console.WriteLine(exception);
+                    Address address = new Address(socket.RemoteEndPoint.ToString());
+                    string deviceName = devicesManager.GetDeviceNameFromAddress(address);
+
+                    Console.WriteLine(String.Format("Device {0} disconnected.", deviceName));
 
                     //Close socket and abort thread
                     Thread thread = null;
-                    Address address = new Address(socket.RemoteEndPoint.ToString());
                     devicesManager.RemoveDevice(devicesManager.GetDeviceNameFromAddress(address));
 
                     if (receiveThreads.TryRemove(address, out thread))
@@ -181,6 +185,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                             _socket.Close();
 
                         thread.Abort();
+
+                        Debug.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
                     }
 
                     break;
@@ -188,9 +194,16 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
         }
 
+        #endregion 
+
+        #region Processing received messages
+
+        /// <summary>
+        /// Message processing thread method
+        /// </summary>
         private void Processor()
         {
-            while(true)
+            while (true)
             {
                 processDone.Reset();
 
@@ -205,57 +218,30 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
         }
 
-        private void Sender()
-        {
-            while (true)
-            {
-                sendDone.Reset();
-
-                if (messagesToSend.Count > 0)
-                {
-                    Message message = null;
-                    if (messagesToSend.TryDequeue(out message))
-                        Send(message);
-                }
-                else
-                    sendDone.WaitOne();
-            }
-        }
-
-        public void Heartbeat(Object stateInfo)
-        {
-            foreach (Device device in devicesManager.Devices)
-            {
-                //double deviceMessageCount = GetDeviceMessageCount(device.Name);
-                Message heartbeat = Message.InstanciateHeartbeatMessage(device.Name);
-                SendToSpecificDevice(heartbeat);
-            }
-
-            heartbeatEvent.Set();
-        }
-
-        #endregion 
-
-        #region Server Actions
-
         protected void Process(Message message)
         {
             ContentTypes messageType = message.ContentType;
-            if (messageType.Equals(ContentTypes.CONTROL))
-            {
-                HandleServerAction(message);
-            }
-            else if (messageType.Equals(ContentTypes.DATA) || messageType.Equals(ContentTypes.COMMAND))
-            {
-                SendToAuthorizedDevices(message);
-            }
-            else if (messageType.Equals(ContentTypes.HEARTBEAT))
-            {
-                HandleReturnedHeartbeat(message);
+            switch(messageType)
+            { 
+                case ContentTypes.CONTROL:
+                    ProcessServerAction(message);
+                    break;
+                case ContentTypes.DATA:
+                case ContentTypes.COMMAND:
+                    SendToAuthorizedDevices(message);
+                    break;
+                case ContentTypes.HEARTBEAT:
+                    HandleReturnedHeartbeat(message);
+                    break;
+                case ContentTypes.HEALTH:
+                case ContentTypes.RESPONSE:
+                    throw new NotImplementedException();
             }
         }
 
-        private void HandleServerAction(Message message)
+        #region Server actions
+
+        private void ProcessServerAction(Message message)
         {
             try
             {
@@ -281,22 +267,26 @@ namespace CodeAbility.MonitorAndCommand.Server
                     case ControlActions.UNSUBSCRIBE:
                         Unsubscribe(message);
                         break;
+                    default:
+                        throw new NotSupportedException(String.Format("HandleServerAction, {0} is not a supported action", message.Name));
                 }
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
+                Debug.WriteLine(exception);
             }
         }
 
         protected void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
+            Console.WriteLine(String.Format("Device {0} registered." + deviceName)); 
         }
 
         protected void Unregister(string deviceName)
         {
             devicesManager.RemoveDevice(deviceName);
+            Console.WriteLine(String.Format("Device {0} unregistered." + deviceName)); 
         }
 
         protected void Publish(Message message)
@@ -324,29 +314,64 @@ namespace CodeAbility.MonitorAndCommand.Server
             DateTime sentOn = (DateTime)message.Timestamp;
             DateTime now = DateTime.Now;
             TimeSpan span = now - sentOn;
+
+            //Health monitoring is not implemented yet
         }
+
+        #endregion 
+
+        #endregion
+
+        #region Sending messages
 
         private void SendToAuthorizedDevices(Message message)
         {
             IEnumerable<string> authorizedDeviceNames = rulesManager.GetAuthorizedDeviceNames(message.ContentType, message.FromDevice, message.ToDevice, message.Name, message.Parameter.ToString());
             foreach (string deviceName in authorizedDeviceNames)
             {
-                message.ReceivingDevice = deviceName;
-
-                Send(message);
+                Message sendToMessage = new Message(message);
+                sendToMessage.ReceivingDevice = deviceName;
+                messagesToSend.Enqueue(sendToMessage);
             }
+
+            sendDone.Set();
         }
 
-        private void SendToSpecificDevice(Message message)
+        private void SendToAllDevices(Message message)
         {
-            messagesToSend.Enqueue(message);
+            IEnumerable<string> deviceNames = devicesManager.GetAllDeviceNames();
+            foreach (string deviceName in deviceNames)
+            {
+                Message sendToMessage = new Message(message);
+                sendToMessage.ReceivingDevice = deviceName;
+                messagesToSend.Enqueue(sendToMessage);
+            }
+
             sendDone.Set();
+        }
+
+        private void Sender()
+        {
+            while (true)
+            {
+                sendDone.Reset();
+
+                if (messagesToSend.Count > 0)
+                {
+                    Message message = null;
+                    if (messagesToSend.TryDequeue(out message))
+                        Send(message);
+                }
+                else
+                    sendDone.WaitOne();
+            }
         }
 
         private void Send(Message message)
         {
             string serializedMessage = JsonConvert.SerializeObject(message);
-            serializedMessage = serializedMessage.PadRight(Constants.BUFFER_SIZE, '.');
+            serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+
             // Convert the string data to byte data using UTF8 encoding.
             byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
 
@@ -367,6 +392,22 @@ namespace CodeAbility.MonitorAndCommand.Server
                     }
                 }
             }
+        }
+
+        #endregion 
+        
+        #region Heartbeat messages
+
+        public void Heartbeat(Object stateInfo)
+        {
+            foreach (Device device in devicesManager.Devices)
+            {
+                //double deviceMessageCount = GetDeviceMessageCount(device.Name);
+                Message heartbeat = Message.InstanciateHeartbeatMessage();
+                SendToAllDevices(heartbeat);
+            }
+
+            heartbeatEvent.Set();
         }
 
         #endregion 
