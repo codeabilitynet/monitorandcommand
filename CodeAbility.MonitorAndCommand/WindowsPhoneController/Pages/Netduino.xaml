@@ -16,6 +16,8 @@
     
     <UserControl.Resources>
         <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"></converters:BooleanToOpacityConverter>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrush"></converters:BooleanToBrushConverter>
+        <converters:BooleanToOnOffConverter x:Key="BooleanToOnOff"></converters:BooleanToOnOffConverter>
     </UserControl.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -59,8 +61,14 @@
                      Stroke="White" StrokeThickness="3"
                      Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ToggleButton x:Name="RedLedToggle" Grid.Row="0" Grid.Column="1" Checked="RedLedToggle_Checked" Unchecked="RedLedToggle_Unchecked" Foreground="Beige"></ToggleButton>
-                <ToggleButton x:Name="GreenLedToggle" Grid.Row="1" Grid.Column="1" Checked="GreenLedToggle_Checked" Unchecked="GreenLedToggle_Unchecked" Foreground="Beige"></ToggleButton>
+                <ToggleButton x:Name="RedLedToggle" Grid.Row="0" Grid.Column="1" 
+                              Content="{Binding RedLed, Converter={StaticResource BooleanToOnOff}}"
+                              Checked="RedLedToggle_Checked" Unchecked="RedLedToggle_Unchecked" 
+                              Foreground="Beige"></ToggleButton>
+                <ToggleButton x:Name="GreenLedToggle" Grid.Row="1" Grid.Column="1" 
+                              Content="{Binding GreenLed, Converter={StaticResource BooleanToOnOff}}"
+                              Checked="GreenLedToggle_Checked" Unchecked="GreenLedToggle_Unchecked" 
+                              Foreground="Beige"></ToggleButton>
             </Grid>
             
             <TextBlock Grid.Row="1" Text="{Binding RandomValue}"
@@ -72,8 +80,10 @@
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             <Button Content="Button" Grid.Row="3" 
-                    FontSize="28"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" />
+                    FontSize="36" Width="120"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
+                    Click="Button_Click" />
             
         </Grid>
     </Grid>

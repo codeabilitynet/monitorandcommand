@@ -77,6 +77,16 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             }
         }
 
+        private bool buttonPressed = false;
+        public bool ButtonPressed
+        {
+            get { return buttonPressed; }
+            set
+            {
+                buttonPressed = value;
+                OnPropertyChanged("ButtonPressed");
+            }
+        }
 
         MessageClient MessageClient { get; set; }
 
@@ -160,6 +170,10 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
                     GreenLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
                 else if (e.Name.Equals(Netduino.OBJECT_SENSOR))
                     RandomValue = e.Content.ToString();
+                else if (e.Name.Equals(Pibrella.OBJECT_BUTTON))
+                {
+                    ButtonPressed = e.Content.Equals(Pibrella.CONTENT_BUTTON_ON);
+                }
             });
         }
     }

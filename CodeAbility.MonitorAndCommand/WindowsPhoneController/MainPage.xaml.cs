@@ -77,7 +77,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Connect();
+            ViewModel.Start();
         }
 
         // Sample code for building a localized ApplicationBar
