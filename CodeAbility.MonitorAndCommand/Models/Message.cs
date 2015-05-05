@@ -147,14 +147,20 @@ namespace CodeAbility.MonitorAndCommand.Models
             return new Message(SERVER, ofDevice, toDevice, ContentTypes.HEALTH, healthEventCategory, healthEventName, healthEventContent);
         }
 
-        public static Message InstanciateHeartbeatMessage(string toDevice)
+        public static Message InstanciateHeartbeatMessage()
         {
-            return new Message(SERVER, SERVER, toDevice, ContentTypes.HEARTBEAT, MESSAGE_COUNT, String.Empty, DateTime.Now);
+            return new Message(SERVER, SERVER, ALL, ContentTypes.HEARTBEAT, MESSAGE_COUNT, String.Empty, DateTime.Now);
         }
 
         #endregion 
 
+        /// <summary>
+        /// Empty constructor, only there because it's needed by the serialization/deserialization process. Do not use in your code.
+        /// </summary>
         public Message() { }
+
+        public Message(Message message) :
+            this(message.SendingDevice, message.FromDevice, message.ToDevice, message.ContentType, message.Name, message.Parameter, message.Content) { }
 
 #if !MF_FRAMEWORK_VERSION_V4_2
         protected Message(string sendingDevice, string fromDevice, string toDevice, ContentTypes contentType, string name, object parameter, object content)

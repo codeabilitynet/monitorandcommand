@@ -66,6 +66,12 @@ namespace CodeAbility.MonitorAndCommand.Server
             return (device != null) ? device.Name : null;
         }
 
+        public IEnumerable<string> GetAllDeviceNames()
+        {
+            return from device in devices
+                   select device.Name; 
+        }
+
         private bool Exists(string deviceName)
         {
             Device device = devices.FirstOrDefault(x => x.Name.Equals(deviceName));

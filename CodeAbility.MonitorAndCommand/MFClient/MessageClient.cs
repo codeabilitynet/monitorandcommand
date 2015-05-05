@@ -174,7 +174,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                     char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
                     string paddedSerializedData = new string(dataChars);
-                    string serializedMessage = JsonHelpers.CleanUpSerializedData(paddedSerializedData.ToString());
+                    string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData.ToString());
 
                     object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
                     Hashtable hashTable = deserializedObject as Hashtable;

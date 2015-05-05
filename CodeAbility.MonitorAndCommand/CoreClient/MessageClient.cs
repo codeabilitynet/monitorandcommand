@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -32,8 +33,6 @@ using CodeAbility.MonitorAndCommand.Helpers;
 
 namespace CodeAbility.MonitorAndCommand.Client
 {
-    //Inspired from : https://msdn.microsoft.com/en-us/library/bew39x2a(v=vs.110).aspx
-
     public class MessageClient
     {
         #region Events
@@ -127,10 +126,12 @@ namespace CodeAbility.MonitorAndCommand.Client
                 sendThread.Start();
                 
                 Register();
+
+                Console.WriteLine(String.Format("Device {0} connected to server.", DeviceName));
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(exception);
             }
         }
 
@@ -237,7 +238,8 @@ namespace CodeAbility.MonitorAndCommand.Client
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
+                    Debug.WriteLine(exception);
+                    throw;
                 }
             }
         }
@@ -250,7 +252,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
             client.Send(byteData, 0, byteData.Length, 0);
 
-            Console.WriteLine(message);
+            Debug.WriteLine(message);
         }
 
         private void Receiver()
@@ -263,7 +265,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
                     client.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
                     string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
-                    string serializedMessage = JsonHelpers.CleanUpSerializedData(paddedSerializedData);
+                    string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 
                     Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
                     if (message != null)
@@ -280,7 +282,8 @@ namespace CodeAbility.MonitorAndCommand.Client
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Debug.WriteLine(e);
+                    throw;
                 }
             }
         }
