@@ -42,6 +42,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
         const int PERIOD = 5000;
 
         const int BUTTON_PRESSED_DURATION = 500;
+        const int RECONNECTION_TIMER_DURATION = 60000;
 
         MessageClient messageClient = null;
 
@@ -69,6 +70,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                     messageClient = new MessageClient(Environment.Devices.NETDUINO);
 
                     messageClient.CommandReceived += socketClient_CommandReceived;
+
                     messageClient.Start(ipAddress, port);
 
                     messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS);
@@ -95,6 +97,12 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 }
                 catch (Exception)
                 {
+                    messageClient.CommandReceived -= socketClient_CommandReceived;
+                    button.OnInterrupt -= new NativeEventHandler(button_OnInterrupt);
+
+                    AutoResetEvent autoResetEvent = new AutoResetEvent(false);
+                    autoResetEvent.WaitOne(RECONNECTION_TIMER_DURATION, false);
+
                     autoEvent.Set();
                 }
             }
@@ -134,17 +142,17 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             }
         }
 
-        void BlinkBoardLED()
-        {
-            try
-            { 
-                boardLedEvent.Set();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //void BlinkBoardLED()
+        //{
+        //    try
+        //    { 
+        //        boardLedEvent.Set();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         void ToggleRedLed(bool state)
         {
