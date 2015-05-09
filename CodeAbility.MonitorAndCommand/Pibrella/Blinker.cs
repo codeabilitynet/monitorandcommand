@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -92,15 +92,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
         void ToggleRunningState()
         {
             Blinking = !Blinking;
-            System.Threading.Thread thread = new System.Threading.Thread(ButtonPressedSimulator);
-            thread.Start();
-        }
-
-        private void ButtonPressedSimulator()
-        {
-            messageClient.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_ON);
-            System.Threading.Thread.Sleep(BUTTON_PRESSED_DURATION);
-            messageClient.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_OFF);           
+            messageClient.SendData(Environment.Devices.ALL, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.CONTENT_BUTTON_PRESSED);
         }
 
         public void Start()
@@ -130,22 +122,23 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			}
         }
 
-        int state = 3;
+        const int numberOfLeds = 3;
+        int state = numberOfLeds;
 		private void OnTimedEvent(Object source, ElapsedEventArgs e)
 		{
 			if (Blinking) 
             {
-				if ((state) % 3 == 0)
+                if ((state) % numberOfLeds == 0)
                 { 
 					ToggleGreenLed ();
                 }
 
-				if ((state) % 3 == 1)
+                if ((state) % numberOfLeds == 1)
                 { 
 					ToggleYellowLed ();
                 }
 
-				if ((state) % 3 == 2)
+                if ((state) % numberOfLeds == 2)
                 { 
 					ToggleRedLed ();
                 }
@@ -153,8 +146,8 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
             state++;
 
-            if (state > 5)
-                state = 3;
+            if (state > numberOfLeds + 2)
+                state = numberOfLeds;
 		}
 
         bool greenLedStatus = false;

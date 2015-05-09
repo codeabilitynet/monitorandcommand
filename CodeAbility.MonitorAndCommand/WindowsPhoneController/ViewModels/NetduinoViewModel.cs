@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -131,7 +131,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO, Netduino.COMMAND_BUTTON_PRESSED, Netduino.OBJECT_BUTTON, Netduino.CONTENT_BUTTON_ON);
+                MessageClient.SendCommand(Devices.NETDUINO, Netduino.COMMAND_BUTTON_PRESSED, Netduino.OBJECT_BUTTON, Netduino.CONTENT_BUTTON_PRESSED);
         }
 
         public void TurnRedLedOn()
@@ -160,20 +160,60 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
+
+            if (e.Name.Equals(Netduino.OBJECT_BOARD_LED))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    BlueLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                });
+            }  
+            else if (e.Name.Equals(Netduino.OBJECT_RED_LED))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    RedLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                });
+            }
+            else if (e.Name.Equals(Netduino.OBJECT_GREEN_LED))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    GreenLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                });
+            }
+            else if (e.Name.Equals(Netduino.OBJECT_SENSOR))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    RandomValue = e.Content.ToString();
+                });
+            }
+            else if (e.Name.Equals(Pibrella.OBJECT_BUTTON))
+            {
+                SimulatorButtonPressure();
+            }
+        }
+
+        void SimulatorButtonPressure()
+        {
+            System.Threading.Thread thread = new System.Threading.Thread(ButtonPressedSimulator);
+            thread.Start();
+        }
+
+        const int BUTTON_PRESSED_DURATION = 250;
+        void ButtonPressedSimulator()
+        {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                if (e.Name.Equals(Netduino.OBJECT_BOARD_LED))
-                    BlueLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
-                else if (e.Name.Equals(Netduino.OBJECT_RED_LED))
-                    RedLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
-                else if (e.Name.Equals(Netduino.OBJECT_GREEN_LED))
-                    GreenLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
-                else if (e.Name.Equals(Netduino.OBJECT_SENSOR))
-                    RandomValue = e.Content.ToString();
-                else if (e.Name.Equals(Pibrella.OBJECT_BUTTON))
-                {
-                    ButtonPressed = e.Content.Equals(Pibrella.CONTENT_BUTTON_ON);
-                }
+                ButtonPressed = true;
+            });
+
+            System.Threading.Thread.Sleep(BUTTON_PRESSED_DURATION);
+
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                ButtonPressed = false;
             });
         }
     }

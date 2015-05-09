@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -123,26 +123,60 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.OBJECT_BUTTON, Pibrella.CONTENT_BUTTON_ON);
+                MessageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.OBJECT_BUTTON, Pibrella.CONTENT_BUTTON_PRESSED);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
             string dataName = e.Name;
 
+            if (dataName.Equals(Pibrella.OBJECT_RED_LED))
+            {                   
+                Deployment.Current.Dispatcher.BeginInvoke(() => {
+                   RedLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                });
+            }
+            else if (dataName.Equals(Pibrella.OBJECT_YELLOW_LED))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    YellowLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                });
+            }
+            else if (dataName.Equals(Pibrella.OBJECT_GREEN_LED))
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                });
+            }
+            else if (dataName.Equals(Pibrella.OBJECT_BUTTON))
+            {
+                SimulatorButtonPressure();
+            }
+        }
+
+        void SimulatorButtonPressure()
+        {
+            System.Threading.Thread thread = new System.Threading.Thread(ButtonPressedSimulator);
+            thread.Start();
+        }
+
+        const int BUTTON_PRESSED_DURATION = 250;
+        void ButtonPressedSimulator()
+        {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                if (dataName.Equals(Pibrella.OBJECT_RED_LED))
-                    RedLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
-                else if (dataName.Equals(Pibrella.OBJECT_YELLOW_LED))
-                    YellowLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
-                else if (dataName.Equals(Pibrella.OBJECT_GREEN_LED))
-                    GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
-                else if (dataName.Equals(Pibrella.OBJECT_BUTTON))
-                {
-                    ButtonPressed = e.Content.Equals(Pibrella.CONTENT_BUTTON_ON);
-                }
+                ButtonPressed = true;
+            });
+            
+            System.Threading.Thread.Sleep(BUTTON_PRESSED_DURATION);
+            
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                ButtonPressed = false;
             });
         }
+
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -39,7 +39,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
     public class Process
     {
         const int STARTUP_TIME = 5000;
-        const int PERIOD = 5000;
+        const int PERIOD = 1000;
 
         const int BUTTON_PRESSED_DURATION = 500;
         const int RECONNECTION_TIMER_DURATION = 60000;
@@ -54,7 +54,6 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         AutoResetEvent autoEvent = new AutoResetEvent(false);
 
-        //Thread boardLedThread = null;
         ManualResetEvent boardLedEvent = new ManualResetEvent(false);
 
         public bool ledState = false;
@@ -89,9 +88,6 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
                     TimerCallback workTimerCallBack = DoWork;
                     Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
-
-                    //boardLedThread = new Thread(BoardLedBlinker);
-                    //boardLedThread.Start();
 
                     autoEvent.WaitOne();
                 }
@@ -132,27 +128,17 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             try
             {
                 if (messageClient != null)
+                {
+                    boardLed.Write(true);
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, new Random().NextDouble().ToString());
-
-                //BlinkBoardLED();
+                    boardLed.Write(false);
+                }
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
-        //void BlinkBoardLED()
-        //{
-        //    try
-        //    { 
-        //        boardLedEvent.Set();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
 
         void ToggleRedLed(bool state)
         {
@@ -179,33 +165,13 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                                         Environment.Netduino.CONTENT_LED_STATUS_ON :
                                         Environment.Netduino.CONTENT_LED_STATUS_OFF);
         }
-
-        private void BoardLedBlinker()
-        {
-            //while(true)
-            //{
-                //boardLedEvent.Reset();
-
-                boardLed.Write(true);
-                if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_ON);
-
-                Thread.Sleep(BUTTON_PRESSED_DURATION);
-            
-                boardLed.Write(false);
-                if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_OFF);
-
-                //boardLedEvent.WaitOne();
-            //}
-        }
  
         #region Interruptions
 
         void button_OnInterrupt(uint data1, uint data2, DateTime time)
         {
             if (messageClient != null)
-                messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.DATA_BUTTON_STATUS, Environment.Netduino.CONTENT_BUTTON_ON);
+                messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.DATA_BUTTON_STATUS, Environment.Netduino.CONTENT_BUTTON_PRESSED);
         }
 
         #endregion 
