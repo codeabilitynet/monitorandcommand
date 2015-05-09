@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -40,8 +40,9 @@ namespace CodeAbility.MonitorAndCommand.Environment
         public const string DATA_SENSOR_RANDOM = "SensorRandom";
 
         //Content
-        public const string CONTENT_BUTTON_ON = "On";
-        public const string CONTENT_BUTTON_OFF = "Off";
+        //public const string CONTENT_BUTTON_ON = "On";
+        //public const string CONTENT_BUTTON_OFF = "Off";
+        public const string CONTENT_BUTTON_PRESSED = "Pressed";
 
         public const string CONTENT_LED_STATUS_ON = "On";
         public const string CONTENT_LED_STATUS_OFF = "Off";

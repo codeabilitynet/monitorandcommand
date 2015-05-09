@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2015, Paul Gaunard (codeability.net)
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -75,36 +75,40 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
                 if (keyInfo.Key == ConsoleKey.NumPad0)
                 {
-                    Thread thread = new Thread(PibrellaButtonPressedSimulator);
-                    thread.Start();
+                    messageClient.SendData(Devices.ALL, 
+                                           Environment.Pibrella.OBJECT_BUTTON, 
+                                           Environment.Pibrella.DATA_BUTTON_STATUS, 
+                                           Environment.Pibrella.CONTENT_BUTTON_PRESSED);
                 }
                 else if (keyInfo.Key == ConsoleKey.NumPad1)
                 {
                     RedLedStatus = !RedLedStatus;
                     messageClient.SendData(Devices.ALL, 
-                                    Pibrella.OBJECT_RED_LED, 
-                                    Pibrella.DATA_LED_STATUS, RedLedStatus ? 
-                                        Pibrella.CONTENT_LED_STATUS_ON :
-                                        Pibrella.CONTENT_LED_STATUS_OFF);
+                                           Pibrella.OBJECT_RED_LED, 
+                                           Pibrella.DATA_LED_STATUS, 
+                                           RedLedStatus ? 
+                                               Pibrella.CONTENT_LED_STATUS_ON :
+                                               Pibrella.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.Key == ConsoleKey.NumPad2)
                 {
                     YellowLedStatus = !YellowLedStatus;
                     messageClient.SendData(Devices.ALL, 
-                                    Pibrella.OBJECT_YELLOW_LED, 
-                                    Pibrella.DATA_LED_STATUS, YellowLedStatus ? 
-                                        Pibrella.CONTENT_LED_STATUS_ON :
-                                        Pibrella.CONTENT_LED_STATUS_OFF);
+                                           Pibrella.OBJECT_YELLOW_LED, 
+                                           Pibrella.DATA_LED_STATUS, 
+                                           YellowLedStatus ? 
+                                               Pibrella.CONTENT_LED_STATUS_ON :
+                                               Pibrella.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.Key == ConsoleKey.NumPad3)
                 {
                     GreenLedStatus = !GreenLedStatus;
                     messageClient.SendData(Devices.ALL, 
-                                    Pibrella.OBJECT_GREEN_LED, 
-                                    Pibrella.DATA_LED_STATUS, 
-                                    GreenLedStatus ? 
-                                        Pibrella.CONTENT_LED_STATUS_ON :
-                                        Pibrella.CONTENT_LED_STATUS_OFF);
+                                           Pibrella.OBJECT_GREEN_LED, 
+                                           Pibrella.DATA_LED_STATUS, 
+                                           GreenLedStatus ? 
+                                               Pibrella.CONTENT_LED_STATUS_ON :
+                                               Pibrella.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 { 
@@ -116,13 +120,6 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             Console.WriteLine("Stopped.");
 
             messageClient.Stop(); 
-        }
-
-        static void PibrellaButtonPressedSimulator()
-        {
-            messageClient.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_ON);
-            Thread.Sleep(500);
-            messageClient.SendData(Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.DATA_BUTTON_STATUS, Environment.Pibrella.CONTENT_BUTTON_OFF);
         }
 
         static void client_CommandReceived(object sender, MessageEventArgs e)
