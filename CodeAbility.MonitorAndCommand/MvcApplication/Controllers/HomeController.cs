@@ -18,7 +18,7 @@ namespace MvcApplication.Controllers
         {
             //ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
-            IEnumerable<Message> lastMessages = messageRepository.ListLastMessages();
+            IEnumerable<Message> lastMessages = messageRepository.ListMessages();
 
             return View(lastMessages);
         }
