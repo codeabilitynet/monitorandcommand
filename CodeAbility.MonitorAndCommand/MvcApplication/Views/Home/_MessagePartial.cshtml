@@ -1,0 +1,72 @@
+﻿
+@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
+
+<table id="DataTable" width="100">
+    <!-- Header -->
+    <tr>
+        <th>
+            Sending
+        </th>
+        <th>
+            Receiving
+        </th>
+        <th>
+            To
+        </th>
+        <th>
+            From
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Parameter
+        </th>
+        <th>
+            Content
+        </th>
+        <th>
+            Timestamp
+        </th>
+    </tr>
+
+    <!-- Items -->
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.SendingDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ReceivingDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ToDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.FromDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ContentType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Parameter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Content)
+            </td>
+            <td>
+                @item.Timestamp.ToString("hh:mm:ss.fff tt")
+                @*@Html.DisplayFor(modelitem => item.Timestamp)*@
+            </td>
+        </tr>
+    }
+</table>
+
+@Html.ActionLink("Purge", "Purge", "Home")

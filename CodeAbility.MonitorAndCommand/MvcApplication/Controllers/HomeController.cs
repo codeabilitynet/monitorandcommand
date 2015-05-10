@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Repository;
+using System.Web.UI;
 
 namespace MvcApplication.Controllers
 {
@@ -21,6 +22,23 @@ namespace MvcApplication.Controllers
             IEnumerable<Message> lastMessages = messageRepository.ListMessages();
 
             return View(lastMessages);
+        }
+
+        [OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 3)]
+        public ActionResult RefreshMessagePartial()
+        {
+            IEnumerable<Message> lastMessages = messageRepository.ListMessages();
+
+            return PartialView("_MessagePartial", lastMessages);
+        }
+
+        public ActionResult Purge()
+        {
+            //ViewBag.Message = "Your app description page.";
+
+            messageRepository.Purge();
+
+            return View();
         }
 
         public ActionResult About()

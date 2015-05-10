@@ -56,8 +56,8 @@ namespace CodeAbility.MonitorAndCommand.Repository
                     command.Parameters.AddWithValue("toDevice", message.ToDevice);
                     command.Parameters.AddWithValue("contentType", message.ContentType.ToString());
                     command.Parameters.AddWithValue("name", message.Name);
-                    command.Parameters.AddWithValue("parameter", message.Parameter.ToString());
-                    command.Parameters.AddWithValue("content", message.Content.ToString());
+                    command.Parameters.AddWithValue("parameter", message.Parameter != null ? message.Parameter.ToString() : String.Empty);
+                    command.Parameters.AddWithValue("content", message.Content != null ? message.Content.ToString() : String.Empty);
                     command.Parameters.AddWithValue("timestamp", message.Timestamp);
 
                     try
