@@ -38,7 +38,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodeAbility.MonitorAndCommand.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -88,6 +87,10 @@
     <ProjectReference Include="..\Helpers\Core.Helpers.csproj">
       <Project>{c5749f33-7c79-4991-b43f-7a83b234cd5a}</Project>
       <Name>Core.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Core.Models.csproj">
+      <Project>{c8632312-2d6e-4c77-9178-f627135130bb}</Project>
+      <Name>Core.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
