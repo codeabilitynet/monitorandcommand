@@ -1,4 +1,4 @@
-If you do not have NETMF/WindowsPhone SDK installed, unload the projects that require it.
+If you do not have NETMF/WindowsPhone SDK installed, unload the projects that require it. 
 
 To start the "Test/Demo" environment, in "multiple start up" projects, set "Start" for the following projects:
 - Test.ServerConsole;

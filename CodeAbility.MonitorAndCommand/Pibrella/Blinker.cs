@@ -37,9 +37,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
     public class Blinker
     {
         const int BUTTON_PRESSED_DURATION = 250;
-
         public int Period { get; set; }
-        public bool Running { get; set; }
 		public bool Blinking { get; set; }
 
         string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
@@ -54,7 +52,6 @@ namespace CodeAbility.RaspberryPi.Pibrella
         {
             Period = period;
 
-            Running = false; 
 			Blinking = false;
 
             messageClient = new MessageClient(Environment.Devices.PIBRELLA);
@@ -97,8 +94,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
         public void Start()
         {
-			Running = true;
-			Blinking = true;
+            Blinking = true; //Blink by default
 
             messageClient.CommandReceived += client_CommandReceived;
             messageClient.Start(ipAddress, portNumber);
