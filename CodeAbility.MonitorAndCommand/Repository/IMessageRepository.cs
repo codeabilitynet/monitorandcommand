@@ -11,8 +11,7 @@ namespace CodeAbility.MonitorAndCommand.Repository
     public interface IMessageRepository
     {
         void Insert(Message message);
-
-        IEnumerable<Message> ListLastMessages();
+        IEnumerable<Message> ListMessages();
         void Purge();
     }
 }

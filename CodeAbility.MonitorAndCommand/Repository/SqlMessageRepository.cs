@@ -76,9 +76,9 @@ namespace CodeAbility.MonitorAndCommand.Repository
         }
 
 
-        public IEnumerable<Message> ListLastMessages()
+        public IEnumerable<Message> ListMessages()
         {
-            const string CommandName = "SP_Message_ListLast";
+            const string CommandName = "SP_Message_List";
 
             List<Message> lastMessages = new List<Message>();
 

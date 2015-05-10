@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [dbo].[TB_Message] (
-    [SendingDevice]   VARCHAR (50) NULL,
+    [Id]              BIGINT       IDENTITY (1, 1) NOT NULL,
+	[SendingDevice]   VARCHAR (50) NULL,
     [ReceivingDevice] VARCHAR (50) NULL,
     [FromDevice]      VARCHAR (50) NULL,
     [ToDevice]        VARCHAR (50) NULL,
