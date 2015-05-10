@@ -28,7 +28,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		{
 			Blinker blinker = new Blinker(args.GetPeriod()); 
 
-			Console.WriteLine ("Hit a key to start.");
+			Console.WriteLine ("Hit a key to start, pressed the board's button to start/stop blinking.");
 			Console.ReadKey();
 
             blinker.Start(); 

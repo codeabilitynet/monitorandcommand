@@ -17,6 +17,7 @@
 
 
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -24,15 +25,18 @@ using System.ServiceModel;
 using System.Text;
 
 using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Repository;
 
 namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class MessageService : IMessageService
     {
+        IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+
         public void StoreMessage(Message message)
         {
-            MessageStore.Insert(message);
+            messageRepository.Insert(message);
             return;
         }
     }

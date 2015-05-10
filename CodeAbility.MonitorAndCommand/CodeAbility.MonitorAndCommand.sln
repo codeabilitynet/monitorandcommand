@@ -65,9 +65,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Read Me.txt = Read Me.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Repository", "Repository\Core.Repository.csproj", "{497D9949-4F94-4806-9182-63D516CFB79C}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Core.T-SQL", "T-SQL\Core.T-SQL.sqlproj", "{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs20
 		SccLocalPath0 = .
@@ -122,6 +126,12 @@ Global
 		SccProjectUniqueName17 = WpfMonitor\\Demo.WpfMonitor.csproj
 		SccProjectName17 = WpfMonitor
 		SccLocalPath17 = WpfMonitor
+		SccProjectUniqueName18 = Repository\\Core.Repository.csproj
+		SccProjectName18 = Repository
+		SccLocalPath18 = Repository
+		SccProjectUniqueName19 = T-SQL\\Core.T-SQL.sqlproj
+		SccProjectName19 = T-SQL
+		SccLocalPath19 = T-SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -359,6 +369,34 @@ Global
 		{8DBA4513-68B1-4AB9-A444-CFE81A3FF343}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8DBA4513-68B1-4AB9-A444-CFE81A3FF343}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8DBA4513-68B1-4AB9-A444-CFE81A3FF343}.Release|x86.ActiveCfg = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{497D9949-4F94-4806-9182-63D516CFB79C}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
