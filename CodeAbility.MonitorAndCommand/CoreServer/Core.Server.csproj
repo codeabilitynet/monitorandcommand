@@ -38,9 +38,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeAbility.MonitorAndCommand.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,22 +62,54 @@
     <Compile Include="Helpers\NetworkHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesManager.cs" />
+    <Compile Include="Service References\MessageServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Subscription.cs" />
     <Compile Include="Rule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Service References\MessageServiceReference\MessageService.wsdl" />
+    <None Include="Service References\MessageServiceReference\MessageService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MessageServiceReference\MessageService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MessageServiceReference\MessageService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helpers\Core.Helpers.csproj">
       <Project>{c5749f33-7c79-4991-b43f-7a83b234cd5a}</Project>
       <Name>Core.Helpers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Core.Models.csproj">
-      <Project>{C8632312-2D6E-4C77-9178-F627135130BB}</Project>
-      <Name>Core.Models</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MessageServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MessageServiceReference\MessageService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MessageServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MessageServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MessageServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

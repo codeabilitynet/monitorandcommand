@@ -63,15 +63,28 @@ namespace CodeAbility.MonitorAndCommand.Server
         int PortNumber { get; set; }
         int HeartbeatPeriod { get; set; }
 
+        bool IsMessageServiceActivated { get; set; }
+
         Socket listener = null;
 
         public string LocalEndPoint { get { return (listener != null) ? listener.LocalEndPoint.ToString() : String.Empty; } }
 
-        public MessageListener(int portNumber, int heartbeatPeriod)
+        MessageServiceReference.MessageServiceClient messageServiceClient = null;
+
+        public MessageListener(int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
         {
             //Parameters
             PortNumber = portNumber;
             HeartbeatPeriod = heartbeatPeriod;
+            IsMessageServiceActivated = isMessageServiceActivated;
+
+            if (IsMessageServiceActivated)
+            { 
+                messageServiceClient = new MessageServiceReference.MessageServiceClient();
+                messageServiceClient.Open();
+
+                Console.WriteLine("Message service is activated."); 
+            }
 
             //Threads
             processingThread = new Thread(new ThreadStart(Processor));
@@ -164,6 +177,10 @@ namespace CodeAbility.MonitorAndCommand.Server
                     Debug.WriteLine(receivedMessage);
 
                     messagesReceived.Enqueue(receivedMessage);
+
+                    if (IsMessageServiceActivated)
+                        
+                        StoreMessage(receivedMessage);
 
                     processDone.Set();
                 }
@@ -408,6 +425,23 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
 
             heartbeatEvent.Set();
+        }
+
+        #endregion 
+
+        #region Message Service
+
+        private void StoreMessage(Message message)
+        {
+            try
+            { 
+                if (messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
+                    messageServiceClient.StoreMessage(message);
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
 
         #endregion 

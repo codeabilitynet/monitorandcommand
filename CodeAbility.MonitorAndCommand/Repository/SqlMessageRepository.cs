@@ -58,6 +58,7 @@ namespace CodeAbility.MonitorAndCommand.Repository
                     command.Parameters.AddWithValue("name", message.Name);
                     command.Parameters.AddWithValue("parameter", message.Parameter.ToString());
                     command.Parameters.AddWithValue("content", message.Content.ToString());
+                    command.Parameters.AddWithValue("timestamp", message.Timestamp);
 
                     try
                     {
@@ -105,7 +106,8 @@ namespace CodeAbility.MonitorAndCommand.Repository
                                 ContentType = (ContentTypes)Enum.Parse(typeof(ContentTypes), reader["ContentType"].ToString()),
                                 Name = (string)reader["Name"],
                                 Parameter = (string)reader["Parameter"],
-                                Content = (string)reader["Content"]
+                                Content = (string)reader["Content"],
+                                Timestamp = (DateTime)reader["Timestamp"]
                             };
 
                             lastMessages.Add(message);
