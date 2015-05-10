@@ -33,8 +33,9 @@ namespace CodeAbility.MonitorAndCommand.ServerConsole
         {
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
             int heartbeatPeriod = Int32.Parse(ConfigurationManager.AppSettings["HeartbeatPeriod"]);
+            bool isMessageServiceActivated = ConfigurationManager.AppSettings["IsMessageServiceActivated"].Equals("true");
 
-            MessageListener messageListener = new MessageListener(portNumber, heartbeatPeriod);
+            MessageListener messageListener = new MessageListener(portNumber, heartbeatPeriod, isMessageServiceActivated);
             messageListener.StartListening();
         }
     }

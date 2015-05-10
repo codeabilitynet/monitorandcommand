@@ -171,12 +171,14 @@ namespace CodeAbility.MonitorAndCommand.Models
             SendingDevice = sendingDevice;
             ReceivingDevice = toDevice; //receivingDevice is equal to toDevice unless the server rerouted the message to a device listening for the to/from traffic
             FromDevice = fromDevice;
+            ToDevice = toDevice;
+
             ContentType = contentType;
             Name = name;
             Parameter = parameter;
             Content = content;
+
             Timestamp = DateTime.Now;
-            ToDevice = toDevice;
         }
 
         public override string ToString()

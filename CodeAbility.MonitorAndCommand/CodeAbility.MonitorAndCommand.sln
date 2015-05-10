@@ -15,6 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DeviceConsole", "Clien
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "CoreServer\Core.Server.csproj", "{A5792C5D-9006-456B-9E9A-79644BA17060}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6659F566-475B-4327-A10A-149ED59A5CFE} = {6659F566-475B-4327-A10A-149ED59A5CFE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Client", "CoreClient\Core.Client.csproj", "{0FC23514-74FE-4107-831F-F57D557BBC2F}"
 	ProjectSection(ProjectDependencies) = postProject
