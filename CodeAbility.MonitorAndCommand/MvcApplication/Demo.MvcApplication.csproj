@@ -301,6 +301,10 @@
       <Project>{c8632312-2d6e-4c77-9178-f627135130bb}</Project>
       <Name>Core.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repository\Core.Repository.csproj">
+      <Project>{497d9949-4f94-4806-9182-63d516cfb79c}</Project>
+      <Name>Core.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WcfServiceLibrary\Core.WcfServiceLibrary.csproj">
       <Project>{EC54149F-6C1A-4017-AE26-F1E75164C46F}</Project>
       <Name>Core.WcfServiceLibrary</Name>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -14,4 +16,64 @@
     </section>
 }*@
 
-<!-- Add content here -->
+<table id="DataTable">
+    <!-- Header -->
+    <tr>
+        <th>
+            Sending Device
+        </th>
+        <th>
+            Receiving Device
+        </th>
+        <th>
+            To Device
+        </th>
+        <th>
+            From Device
+        </th>
+        <th>
+            Content Type
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Parameter
+        </th>
+        <th>
+            Content
+        </th>
+    </tr>
+
+    <!-- Items -->
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.SendingDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ReceivingDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ToDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.FromDevice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.ContentType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Parameter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Content)
+            </td>
+        </tr>
+    }
+</table>
+
