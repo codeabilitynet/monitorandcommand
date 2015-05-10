@@ -79,7 +79,7 @@ namespace CodeAbility.MonitorAndCommand.Repository
         {
             const string CommandName = "SP_Message_ListLast";
 
-            List<Message> lastMessages = null;
+            List<Message> lastMessages = new List<Message>();
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {

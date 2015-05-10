@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
+using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Repository;
 
 namespace MvcApplication.Controllers
 {
     public class HomeController : Controller
     {
+        IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            //ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
-            return View();
+            IEnumerable<Message> lastMessages = messageRepository.ListLastMessages();
+
+            return View(lastMessages);
         }
 
         public ActionResult About()
