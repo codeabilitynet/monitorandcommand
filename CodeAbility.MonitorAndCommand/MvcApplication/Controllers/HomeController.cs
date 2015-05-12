@@ -38,7 +38,7 @@ namespace MvcApplication.Controllers
 
             messageRepository.Purge();
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         public ActionResult About()
