@@ -295,13 +295,13 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
-            Console.WriteLine(String.Format("Device {0} registered." + deviceName)); 
+            Console.WriteLine(String.Format("Device {0} registered.", deviceName)); 
         }
 
         protected void Unregister(string deviceName)
         {
             devicesManager.RemoveDevice(deviceName);
-            Console.WriteLine(String.Format("Device {0} unregistered." + deviceName)); 
+            Console.WriteLine(String.Format("Device {0} unregistered.", deviceName)); 
         }
 
         protected void Publish(Message message)
