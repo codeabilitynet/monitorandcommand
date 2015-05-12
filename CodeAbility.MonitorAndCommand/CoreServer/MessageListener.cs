@@ -139,7 +139,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Trace.WriteLine(e);
             }
 
             Console.WriteLine("\nPress ENTER to continue...");
@@ -172,19 +172,17 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     //HACK : we pass the ip:port address in the Property argument
                     if (receivedMessage.Name.Equals(ControlActions.REGISTER))
-                        receivedMessage.Content = new Address(socket.RemoteEndPoint.ToString());
-
-                    Debug.WriteLine(receivedMessage);
+                        //receivedMessage.Content = new Address(socket.RemoteEndPoint.ToString());
+                        receivedMessage.Content = socket.RemoteEndPoint.ToString();
 
                     messagesReceived.Enqueue(receivedMessage);
 
-                    if (IsMessageServiceActivated)
-                        
+                    if (IsMessageServiceActivated)       
                         StoreMessage(receivedMessage);
 
                     processDone.Set();
                 }
-                catch(Exception)
+                catch(Exception exception)
                 {
                     Address address = new Address(socket.RemoteEndPoint.ToString());
                     string deviceName = devicesManager.GetDeviceNameFromAddress(address);
@@ -203,7 +201,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                         thread.Abort();
 
-                        Debug.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
+                        Trace.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
                     }
 
                     break;
@@ -266,7 +264,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     case ControlActions.REGISTER:
                         //HACK : we pass the ip:port address in the Content argument
-                        Address deviceAddress = message.Content as Address;
+                        Address deviceAddress = new Address(message.Content.ToString());
                         Register(deviceAddress, message.FromDevice);
                         break;
                     case ControlActions.UNREGISTER:
@@ -290,7 +288,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception exception)
             {
-                Debug.WriteLine(exception);
+                Trace.WriteLine(exception);
             }
         }
 
@@ -436,11 +434,11 @@ namespace CodeAbility.MonitorAndCommand.Server
             try
             { 
                 if (messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
-                    messageServiceClient.StoreMessage(message);
+                    messageServiceClient.StoreMessageAsync(message);
             }
             catch(Exception exception)
             {
-                Debug.WriteLine(exception);
+                Trace.WriteLine(exception);
             }
         }
 

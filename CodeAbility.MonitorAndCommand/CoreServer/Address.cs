@@ -17,6 +17,8 @@
 
 
 using System;
+using System.Runtime.Serialization;
+using System.ServiceModel;
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
