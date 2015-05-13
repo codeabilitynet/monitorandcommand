@@ -26,7 +26,7 @@ using CodeAbility.MonitorAndCommand.Models;
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
-    public class Subscription
+    internal class Subscription
     {
         public string DeviceName { get; set; }
         public string DataName { get; set; }
