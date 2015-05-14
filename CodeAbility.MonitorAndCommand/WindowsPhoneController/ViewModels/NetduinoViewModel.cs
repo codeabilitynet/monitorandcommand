@@ -112,7 +112,6 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             }
         }
 
-
         public void Unsubscribe()
         {
             if (MessageClient != null)
@@ -160,6 +159,9 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
+            //Only consider the messages from the NETDUINO
+            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO))
+                return;
 
             if (e.Name.Equals(Netduino.OBJECT_BOARD_LED))
             {

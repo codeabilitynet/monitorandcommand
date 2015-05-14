@@ -101,7 +101,6 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			ButtonPin = buttonPin.Input().Name("Button").Revert().Switch().Enable().OnStatusChanged(x =>
 				{
 					OnButtonPressed(new EventArgs());
-					Console.WriteLine("Button pressed");
 				});
 
 			Pins = new PinConfiguration[] { LedPinGreen, LedPinYellow, LedPinRed, 

@@ -437,7 +437,6 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             foreach (Device device in devicesManager.Devices)
             {
-                //double deviceMessageCount = GetDeviceMessageCount(device.Name);
                 Message heartbeat = Message.InstanciateHeartbeatMessage();
                 SendToAllDevices(heartbeat);
             }

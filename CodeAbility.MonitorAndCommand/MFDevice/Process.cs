@@ -39,7 +39,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
     public class Process
     {
         const int STARTUP_TIME = 5000;
-        const int PERIOD = 1000;
+        const int PERIOD = 2500;
 
         const int BUTTON_PRESSED_DURATION = 500;
         const int RECONNECTION_TIMER_DURATION = 60000;
@@ -54,7 +54,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         AutoResetEvent autoEvent = new AutoResetEvent(false);
 
-        ManualResetEvent boardLedEvent = new ManualResetEvent(false);
+        //ManualResetEvent boardLedEvent = new ManualResetEvent(false);
 
         public bool ledState = false;
 
@@ -68,21 +68,24 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
                     messageClient = new MessageClient(Environment.Devices.NETDUINO);
 
-                    messageClient.CommandReceived += socketClient_CommandReceived;
+                    if (messageClient != null)
+                    { 
+                        messageClient.CommandReceived += socketClient_CommandReceived;
 
-                    messageClient.Start(ipAddress, port);
+                        messageClient.Start(ipAddress, port);
 
-                    messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS);
-                    messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.DATA_BUTTON_STATUS);
-                    messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.DATA_BUTTON_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM);
 
-                    messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_RED_LED, Environment.Netduino.DATA_LED_STATUS);
-                    messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_GREEN_LED, Environment.Netduino.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_RED_LED, Environment.Netduino.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.Netduino.OBJECT_GREEN_LED, Environment.Netduino.DATA_LED_STATUS);
 
-                    messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
-                    messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_GREEN_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
-                    messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_RED_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
-                    messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.COMMAND_BUTTON_PRESSED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_GREEN_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_RED_LED, Environment.Netduino.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Netduino.OBJECT_BUTTON, Environment.Netduino.COMMAND_BUTTON_PRESSED);
+                    }
 
                     button.OnInterrupt += new NativeEventHandler(button_OnInterrupt);
 
@@ -106,12 +109,16 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         void socketClient_CommandReceived(object sender, MessageEventArgs e)
         {
+            //Only consider the messages addressed to me
+            if (!e.ToDevice.Equals(Environment.Devices.NETDUINO))
+                return;
+
             string objectName = e.Parameter.ToString();
             string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
             if (objectName.Equals(Environment.Netduino.OBJECT_BUTTON))
             {
-                boardLedEvent.Set();
+                //boardLedEvent.Set();
             }
             else if (objectName.Equals(Environment.Netduino.OBJECT_RED_LED))
             {
@@ -129,9 +136,16 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             {
                 if (messageClient != null)
                 {
+                    //Board LED On
                     boardLed.Write(true);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_ON);
+
+                    //Sensor data
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, new Random().NextDouble().ToString());
+                    
+                    //Board LED Off
                     boardLed.Write(false);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_OFF);
                 }
             }
             catch (Exception)

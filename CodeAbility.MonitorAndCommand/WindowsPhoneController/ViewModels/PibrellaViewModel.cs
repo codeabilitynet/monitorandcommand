@@ -128,6 +128,10 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
+            //Only consider the messages from the PIBRELLA
+            if (!e.FromDevice.Equals(Environment.Devices.PIBRELLA))
+                return;
+
             string dataName = e.Name;
 
             if (dataName.Equals(Pibrella.OBJECT_RED_LED))

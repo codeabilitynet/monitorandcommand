@@ -89,8 +89,6 @@ namespace CodeAbility.MonitorAndCommand.Models
         const string HEARTBEAT = "HEARTBEAT";
         const string ALL = "*";
 
-        const string MESSAGE_COUNT = "MESSAGE_COUNT";
-
         #region Static Helpers
 
         public static Message InstanciateRegisterMessage(string sendingDevice)
@@ -149,7 +147,7 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         public static Message InstanciateHeartbeatMessage()
         {
-            return new Message(SERVER, SERVER, ALL, ContentTypes.HEARTBEAT, MESSAGE_COUNT, String.Empty, DateTime.Now);
+            return new Message(SERVER, SERVER, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
         }
 
         #endregion 

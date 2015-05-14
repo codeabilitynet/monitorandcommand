@@ -36,7 +36,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 {
     public class Blinker
     {
-        const int BLINKING_PERIOD = 333;
+        const int BLINKING_PERIOD = 500;
 
         const int BUTTON_PRESSED_DURATION = 250;
         public int Period { get; set; }
@@ -64,6 +64,10 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
         void client_CommandReceived(object sender, MessageEventArgs e)
         {
+            //Only consider the messages addressed to me
+            if (!e.ToDevice.Equals(Environment.Devices.PIBRELLA))
+                return;
+
 			string commandName = e.Name; 
 			string parameter = e.Parameter.ToString();
             string content = e.Content.ToString();
@@ -120,32 +124,36 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			}
         }
 
-        const int numberOfLeds = 3;
-        int state = numberOfLeds;
+        const int RESET_LED_INDEX = 0;
+        const int GREEN_LED_INDEX = 1;
+        const int YELLOW_LED_INDEX = 2;
+        const int RED_LED_INDEX = 3;
+
+        int ledIndex = RESET_LED_INDEX;
 		private void OnTimedEvent(Object source, ElapsedEventArgs e)
 		{
+            ledIndex++;
+
 			if (Blinking) 
             {
-                if ((state) % numberOfLeds == 0)
+                if (ledIndex == GREEN_LED_INDEX)
                 { 
 					ToggleGreenLed ();
                 }
 
-                if ((state) % numberOfLeds == 1)
+                if (ledIndex == YELLOW_LED_INDEX)
                 { 
 					ToggleYellowLed ();
                 }
 
-                if ((state) % numberOfLeds == 2)
+                if (ledIndex == RED_LED_INDEX)
                 { 
 					ToggleRedLed ();
                 }
 			}
 
-            state++;
-
-            if (state > numberOfLeds + 2)
-                state = numberOfLeds;
+            if (ledIndex == RED_LED_INDEX)
+                ledIndex = RESET_LED_INDEX;
 		}
 
         bool greenLedStatus = false;
