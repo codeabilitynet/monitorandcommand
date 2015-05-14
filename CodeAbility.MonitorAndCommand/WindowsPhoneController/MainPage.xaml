@@ -84,9 +84,9 @@
                     Content="Connect" 
                     Click="Button_Click" ></Button>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" 
+            <!--<TextBlock Grid.Row="2" Grid.Column="0" 
                        FontSize="48"
-                       Text="Devices"></TextBlock>
+                       Text="Devices"></TextBlock>-->
             
             <ListBox x:Name="DevicesListBox"
                      Grid.Row="3" 

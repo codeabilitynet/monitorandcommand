@@ -39,7 +39,7 @@
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <!--<RowDefinition Height="*"></RowDefinition>-->
             </Grid.RowDefinitions>
 
             <Grid>
@@ -79,11 +79,12 @@
                      Opacity="{Binding BlueLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Button Content="Button" Grid.Row="3" 
+            <!--<Button Grid.Row="3" 
                     FontSize="36" Width="120"
                     HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Content="{Binding ButtonPressed, Converter={StaticResource BooleanToOnOff}, FallbackValue=Off}"
                     BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
-                    Click="Button_Click" />
+                    Click="Button_Click" />-->
             
         </Grid>
     </Grid>
