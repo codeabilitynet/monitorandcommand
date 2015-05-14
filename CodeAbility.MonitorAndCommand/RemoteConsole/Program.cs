@@ -33,12 +33,10 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
     {
         static void Main(string[] args)
         {
-            const string DEVICE_NAME = "WindowsPhone";
-
             string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-            MessageClient messageClient = new MessageClient(DEVICE_NAME);
+            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE);
 
             messageClient.DataReceived += client_DataReceived;
 
@@ -48,11 +46,8 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             messageClient.Start(ipAddress, portNumber);
 
-            bool running = true;
-
             Console.WriteLine("Running.");
 
-            //Pibrella
             messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
             messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
             messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
@@ -63,6 +58,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
             messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
 
+            bool running = true;
             while (running)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();

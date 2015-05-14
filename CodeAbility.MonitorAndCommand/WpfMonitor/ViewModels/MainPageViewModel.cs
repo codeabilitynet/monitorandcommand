@@ -122,14 +122,10 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
             messageClient.Start(ipAddress, portNumber);
 
-            System.Threading.Thread.Sleep(10);
-
             messageClient.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
             messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-
             messageClient.SubscribeToTraffic(Devices.NETDUINO, Devices.WINDOWS_PHONE);
             messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO);
-
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)

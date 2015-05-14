@@ -36,6 +36,8 @@ namespace CodeAbility.RaspberryPi.Pibrella
 {
     public class Blinker
     {
+        const int BLINKING_PERIOD = 333;
+
         const int BUTTON_PRESSED_DURATION = 250;
         public int Period { get; set; }
 		public bool Blinking { get; set; }
@@ -94,7 +96,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
         public void Start()
         {
-            Blinking = true; //Blink by default
+            Blinking = false;
 
             messageClient.CommandReceived += client_CommandReceived;
             messageClient.Start(ipAddress, portNumber);
@@ -111,7 +113,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
                 messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_RED_LED, Environment.Pibrella.COMMAND_TOGGLE_LED);
                 messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.COMMAND_BUTTON_PRESSED);
 
-                aTimer = new Timer(500);
+                aTimer = new Timer(BLINKING_PERIOD);
 				// Hook up the Elapsed event for the timer. 
 				aTimer.Elapsed += OnTimedEvent;
 				aTimer.Enabled = true;
