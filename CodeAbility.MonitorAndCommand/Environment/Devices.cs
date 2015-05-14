@@ -23,13 +23,13 @@ namespace CodeAbility.MonitorAndCommand.Environment
     public class Devices
     {
         public const string ALL = "*";
-        //Device name
+
         public const string NETDUINO = "Netduino";
-        //Device name
+
         public const string PIBRELLA = "Pibrella";
-        //Device name
+
         public const string WINDOWS_PHONE = "WindowsPhone";
-        //Device name
+
         public const string WPF_MONITOR = "WpfMonitor";
     }
 }

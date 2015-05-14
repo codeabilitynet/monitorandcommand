@@ -33,14 +33,8 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 {
     internal class SocketClient
     {
-        // A delegate type for hooking up change notifications.
         public delegate void DataStringReceivedEventHandler(object sender, DataStringEventArgs e);
-
-        // An event that clients can use to be notified whenever the
-        // elements of the list change.
         public event DataStringReceivedEventHandler DataStringReceived;
-
-        // Invoke the Changed event; called whenever list changes
         protected void OnDataStringReceived(DataStringEventArgs e)
         {
             if (DataStringReceived != null)
@@ -49,7 +43,6 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 
         Socket socket = null;
 
-        // Signaling object used to notify when an asynchronous operation is completed
         static ManualResetEvent clientDone = new ManualResetEvent(false);
 
         // Define a timeout in milliseconds for each asynchronous call. If a response is not received within this 
@@ -57,8 +50,6 @@ namespace CodeAbility.MonitorAndCommand.WPClient
         const int TIMEOUT_MILLISECONDS = 5000;
 
         public bool IsConnected { get; set; }
-
-        //StreamSocket _socket;
 
         private Queue<Message> messagesToSend = new Queue<Message>();
 
@@ -118,7 +109,6 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 
             if (socket != null)
             {
-                // Create SocketAsyncEventArgs context object
                 SocketAsyncEventArgs socketEventArg = new SocketAsyncEventArgs();
 
                 socketEventArg.RemoteEndPoint = socket.RemoteEndPoint;

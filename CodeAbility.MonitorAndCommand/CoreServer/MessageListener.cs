@@ -33,6 +33,9 @@ using CodeAbility.MonitorAndCommand.Helpers;
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
+    /// <summary>
+    /// Waits for connections from clients, listens for the messages they send and then routes them to other clients that requested them. 
+    /// </summary>
     public class MessageListener
     {
         const string ALL = "*";
@@ -47,17 +50,34 @@ namespace CodeAbility.MonitorAndCommand.Server
         private ManualResetEvent processDone = new ManualResetEvent(false);
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
-        
+        /// <summary>
+        /// Dictionary holding references to the threads receiving messages from connected clients
+        /// </summary>
         private ConcurrentDictionary<Address, Thread> receiveThreads = new ConcurrentDictionary<Address, Thread>();
+
+        /// <summary>
+        /// Dictionary holding references to the sockets opened for each connected client
+        /// </summary>
         private ConcurrentDictionary<Address, Socket> clientsSockets = new ConcurrentDictionary<Address, Socket>();
 
-        private ConcurrentDictionary<string, int> messageHeartbeatCounters = new ConcurrentDictionary<string, int>();
-        private ConcurrentDictionary<string, Queue<int>> messageMinutesCounters = new ConcurrentDictionary<string, Queue<int>>();
-        
+        /// <summary>
+        /// Queue containing messages received from clients through each "message receiving" thread
+        /// </summary>
         private ConcurrentQueue<Message> messagesReceived = new ConcurrentQueue<Message>();
+
+        /// <summary>
+        /// Queue containg messages to be sent
+        /// </summary>
         private ConcurrentQueue<Message> messagesToSend = new ConcurrentQueue<Message>();
        
+        /// <summary>
+        /// Object managing references to devices (connected clients)
+        /// </summary>
         DevicesManager devicesManager = new DevicesManager();
+
+        /// <summary>
+        /// Object managing the "message routing rules" derived from publish/subscribe messages sent by the clients
+        /// </summary>
         RulesManager rulesManager = new RulesManager(); 
 
         int PortNumber { get; set; }
@@ -79,7 +99,8 @@ namespace CodeAbility.MonitorAndCommand.Server
             IsMessageServiceActivated = isMessageServiceActivated;
 
             if (IsMessageServiceActivated)
-            { 
+            {
+                //Activate the message service
                 messageServiceClient = new MessageServiceReference.MessageServiceClient();
                 messageServiceClient.Open();
 
@@ -125,7 +146,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
-                    Socket socket = listener.Accept(/*new AsyncCallback(AcceptCallback), listener*/);
+                    Socket socket = listener.Accept();
 
                     Address address = new Address(socket.RemoteEndPoint.ToString());
 
@@ -172,7 +193,6 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     //HACK : we pass the ip:port address in the Property argument
                     if (receivedMessage.Name.Equals(ControlActions.REGISTER))
-                        //receivedMessage.Content = new Address(socket.RemoteEndPoint.ToString());
                         receivedMessage.Content = socket.RemoteEndPoint.ToString();
 
                     messagesReceived.Enqueue(receivedMessage);
@@ -182,7 +202,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     processDone.Set();
                 }
-                catch(Exception exception)
+                catch(Exception)
                 {
                     Address address = new Address(socket.RemoteEndPoint.ToString());
                     string deviceName = devicesManager.GetDeviceNameFromAddress(address);
