@@ -1,0 +1,4 @@
+﻿When trying to access the server's port from an other machine, do not forget : 
+- to start the Console application as Administrator and 
+- to open the port on the firewall.
+
