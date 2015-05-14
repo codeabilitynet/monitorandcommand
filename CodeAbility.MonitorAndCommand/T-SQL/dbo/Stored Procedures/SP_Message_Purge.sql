@@ -13,4 +13,6 @@ BEGIN
     -- Insert statements for procedure here
 	DELETE  
 	  FROM [dbo].[TB_Message];
+
+	DBCC CHECKIDENT ('TB_Message', RESEED, 0);
 END
