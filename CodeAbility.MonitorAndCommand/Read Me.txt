@@ -2,8 +2,8 @@ If you do not have NETMF/WindowsPhone SDK installed, unload the projects that re
 
 To start the "Test/Demo" environment, in "multiple start up" projects, set "Start" for the following projects:
 - Test.ServerConsole;
-- Test.DeviceConsole or Demo.WindowsPhoneController;
-- Test.RemoteConsole;
+- Test.DeviceConsole;
+- Test.RemoteConsole or Demo.WindowsPhoneController;
 - optional, Demo.WpfMonitor;
 - optional, if you have a Netduino Plus device connected to the network, Demo.Netduino;
 
