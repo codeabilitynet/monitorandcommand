@@ -174,7 +174,7 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// Message receiving thread method
         /// </summary>
         /// <param name="socketObject">receiving socket</param>
-        public void Receiver(object socketObject)
+        private void Receiver(object socketObject)
         {
             Socket socket = socketObject as Socket;
 
@@ -246,11 +246,20 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     Message message = null;
                     if (messagesReceived.TryDequeue(out message))
+                    {
+                        PreProcess(message);
                         Process(message);
+                        PostProcess(message);
+                    }
                 }
 
                 processDone.WaitOne();
             }
+        }
+
+        protected virtual void PreProcess(Message message)
+        {
+
         }
 
         protected void Process(Message message)
@@ -272,6 +281,11 @@ namespace CodeAbility.MonitorAndCommand.Server
                 case ContentTypes.RESPONSE:
                     throw new NotImplementedException();
             }
+        }
+
+        protected virtual void PostProcess(Message message)
+        {
+
         }
 
         #region Server actions

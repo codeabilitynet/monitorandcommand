@@ -96,7 +96,9 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 }
                 catch (Exception)
                 {
-                    messageClient.CommandReceived -= socketClient_CommandReceived;
+                    if (messageClient != null)
+                        messageClient.CommandReceived -= socketClient_CommandReceived;
+
                     button.OnInterrupt -= new NativeEventHandler(button_OnInterrupt);
 
                     AutoResetEvent autoResetEvent = new AutoResetEvent(false);
@@ -134,19 +136,20 @@ namespace CodeAbility.MonitorAndCommand.Netduino
         {
             try
             {
+                //Board LED On
+                boardLed.Write(true);
                 if (messageClient != null)
-                {
-                    //Board LED On
-                    boardLed.Write(true);
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_ON);
 
-                    //Sensor data
-                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, new Random().NextDouble().ToString());
+                //Sensor data
+                string sensorDataString = new Random().NextDouble().ToString();
+                if (messageClient != null)
+                    messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, sensorDataString);
                     
-                    //Board LED Off
-                    boardLed.Write(false);
+                //Board LED Off
+                boardLed.Write(false);
+                if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_OFF);
-                }
             }
             catch (Exception)
             {
