@@ -221,6 +221,8 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private void Sender()
         {
+            Trace.WriteLine("Starting Sender() thread.");
+
             while (client.Connected)
             {
                 try
@@ -238,7 +240,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                 }
                 catch (Exception exception)
                 {
-                    Debug.WriteLine(exception);
+                    Trace.WriteLine(exception);
                     throw;
                 }
             }
@@ -246,17 +248,28 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private void Send(Message message)
         {
-            string serializedMessage = JsonConvert.SerializeObject(message);
-            string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
-            byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
+            try
+            {
+                Trace.WriteLine(String.Format("Sending     : {0}", message));
 
-            client.Send(byteData, 0, byteData.Length, 0);
+                string serializedMessage = JsonConvert.SerializeObject(message);
+                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+                byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-            Debug.WriteLine(message);
+                client.Send(byteData, 0, byteData.Length, 0);
+
+                Trace.WriteLine(String.Format("Sent        : {0}", message));
+            }
+            catch(Exception exception)
+            {
+                Trace.WriteLine(String.Format("Send exception : {0}", exception));
+            }
         }
 
         private void Receiver()
         {
+            Trace.WriteLine("Starting Receiver() thread.");
+
             while (client.Connected)
             {
                 try
@@ -268,6 +281,9 @@ namespace CodeAbility.MonitorAndCommand.Client
                     string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 
                     Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
+
+                    Trace.WriteLine(String.Format("Received    : {0}", message));
+
                     if (message != null)
                     {
                         if (message.ContentType.Equals(ContentTypes.COMMAND))
@@ -282,8 +298,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e);
-                    throw;
+                    Trace.WriteLine(e);
                 }
             }
         }

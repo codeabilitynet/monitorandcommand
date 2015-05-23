@@ -55,6 +55,11 @@ namespace CodeAbility.MonitorAndCommand.Server
             rules.RemoveAll(x => x.FromDevice.Equals(deviceName) || x.ToDevice.Equals(deviceName));
         }
 
+        public void RemoveAllRules()
+        {
+            rules.Clear();
+        }
+
         public IEnumerable<string> GetAuthorizedDeviceNames(ContentTypes contentType, string fromDevice, string toDevice, string parameter, string content)
         {
 			IEnumerable<string> deviceNames = null; 
