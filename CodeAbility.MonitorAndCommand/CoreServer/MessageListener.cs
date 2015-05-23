@@ -120,7 +120,7 @@ namespace CodeAbility.MonitorAndCommand.Server
         }
 
         /// <summary>
-        /// Start listening for messages
+        /// Start/Stop listening for messages
         /// </summary>
         public void StartListening()
         {
@@ -162,10 +162,21 @@ namespace CodeAbility.MonitorAndCommand.Server
             {
                 Trace.WriteLine(e);
             }
+        }
 
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
+        public void StopListening()
+        {
+            rulesManager.RemoveAllRules();
 
+            foreach(Socket socket in clientsSockets.Values)
+            {
+                Address address = new Address(socket.RemoteEndPoint.ToString());
+                CleanUp(address);
+            }
+
+            devicesManager.RemoveAllDevices();
+
+            listener.Close();
         }
 
         #region Receiving messages
@@ -177,6 +188,8 @@ namespace CodeAbility.MonitorAndCommand.Server
         private void Receiver(object socketObject)
         {
             Socket socket = socketObject as Socket;
+
+            Trace.WriteLine(String.Format("Starting Receiver thread for socket {0}", socket.RemoteEndPoint.ToString()));
 
             while (socket.Connected)
             {
@@ -191,6 +204,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                     string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
                     Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
+                    Trace.WriteLine(String.Format("Receiving   : {0}", receivedMessage));
+
                     //HACK : we pass the ip:port address in the Property argument
                     if (receivedMessage.Name.Equals(ControlActions.REGISTER))
                         receivedMessage.Content = socket.RemoteEndPoint.ToString();
@@ -200,32 +215,38 @@ namespace CodeAbility.MonitorAndCommand.Server
                     if (IsMessageServiceActivated)       
                         StoreMessage(receivedMessage);
 
+                    Trace.WriteLine(String.Format("Received    : {0}", receivedMessage));
+
                     processDone.Set();
                 }
                 catch(Exception)
                 {
                     Address address = new Address(socket.RemoteEndPoint.ToString());
-                    string deviceName = devicesManager.GetDeviceNameFromAddress(address);
-
-                    Console.WriteLine(String.Format("Device {0} disconnected.", deviceName));
-
-                    //Close socket and abort thread
-                    Thread thread = null;
-                    devicesManager.RemoveDevice(devicesManager.GetDeviceNameFromAddress(address));
-
-                    if (receiveThreads.TryRemove(address, out thread))
-                    {
-                        Socket _socket = null;
-                        if (clientsSockets.TryRemove(address, out _socket))
-                            _socket.Close();
-
-                        thread.Abort();
-
-                        Trace.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
-                    }
-
+                    CleanUp(address);
                     break;
                 }
+            }
+        }
+
+        private void CleanUp(Address address)
+        {
+            string deviceName = devicesManager.GetDeviceNameFromAddress(address);
+
+            Console.WriteLine(String.Format("Device {0} disconnected.", deviceName));
+
+            //Close socket and abort thread
+            Thread thread = null;
+            devicesManager.RemoveDevice(devicesManager.GetDeviceNameFromAddress(address));
+
+            if (receiveThreads.TryRemove(address, out thread))
+            {
+                Socket _socket = null;
+                if (clientsSockets.TryRemove(address, out _socket))
+                    _socket.Close();
+
+                thread.Abort();
+
+                Trace.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
             }
         }
 
@@ -238,6 +259,8 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// </summary>
         private void Processor()
         {
+            Trace.WriteLine("Starting Processor() thread"); 
+
             while (true)
             {
                 processDone.Reset();
@@ -264,6 +287,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         protected void Process(Message message)
         {
+            Trace.WriteLine(String.Format("Processing  : {0}", message));
+
             ContentTypes messageType = message.ContentType;
             switch(messageType)
             { 
@@ -281,6 +306,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                 case ContentTypes.RESPONSE:
                     throw new NotImplementedException();
             }
+
+            Trace.WriteLine(String.Format("Processed   : {0}", message));
         }
 
         protected virtual void PostProcess(Message message)
@@ -322,7 +349,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception exception)
             {
-                Trace.WriteLine(exception);
+                Trace.WriteLine(String.Format("Processing exception : {0}", exception));
             }
         }
 
@@ -334,6 +361,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         protected void Unregister(string deviceName)
         {
+            rulesManager.RemoveAllRules(deviceName);
             devicesManager.RemoveDevice(deviceName);
             Console.WriteLine(String.Format("Device {0} unregistered.", deviceName)); 
         }
@@ -401,6 +429,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void Sender()
         {
+            Trace.WriteLine("Starting Sender() thread"); 
+
             while (true)
             {
                 sendDone.Reset();
@@ -418,6 +448,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void Send(Message message)
         {
+            Trace.WriteLine(String.Format("Sending     : {0}", message));
+
             string serializedMessage = JsonConvert.SerializeObject(message);
             serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
@@ -429,7 +461,10 @@ namespace CodeAbility.MonitorAndCommand.Server
             {
                 Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
                 if (socket != null && socket.Connected)
+                {
                     socket.Send(byteData, 0, byteData.Length, 0);
+                    Trace.WriteLine(String.Format("Sent        : {0}", message));
+                }
                 else
                 {
                     clientsSockets.TryRemove(destinationAddress, out socket);
@@ -467,7 +502,9 @@ namespace CodeAbility.MonitorAndCommand.Server
             try
             { 
                 if (messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
+                {
                     messageServiceClient.StoreMessageAsync(message);
+                }
             }
             catch(Exception exception)
             {

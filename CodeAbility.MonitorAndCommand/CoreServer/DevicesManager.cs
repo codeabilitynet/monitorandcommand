@@ -44,6 +44,11 @@ namespace CodeAbility.MonitorAndCommand.Server
             devices.RemoveAll(x => x.Name.Equals(name));
         }
 
+        public void RemoveAllDevices()
+        {
+            devices.Clear();
+        }
+
         public Device GetDeviceFromName(string deviceName)
         {
             return devices.FirstOrDefault(x => x.Name == deviceName);

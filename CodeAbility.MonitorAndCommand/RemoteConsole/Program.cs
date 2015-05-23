@@ -40,8 +40,8 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             messageClient.DataReceived += client_DataReceived;
 
-            Console.WriteLine("Remote console.");
-            Console.WriteLine("Hit a key to start, hit [0,3] to send Pibrella commands, hit ESC to exit.");
+            Console.WriteLine("Remote console");
+            Console.WriteLine("Hit a key to start client, hit [0,3] to send Pibrella commands, hit ESC to exit.");
             Console.ReadKey();
 
             messageClient.Start(ipAddress, portNumber);

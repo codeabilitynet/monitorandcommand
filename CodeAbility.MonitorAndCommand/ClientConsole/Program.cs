@@ -49,7 +49,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             messageClient.CommandReceived += client_CommandReceived;
 
             Console.WriteLine("Device console.");
-            Console.WriteLine("Hit a key to start, hit [0,3] to send Pibrella data, hit ESC to exit.");
+            Console.WriteLine("Hit a key to start client, hit [0,3] to send Pibrella data, hit ESC to exit.");
             Console.ReadKey();
 
             messageClient.Start(ipAddress, portNumber);

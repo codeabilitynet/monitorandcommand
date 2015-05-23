@@ -2,3 +2,9 @@
 - to start the Console application as Administrator;
 - to open the server's port (default: 11000) on the firewall.
 
+When trying to access the MVC Web Application deployed on a IIS server (instead of the one started by VS), set the appropriate address in the app.config file (blue line below)
+ 
+ <endpoint address="http://localhost:1304/MessageService.svc"
+        binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMessageService"
+        contract="MessageServiceReference.IMessageService" name="BasicHttpBinding_IMessageService" behaviorConfiguration="debug" />
+
