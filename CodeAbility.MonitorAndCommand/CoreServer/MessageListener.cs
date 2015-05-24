@@ -100,11 +100,19 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             if (IsMessageServiceActivated)
             {
-                //Activate the message service
-                messageServiceClient = new MessageServiceReference.MessageServiceClient();
-                messageServiceClient.Open();
+                try
+                { 
+                    //Activate the message service
+                    messageServiceClient = new MessageServiceReference.MessageServiceClient();
+                    messageServiceClient.Open();
 
-                Console.WriteLine("Message service is activated."); 
+                    Console.WriteLine("Message service is activated."); 
+                }
+                catch(Exception exception)
+                {
+                    Console.WriteLine("Message service could not be reached.");
+                    Trace.WriteLine(String.Format("Service exception : {0}", exception));
+                }
             }
 
             //Threads
@@ -201,10 +209,11 @@ namespace CodeAbility.MonitorAndCommand.Server
                     socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
 
                     string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
+
+                    Trace.WriteLine(String.Format("Receiving   : {0}", paddedSerializedData));
+
                     string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
                     Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
-
-                    Trace.WriteLine(String.Format("Receiving   : {0}", receivedMessage));
 
                     //HACK : we pass the ip:port address in the Property argument
                     if (receivedMessage.Name.Equals(ControlActions.REGISTER))
@@ -212,10 +221,10 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     messagesReceived.Enqueue(receivedMessage);
 
+                    Trace.WriteLine(String.Format("Received    : {0}", receivedMessage));
+
                     if (IsMessageServiceActivated)       
                         StoreMessage(receivedMessage);
-
-                    Trace.WriteLine(String.Format("Received    : {0}", receivedMessage));
 
                     processDone.Set();
                 }
@@ -287,27 +296,32 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         protected void Process(Message message)
         {
-            Trace.WriteLine(String.Format("Processing  : {0}", message));
+            try
+            {
+                ContentTypes messageType = message.ContentType;
+                switch(messageType)
+                { 
+                    case ContentTypes.CONTROL:
+                        ProcessServerAction(message);
+                        break;
+                    case ContentTypes.DATA:
+                    case ContentTypes.COMMAND:
+                        SendToAuthorizedDevices(message);
+                        break;
+                    case ContentTypes.HEARTBEAT:
+                        HandleReturnedHeartbeat(message);
+                        break;
+                    case ContentTypes.HEALTH:
+                    case ContentTypes.RESPONSE:
+                        throw new NotImplementedException();
+                }
 
-            ContentTypes messageType = message.ContentType;
-            switch(messageType)
-            { 
-                case ContentTypes.CONTROL:
-                    ProcessServerAction(message);
-                    break;
-                case ContentTypes.DATA:
-                case ContentTypes.COMMAND:
-                    SendToAuthorizedDevices(message);
-                    break;
-                case ContentTypes.HEARTBEAT:
-                    HandleReturnedHeartbeat(message);
-                    break;
-                case ContentTypes.HEALTH:
-                case ContentTypes.RESPONSE:
-                    throw new NotImplementedException();
+                Trace.WriteLine(String.Format("Processed   : {0}", message));
             }
-
-            Trace.WriteLine(String.Format("Processed   : {0}", message));
+            catch (Exception exception)
+            {
+                Trace.WriteLine(String.Format("Processing exception : {0}", exception));
+            }
         }
 
         protected virtual void PostProcess(Message message)
@@ -319,37 +333,30 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void ProcessServerAction(Message message)
         {
-            try
+            switch (message.Name)
             {
-                switch (message.Name)
-                {
-                    case ControlActions.REGISTER:
-                        //HACK : we pass the ip:port address in the Content argument
-                        Address deviceAddress = new Address(message.Content.ToString());
-                        Register(deviceAddress, message.FromDevice);
-                        break;
-                    case ControlActions.UNREGISTER:
-                        Unregister(message.FromDevice);
-                        break;
-                    case ControlActions.PUBLISH:
-                        Publish(message);
-                        break;
-                    case ControlActions.UNPUBLISH:
-                        Unpublish(message);
-                        break;
-                    case ControlActions.SUBSCRIBE:
-                        Subscribe(message);
-                        break;
-                    case ControlActions.UNSUBSCRIBE:
-                        Unsubscribe(message);
-                        break;
-                    default:
-                        throw new NotSupportedException(String.Format("HandleServerAction, {0} is not a supported action", message.Name));
-                }
-            }
-            catch (Exception exception)
-            {
-                Trace.WriteLine(String.Format("Processing exception : {0}", exception));
+                case ControlActions.REGISTER:
+                    //HACK : we pass the ip:port address in the Content argument
+                    Address deviceAddress = new Address(message.Content.ToString());
+                    Register(deviceAddress, message.FromDevice);
+                    break;
+                case ControlActions.UNREGISTER:
+                    Unregister(message.FromDevice);
+                    break;
+                case ControlActions.PUBLISH:
+                    Publish(message);
+                    break;
+                case ControlActions.UNPUBLISH:
+                    Unpublish(message);
+                    break;
+                case ControlActions.SUBSCRIBE:
+                    Subscribe(message);
+                    break;
+                case ControlActions.UNSUBSCRIBE:
+                    Unsubscribe(message);
+                    break;
+                default:
+                    throw new NotSupportedException(String.Format("HandleServerAction, {0} is not a supported action", message.Name));
             }
         }
 
@@ -448,33 +455,38 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void Send(Message message)
         {
-            Trace.WriteLine(String.Format("Sending     : {0}", message));
-
-            string serializedMessage = JsonConvert.SerializeObject(message);
-            serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
-
-            // Convert the string data to byte data using UTF8 encoding.
-            byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
-
-            Address destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
-            if (destinationAddress != null)
+            try
             {
-                Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
-                if (socket != null && socket.Connected)
+                string serializedMessage = JsonConvert.SerializeObject(message);
+                serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+
+                // Convert the string data to byte data using UTF8 encoding.
+                byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
+
+                Address destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
+                if (destinationAddress != null)
                 {
-                    socket.Send(byteData, 0, byteData.Length, 0);
-                    Trace.WriteLine(String.Format("Sent        : {0}", message));
-                }
-                else
-                {
-                    clientsSockets.TryRemove(destinationAddress, out socket);
-                    Thread receiveThread = null;
-                    if (receiveThreads.TryGetValue(destinationAddress, out receiveThread))
+                    Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
+                    if (socket != null && socket.Connected)
                     {
-                        receiveThread.Abort();
-                        receiveThreads.TryRemove(destinationAddress, out receiveThread);
+                        socket.Send(byteData, 0, byteData.Length, 0);
+                        Trace.WriteLine(String.Format("Sent        : {0}", message));
+                    }
+                    else
+                    {
+                        clientsSockets.TryRemove(destinationAddress, out socket);
+                        Thread receiveThread = null;
+                        if (receiveThreads.TryGetValue(destinationAddress, out receiveThread))
+                        {
+                            receiveThread.Abort();
+                            receiveThreads.TryRemove(destinationAddress, out receiveThread);
+                        }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine(String.Format("Send exception : {0}", exception));
             }
         }
 
@@ -501,7 +513,7 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             try
             { 
-                if (messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
+                if (messageServiceClient != null && messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
                 {
                     messageServiceClient.StoreMessageAsync(message);
                 }
