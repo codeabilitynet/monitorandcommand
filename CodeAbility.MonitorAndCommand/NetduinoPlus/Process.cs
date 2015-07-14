@@ -142,9 +142,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_ON);
 
                 //Sensor data
-                //string sensorDataString = new Random().NextDouble().ToString();
-
-                string sensorDataString = new TemperatureSensor().ReadTemperature().ToString();
+                string sensorDataString = new Random().NextDouble().ToString();
                 if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, sensorDataString);
                     

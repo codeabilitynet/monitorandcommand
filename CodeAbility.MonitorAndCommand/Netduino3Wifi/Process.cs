@@ -105,8 +105,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino3.OBJECT_BOARD_LED, Environment.Netduino3.DATA_LED_STATUS, Environment.Netduino3.CONTENT_LED_STATUS_ON);
 
                 //Sensor data
-                string sensorDataString = new Random().NextDouble().ToString();
-                //string sensorDataString = new TemperatureSensor().ReadTemperature().ToString();
+                //string sensorDataString = new Random().NextDouble().ToString();
+                string sensorDataString = new TemperatureSensor().ReadTemperature().ToString();
                 if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino3.OBJECT_TEMPERATURE_SENSOR, Environment.Netduino3.DATA_SENSOR_TEMPERATURE, sensorDataString);
 
