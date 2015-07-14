@@ -64,9 +64,9 @@
       <Project>{0FC23514-74FE-4107-831F-F57D557BBC2F}</Project>
       <Name>Core.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Environment\Test.Environment.csproj">
+    <ProjectReference Include="..\Environment\Demo.Environment.csproj">
       <Project>{9a68efd0-24a4-4df3-86de-ee35f9e2f778}</Project>
-      <Name>Test.Environment</Name>
+      <Name>Demo.Environment</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Core.Models.csproj">
       <Project>{C8632312-2D6E-4C77-9178-F627135130BB}</Project>

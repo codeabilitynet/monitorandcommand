@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToConnectionStateColorConverter.cs" />
     <Compile Include="Converters\BooleanToOnOffConverter.cs" />
     <Compile Include="Converters\BooleanToBrushConverter.cs" />
     <Compile Include="Converters\BooleanToOpacityConverter.cs" />
@@ -173,9 +174,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Environment\Test.Environment.csproj">
+    <ProjectReference Include="..\Environment\Demo.Environment.csproj">
       <Project>{9a68efd0-24a4-4df3-86de-ee35f9e2f778}</Project>
-      <Name>Test.Environment</Name>
+      <Name>Demo.Environment</Name>
     </ProjectReference>
     <ProjectReference Include="..\PortableModels\Core.PortableModels.csproj">
       <Project>{4537023c-8102-4a8d-9de6-a5636936e6b1}</Project>

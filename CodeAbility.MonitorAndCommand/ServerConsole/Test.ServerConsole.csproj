@@ -66,9 +66,9 @@
       <Project>{A5792C5D-9006-456B-9E9A-79644BA17060}</Project>
       <Name>Core.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Environment\Test.Environment.csproj">
+    <ProjectReference Include="..\Environment\Demo.Environment.csproj">
       <Project>{9a68efd0-24a4-4df3-86de-ee35f9e2f778}</Project>
-      <Name>Test.Environment</Name>
+      <Name>Demo.Environment</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

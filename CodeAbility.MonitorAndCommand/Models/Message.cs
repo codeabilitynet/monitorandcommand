@@ -19,7 +19,7 @@
 using System;
 using System.Net;
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
 using System.Runtime.Serialization;
 #if !PORTABLE
 using System.ServiceModel;
@@ -29,56 +29,56 @@ using System.ServiceModel;
 namespace CodeAbility.MonitorAndCommand.Models
 {
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
     [DataContract]
 #endif
     public class Message
     {
         #region Properties
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public string SendingDevice { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public string ReceivingDevice { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public string FromDevice { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public string ToDevice { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
         public ContentTypes ContentType { get; set; }
 #else
         public int ContentType { get; set; }
 #endif
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public string Name { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public object Parameter { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public object Content { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         [DataMember]
 #endif
         public DateTime Timestamp { get; set; }
@@ -101,11 +101,7 @@ namespace CodeAbility.MonitorAndCommand.Models
             return new Message(sendingDevice, String.Empty, SERVER, ContentTypes.CONTROL, ControlActions.UNREGISTER, String.Empty, String.Empty);
         }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
         public static Message InstanciatePublishMessage(string sendingDevice, string toDevice, string publicationSource, string publicationName)
-#else
-        public static Message InstanciatePublishMessage(string sendingDevice, string toDevice, string publicationSource, string publicationName)
-#endif
         {
             return new Message(sendingDevice, sendingDevice, toDevice, ContentTypes.CONTROL, ControlActions.PUBLISH, publicationSource, publicationName);
         }
@@ -160,7 +156,7 @@ namespace CodeAbility.MonitorAndCommand.Models
         public Message(Message message) :
             this(message.SendingDevice, message.FromDevice, message.ToDevice, message.ContentType, message.Name, message.Parameter, message.Content) { }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         protected Message(string sendingDevice, string fromDevice, string toDevice, ContentTypes contentType, string name, object parameter, object content)
 #else
         protected Message(string sendingDevice, string fromDevice, string toDevice, int contentType, string name, object parameter, object content)
@@ -183,7 +179,7 @@ namespace CodeAbility.MonitorAndCommand.Models
         {
             const string NOT_AVAILABLE = "N/A";
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
             string content = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
 
@@ -201,7 +197,6 @@ namespace CodeAbility.MonitorAndCommand.Models
                  + ", Parameter: " + parameter
                  + ", Content: " + content;
 #endif
-
         }
     }
 }

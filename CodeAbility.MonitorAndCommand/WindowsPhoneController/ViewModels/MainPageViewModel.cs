@@ -34,6 +34,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
+        const string DEFAULT_IP_ADDRESS = "192.168.178.26"; 
+
         public string IpAddress 
         {
             get { return ApplicationSettings.IpAddress; }
@@ -69,8 +71,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         }
 
         public MainPageViewModel()
-        {                
-            IpAddress = !String.IsNullOrEmpty(ApplicationSettings.IpAddress) ? ApplicationSettings.IpAddress : "192.168.178.26";
+        {
+            IpAddress = !String.IsNullOrEmpty(ApplicationSettings.IpAddress) ? ApplicationSettings.IpAddress : DEFAULT_IP_ADDRESS;
             PortNumber = ApplicationSettings.PortNumber.HasValue ? ApplicationSettings.PortNumber.Value : 11000 ;
         }
 
@@ -80,7 +82,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
             if (messageClient.Start(IpAddress, PortNumber))
             { 
-                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO, "Netduino"), 
+                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_PLUS, "Netduino"), 
                                                                new Device(Environment.Devices.PIBRELLA, "Pibrella") };
             }
         }

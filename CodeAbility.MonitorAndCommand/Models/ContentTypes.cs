@@ -21,7 +21,7 @@ using System;
 namespace CodeAbility.MonitorAndCommand.Models
 {
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
 
     public enum ContentTypes
     {
@@ -35,7 +35,7 @@ namespace CodeAbility.MonitorAndCommand.Models
 
 #endif
 
-#if MF_FRAMEWORK_VERSION_V4_2
+#if MF_FRAMEWORK_VERSION_V4_2 || MF_FRAMEWORK_VERSION_V4_3
 
     //.NET MF FRAMEWORK v4.2 does not support enums
 

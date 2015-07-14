@@ -1,0 +1,1 @@
+﻿C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe /username=demoq2m /password=demoq2m /name=OwnCloudFilesWatcherService C:\__OwnCloudFilesWatcherService\Lusis.Q2M.WindowsService.exe

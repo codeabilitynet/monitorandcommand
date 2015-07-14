@@ -38,6 +38,20 @@ namespace CodeAbility.MonitorAndCommand.Server
     /// </summary>
     public class MessageListener
     {
+        #region 
+
+        public delegate void RegistrationEventHandler(object sender, RegistrationEventArgs e);
+
+        public event RegistrationEventHandler RegistrationChanged;
+
+        protected void OnRegistrationChanged(RegistrationEventArgs e)
+        {
+            if (RegistrationChanged != null)
+                RegistrationChanged(this, e);
+        }
+
+        #endregion 
+
         const string ALL = "*";
 
         //Threads
@@ -245,7 +259,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             //Close socket and abort thread
             Thread thread = null;
-            devicesManager.RemoveDevice(devicesManager.GetDeviceNameFromAddress(address));
+
+            Unregister(deviceName);
 
             if (receiveThreads.TryRemove(address, out thread))
             {
@@ -363,14 +378,16 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
-            Console.WriteLine(String.Format("Device {0} registered.", deviceName)); 
+            Console.WriteLine(String.Format("Device {0} registered.", deviceName));
+            OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Registered)); 
         }
 
         protected void Unregister(string deviceName)
         {
             rulesManager.RemoveAllRules(deviceName);
             devicesManager.RemoveDevice(deviceName);
-            Console.WriteLine(String.Format("Device {0} unregistered.", deviceName)); 
+            Console.WriteLine(String.Format("Device {0} unregistered.", deviceName));
+            OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Unregistered)); 
         }
 
         protected void Publish(Message message)
@@ -453,6 +470,11 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
         }
 
+        protected virtual void PostSend(Message message)
+        {
+
+        }
+
         private void Send(Message message)
         {
             try
@@ -470,6 +492,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                     if (socket != null && socket.Connected)
                     {
                         socket.Send(byteData, 0, byteData.Length, 0);
+
+                        PostSend(message);
+
                         Trace.WriteLine(String.Format("Sent        : {0}", message));
                     }
                     else

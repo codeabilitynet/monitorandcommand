@@ -1,11 +1,22 @@
-If you do not have NETMF/WindowsPhone SDK installed, unload the projects that require it. 
-
-To start the "Test/Demo" environment, in "multiple start up" projects, set "Start" for the following projects:
-- Test.ServerConsole;
-- Test.DeviceConsole;
-- Test.RemoteConsole or Demo.WindowsPhoneController;
-- optional, Demo.WpfMonitor;
-- optional, if you have a Netduino Plus device connected to the network, Demo.Netduino;
-
 In order for things to work in your environment, you have to set the Ip address of your test machine as the "server address" to which all the devices are pointing.
 Except for the Netduino project, which "hardcodes" it, the server Ip address is set in the App.config of the respective projects.
+
+If you do not have NETMF/WindowsPhone SDK installed, unload the projects that require it. 
+
+Netduino Plus only support NETMF up to v.4.2. When compiling the NetduinoPlus project, first compile the Core.MFClient with the same version.
+
+The T-SQL project contains all the scripts required to build the database used by the WCF "logging" service (exposed through the MVC Web Application).
+
+To start the "Test" environment, in "multiple start up" projects, set "Start" for the following projects:
+- Test.ServerConsole;
+- Test.DeviceConsole;
+- Test.RemoteConsole.
+
+To start the "Demo" environment presented in the showcase video, in "multiple start up" projects, set "Start" for the following projects:
+- Demo.WpfServer; 
+- Test.DeviceConsole, using the "Data Generator" option; 
+- Demo.WindowsPhoneController;
+- optional, Demo.WpfMonitor;
+- optional, if you have a Netduino Plus device with leds (wired to digital inputs 0 & 1) connected to the network, Demo.NetduinoPlus;
+- optional, if you have a Netduino 3 Wifi device wired to a DS18B20 (data wire on digital input 3) connected to the network, Demo.Netduino3Wifi;
+- optional, if you have a Raspberry with a Pibrella board, Demo.Pibrella.

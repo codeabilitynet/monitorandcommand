@@ -1,0 +1,68 @@
+﻿<Window x:Class="CodeAbility.MonitorAndCommand.WpfServer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
+        xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.UserControls"
+        Title="Monitor and Command Server" Height="400" Width="550" Background="Black">
+    <Window.Resources>
+        <Style x:Key="LegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="SubLegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>        
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Text="Device" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" 
+                       Text="Connection" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"                       
+                       Text="Messages" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="received/min" Style="{StaticResource SubLegendStyle}"></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="3" Text="sent/min" Style="{StaticResource SubLegendStyle}"></TextBlock>                        
+        </Grid>
+                
+        <ListView Grid.Row="1" ItemsSource="{Binding DevicesData}" Background="Transparent">           
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <usercontrols:DeviceDataUserControl />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>    
+        </ListView>
+        
+    </Grid>
+</Window>

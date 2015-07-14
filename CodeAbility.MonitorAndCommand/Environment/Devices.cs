@@ -24,12 +24,16 @@ namespace CodeAbility.MonitorAndCommand.Environment
     {
         public const string ALL = "*";
 
-        public const string NETDUINO = "Netduino";
+        public const string NETDUINO_PLUS = "NetduinoPlus";
+
+        public const string NETDUINO_3 = "Netduino3";
 
         public const string PIBRELLA = "Pibrella";
 
         public const string WINDOWS_PHONE = "WindowsPhone";
 
         public const string WPF_MONITOR = "WpfMonitor";
+
+        public const string DATA_GENERATOR = "DataGenerator"; 
     }
 }

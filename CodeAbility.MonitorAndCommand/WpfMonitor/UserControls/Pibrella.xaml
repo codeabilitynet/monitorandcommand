@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="CodeAbility.MonitorAndCommand.WpfMonitor.UserControls.Pibrella"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+    </UserControl.Resources>
+     
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Pibrella" Style="{StaticResource DeviceNameStyle}"></TextBlock>
+        
+        <Ellipse Grid.Row="1" Fill="Red" 
+                 Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                 Style="{StaticResource EllipseStyle}"/>
+        <Ellipse Grid.Row="2" Fill="Yellow" 
+                 Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                 Style="{StaticResource EllipseStyle}"/>
+        <Ellipse Grid.Row="3" Fill="Green" 
+                 Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                 Style="{StaticResource EllipseStyle}"/>
+
+        <Button Grid.Row="4" 
+                    FontSize="24" Width="60"
+                    BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
+                    Content="{Binding ButtonPressed, Converter={StaticResource BooleanToOnOff}, FallbackValue=Off}"
+                    Style="{StaticResource ButtonStyle}" />
+
+    </Grid>
+</UserControl>

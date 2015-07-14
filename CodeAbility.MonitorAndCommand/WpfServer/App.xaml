@@ -1,0 +1,15 @@
+﻿<Application x:Class="CodeAbility.MonitorAndCommand.WpfServer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"></converters:BooleanToOpacityConverter>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="FontSize" Value="48"></Setter>
+        </Style>
+
+    </Application.Resources>
+</Application>

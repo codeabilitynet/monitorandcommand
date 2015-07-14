@@ -1,0 +1,23 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="E:\Projects\CodeAbility.CommandAndControl\Pibrella\Program.cs" line="9" column="1" />
+      <Breakpoint file="E:\Projects\CodeAbility.CommandAndControl\Pibrella\Blinker.cs" line="78" column="1" />
+      <Breakpoint file="E:\Projects\CodeAbility.CommandAndControl\CoreServer\RulesManager.cs" line="45" column="1" />
+      <Breakpoint file="E:\Projects\CodeAbility.CommandAndControl\CoreServer\RulesManager.cs" line="47" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="D:\Projects\Mono\Pibrella\RaspberryPi\Program.cs" line="9" offsetX="389" offsetY="128" expression="args" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <DisabledProjects>
+    <String>MvcApplication\Demo.MvcApplication.csproj</String>
+  </DisabledProjects>
+  <StartupItems>
+    <String>ServerConsole\Test.ServerConsole.csproj</String>
+    <String>ClientConsole\Test.DeviceConsole.csproj</String>
+    <String>RemoteConsole\Test.RemoteConsole.csproj</String>
+  </StartupItems>
+</Properties>

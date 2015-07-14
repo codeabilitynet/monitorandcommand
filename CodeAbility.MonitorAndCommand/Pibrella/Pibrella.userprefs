@@ -1,0 +1,22 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ActiveRuntime="Mono 3.3.0 (6cd4ddc)&#xD;&#xA;Copyright)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Pibrella\Program.cs">
+    <Files>
+      <File FileName="Pibrella\Program.cs" Line="25" Column="1" />
+      <File FileName="Pibrella\Pibrella.cs" Line="66" Column="55" />
+      <File FileName="Pibrella\packages.config" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="D:\Mono\RaspberryPi\RaspberryPi\Program.cs" line="79" column="1" />
+      <Breakpoint file="D:\Mono\RaspberryPi\RaspberryPi\Program.cs" line="14" column="1" />
+      <Breakpoint file="D:\Mono\Pibrella\RaspberryPi\Program.cs" line="77" column="1" />
+      <Breakpoint file="D:\Mono\Pibrella\RaspberryPi\Program.cs" line="52" column="1" />
+      <Breakpoint file="D:\Mono\Pibrella\Pibrella\Program.cs" line="26" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="RaspberryPi\Program.cs" line="9" offsetX="389" offsetY="128" expression="args" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+</Properties>

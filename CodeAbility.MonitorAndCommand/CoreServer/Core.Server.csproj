@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="DeviceData.cs" />
     <Compile Include="DevicesManager.cs" />
     <Compile Include="MessageListener.cs" />
     <Compile Include="Device.cs" />

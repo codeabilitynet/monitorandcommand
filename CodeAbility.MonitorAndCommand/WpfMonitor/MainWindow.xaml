@@ -2,63 +2,31 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
-        Title="MainWindow" Height="350" Width="550">
-    
-    <Window.Resources>
-        <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"></converters:BooleanToOpacityConverter>
-        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="10"></Setter>
-            <Setter Property="Foreground" Value="White"></Setter>
-            <Setter Property="FontSize" Value="48"></Setter>
-        </Style>
-        <Style x:Key="RectangleStyle" TargetType="Rectangle">
-            <Setter Property="Margin" Value="10"></Setter>
-            <Setter Property="Width" Value="60"></Setter>
-            <Setter Property="Height" Value="60"></Setter>
-            <Setter Property="StrokeThickness" Value="5"></Setter>
-        </Style>
-    </Window.Resources>
-    
+        xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.UserControls"
+        Title="Monitor" Height="300" Width="1000"
+        Loaded="Window_Loaded">
+        
     <Grid Background="Black">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <!--<ListView ItemsSource="{Binding DevicesData}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <usercontrols:DeviceDataUserControl />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->      
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Pibrella" Style="{StaticResource TextBlockStyle}"></TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Netduino" Style="{StaticResource TextBlockStyle}"></TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Windows Phone" Style="{StaticResource TextBlockStyle}"></TextBlock>
-
-        <Rectangle Grid.Row="0" Grid.Column="1"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Green" 
-                   Opacity="{Binding PibrellaMessageSent, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-        <Rectangle Grid.Row="1" Grid.Column="1"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Green" 
-                   Opacity="{Binding NetduinoMessageSent, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-        <Rectangle Grid.Row="2" Grid.Column="1"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Green" 
-                   Opacity="{Binding WindowsPhoneMessageSent, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-
-        <Rectangle Grid.Row="0" Grid.Column="2"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Blue" 
-                   Opacity="{Binding PibrellaMessageReceived, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-        <Rectangle Grid.Row="1" Grid.Column="2"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Blue" 
-                   Opacity="{Binding NetduinoMessageReceived, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-        <Rectangle Grid.Row="2" Grid.Column="2"
-                   Style="{StaticResource RectangleStyle}"
-                   Fill="Blue" 
-                   Opacity="{Binding WindowsPhoneMessageReceived, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+        
+        <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
+        <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
+        <usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>
+        <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
+        
     </Grid>
 </Window>
