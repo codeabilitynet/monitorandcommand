@@ -60,15 +60,19 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         int PortNumber { get; set; }
 
+        bool IsLoggingEnabled { get; set; }
+
         #endregion 
 
         Socket socket = null;
 
         private Thread receiveThread = null;
 
-        public MessageClient(string deviceName)
+        public MessageClient(string deviceName, bool isLoggingEnabled)
         { 
             DeviceName = deviceName;
+
+            IsLoggingEnabled = isLoggingEnabled;
 
             receiveThread = new Thread(new ThreadStart(Receiver));
         }
@@ -92,9 +96,15 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 receiveThread.Start();
 
                 Register();
+
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("MessageClient started.");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write(exception.ToString());
+
                 throw;
             }
         }
@@ -105,9 +115,15 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             {
                 this.receiveThread.Abort();
                 this.socket.Close();
+
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("MessageClient stopped");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write(exception.ToString());
+
                 throw;
             }
         }
@@ -154,6 +170,9 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
             this.socket.Send(Encoding.UTF8.GetBytes(paddedSerializedData));
+
+            if (IsLoggingEnabled)
+                Logger.Instance.Write("Sent    : " + message.ToString());
         }
 
         #region Threads
@@ -189,15 +208,21 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                         Parameter = (string)hashTable["Parameter"],
                         Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
                     };
-                        
+    
                     if (message != null)
                     {
+                        if (IsLoggingEnabled)
+                            Logger.Instance.Write("Received: " + message.ToString());
+
                         if (message.ContentType == ContentTypes.COMMAND)
                             OnCommandReceived(new MessageEventArgs(message));
                     }
                 }
                 catch (Exception exception)
                 {
+                    if (IsLoggingEnabled)
+                        Logger.Instance.Write(exception.ToString());
+
                     throw;
                 }
             }

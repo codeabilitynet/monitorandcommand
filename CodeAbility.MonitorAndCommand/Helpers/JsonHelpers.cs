@@ -29,7 +29,7 @@ namespace CodeAbility.MonitorAndCommand.Helpers
         /// <returns></returns>
         public static string PadSerializedMessage(string serializedMessage, int bufferSize)
         {
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string paddedSerializedData = serializedMessage.PadRight(bufferSize, '.');
 #else
             //Padding serializedMessage with dots to have a BUFFER_SIZE bytes message

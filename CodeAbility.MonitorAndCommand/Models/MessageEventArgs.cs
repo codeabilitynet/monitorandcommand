@@ -18,7 +18,7 @@
 
 using System;
 
-#if MF_FRAMEWORK_VERSION_V4_2
+#if MF_FRAMEWORK_VERSION_V4_2 || MF_FRAMEWORK_VERSION_V4_3
 using Microsoft.SPOT;
 #endif
 
@@ -32,7 +32,9 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         public string ToDevice { get; set; }
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+        public string ReceivingDevice { get; set; }
+
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
         public ContentTypes ContentType { get; set; }
 #else
         public int ContentType { get; set; }
@@ -48,6 +50,7 @@ namespace CodeAbility.MonitorAndCommand.Models
             SendingDevice = receivedMessage.SendingDevice;
             FromDevice = receivedMessage.FromDevice;
             ToDevice = receivedMessage.ToDevice;
+            ReceivingDevice = receivedMessage.ReceivingDevice; 
             ContentType = receivedMessage.ContentType;
             Name = receivedMessage.Name;
             Parameter = receivedMessage.Parameter; 
@@ -59,7 +62,7 @@ namespace CodeAbility.MonitorAndCommand.Models
         {
             const string NOT_AVAILABLE = "N/A";
 
-#if !MF_FRAMEWORK_VERSION_V4_2
+#if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
             string content = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
 

@@ -31,6 +31,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using CodeAbility.MonitorAndCommand.Client;
+using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Environment;
+
+using CodeAbility.MonitorAndCommand.WpfMonitor.Models;
+
 namespace CodeAbility.MonitorAndCommand.WpfMonitor
 {
     /// <summary>
@@ -38,11 +44,20 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
+        ViewModels.MainWindowViewModel viewModel; 
+
         public MainWindow()
         {
-            InitializeComponent();
+            viewModel = new ViewModels.MainWindowViewModel();
+            this.DataContext = viewModel; 
 
-            this.DataContext = new ViewModels.MainPageViewModel();
+            InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Connect when UI is loaded
+            viewModel.Connect(); 
         }
     }
 }

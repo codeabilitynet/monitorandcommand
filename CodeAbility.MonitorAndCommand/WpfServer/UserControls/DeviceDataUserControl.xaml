@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="CodeAbility.MonitorAndCommand.WpfServer.UserControls.DeviceDataUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="550">
+    
+    <UserControl.Resources>
+        
+        <converters:BooleanToConnectionStateColorConverter x:Key="BooleanToConnectionStateColor"/>
+        
+        <Style x:Key="DeviceStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="MessageIndicatorStyle" TargetType="Rectangle">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"></Setter>
+            <Setter Property="Width" Value="32"></Setter>
+            <Setter Property="Height" Value="32"></Setter>
+        </Style>
+        <Style x:Key="ValueStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,5,15,5"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="EllipseStyle" TargetType="Ellipse">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="2"/>
+        </Style>
+
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="70"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource DeviceStyle}"></TextBlock>
+
+        <Ellipse Grid.Column="1"
+                Fill="{Binding IsConnected, Converter={StaticResource BooleanToConnectionStateColor}}" 
+                Style="{StaticResource EllipseStyle}"/>
+
+        <Rectangle Grid.Column="2"
+                        Style="{StaticResource MessageIndicatorStyle}"
+                        Fill="Violet" 
+                        Opacity="{Binding MessageReceived, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}">
+        </Rectangle>
+        <TextBlock Grid.Column="3" Text="{Binding IncomingMessagesAverage, StringFormat=N1, FallbackValue=0}"  Style="{StaticResource ValueStyle}"/>
+
+        <Rectangle Grid.Column="4"
+                        Style="{StaticResource MessageIndicatorStyle}"
+                        Fill="Turquoise" 
+                        Opacity="{Binding MessageSent, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+        <TextBlock Grid.Column="5" Text="{Binding OutgoingMessagesAverage, StringFormat=N1, FallbackValue=0}" Style="{StaticResource ValueStyle}"/>
+
+
+    </Grid>
+</UserControl>

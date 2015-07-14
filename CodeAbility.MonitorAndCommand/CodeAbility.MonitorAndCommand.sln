@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WindowsPhoneController
 		{9A68EFD0-24A4-4DF3-86DE-EE35F9E2F778} = {9A68EFD0-24A4-4DF3-86DE-EE35F9E2F778}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Netduino", "MFDevice\Demo.Netduino.csproj", "{37B0D3FB-AD32-4106-928D-7B6AE5D57252}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.NetduinoPlus", "NetduinoPlus\Demo.NetduinoPlus.csproj", "{37B0D3FB-AD32-4106-928D-7B6AE5D57252}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Helpers", "Helpers\Core.Helpers.csproj", "{C5749F33-7C79-4991-B43F-7A83B234CD5A}"
 EndProject
@@ -58,7 +58,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.WcfServiceLibrary", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.MvcApplication", "MvcApplication\Demo.MvcApplication.csproj", "{6659F566-475B-4327-A10A-149ED59A5CFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Environment", "Environment\Test.Environment.csproj", "{9A68EFD0-24A4-4DF3-86DE-EE35F9E2F778}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Environment", "Environment\Demo.Environment.csproj", "{9A68EFD0-24A4-4DF3-86DE-EE35F9E2F778}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WpfMonitor", "WpfMonitor\Demo.WpfMonitor.csproj", "{8DBA4513-68B1-4AB9-A444-CFE81A3FF343}"
 EndProject
@@ -72,70 +72,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Repository", "Reposito
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Core.T-SQL", "T-SQL\Core.T-SQL.sqlproj", "{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WpfServer", "WpfServer\Demo.WpfServer.csproj", "{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Netduino3Wifi", "Netduino3Wifi\Demo.Netduino3Wifi.csproj", "{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs20
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ClientConsole\\Test.DeviceConsole.csproj
-		SccProjectName1 = ClientConsole
-		SccLocalPath1 = ClientConsole
-		SccProjectUniqueName2 = CoreClient\\Core.Client.csproj
-		SccProjectName2 = CoreClient
-		SccLocalPath2 = CoreClient
-		SccProjectUniqueName3 = CoreServer\\Core.Server.csproj
-		SccProjectName3 = CoreServer
-		SccLocalPath3 = CoreServer
-		SccProjectUniqueName4 = Environment\\Test.Environment.csproj
-		SccProjectName4 = Environment
-		SccLocalPath4 = Environment
-		SccProjectUniqueName5 = Helpers\\Core.Helpers.csproj
-		SccProjectName5 = Helpers
-		SccLocalPath5 = Helpers
-		SccProjectUniqueName6 = MFClient\\Core.MFClient.csproj
-		SccProjectName6 = MFClient
-		SccLocalPath6 = MFClient
-		SccProjectUniqueName7 = MFDevice\\Demo.Netduino.csproj
-		SccProjectName7 = MFDevice
-		SccLocalPath7 = MFDevice
-		SccProjectUniqueName8 = Models\\Core.Models.csproj
-		SccProjectName8 = Models
-		SccLocalPath8 = Models
-		SccProjectUniqueName9 = MvcApplication\\Demo.MvcApplication.csproj
-		SccProjectName9 = MvcApplication
-		SccLocalPath9 = MvcApplication
-		SccProjectUniqueName10 = Pibrella\\Demo.Pibrella.csproj
-		SccProjectName10 = Pibrella
-		SccLocalPath10 = Pibrella
-		SccProjectUniqueName11 = PortableModels\\Core.PortableModels.csproj
-		SccProjectName11 = PortableModels
-		SccLocalPath11 = PortableModels
-		SccProjectUniqueName12 = RemoteConsole\\Test.RemoteConsole.csproj
-		SccProjectName12 = RemoteConsole
-		SccLocalPath12 = RemoteConsole
-		SccProjectUniqueName13 = ServerConsole\\Test.ServerConsole.csproj
-		SccProjectName13 = ServerConsole
-		SccLocalPath13 = ServerConsole
-		SccProjectUniqueName14 = WcfServiceLibrary\\Core.WcfServiceLibrary.csproj
-		SccProjectName14 = WcfServiceLibrary
-		SccLocalPath14 = WcfServiceLibrary
-		SccProjectUniqueName15 = WindowsPhoneController\\Demo.WindowsPhoneController.csproj
-		SccProjectName15 = WindowsPhoneController
-		SccLocalPath15 = WindowsPhoneController
-		SccProjectUniqueName16 = WPClient\\Core.WPClient.csproj
-		SccProjectName16 = WPClient
-		SccLocalPath16 = WPClient
-		SccProjectUniqueName17 = WpfMonitor\\Demo.WpfMonitor.csproj
-		SccProjectName17 = WpfMonitor
-		SccLocalPath17 = WpfMonitor
-		SccProjectUniqueName18 = Repository\\Core.Repository.csproj
-		SccProjectName18 = Repository
-		SccLocalPath18 = Repository
-		SccProjectUniqueName19 = T-SQL\\Core.T-SQL.sqlproj
-		SccProjectName19 = T-SQL
-		SccLocalPath19 = T-SQL
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -389,8 +330,6 @@ Global
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Any CPU.Build.0 = Release|Any CPU
@@ -400,6 +339,34 @@ Global
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{D2845C2A-1DF8-4C6B-86C0-8BF9FB76718F}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BDE923F4-D3F3-4092-ADC9-6FB0D16FB9A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{6796EE4B-5FA7-41C2-9DD3-AA3EEAF33DA3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
