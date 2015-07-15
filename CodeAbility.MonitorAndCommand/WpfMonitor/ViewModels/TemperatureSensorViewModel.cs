@@ -65,7 +65,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
             if (e.Name.Equals(Netduino3.OBJECT_TEMPERATURE_SENSOR))
             {
-                Temperature = e.Content.ToString().Substring(0,3);
+                Temperature = e.Content.ToString().Substring(0,4);
             }
         }
     }

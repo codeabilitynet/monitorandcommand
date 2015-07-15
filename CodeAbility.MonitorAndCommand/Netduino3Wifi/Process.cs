@@ -24,7 +24,6 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
         MessageClient messageClient = null;
 
         OutputPort boardLed = new OutputPort(Pins.ONBOARD_LED, false);
-        InputPort temperatureSensor = new InputPort(Pins.GPIO_PIN_D0, true, Port.ResistorMode.Disabled);
 
         InterruptPort button = new InterruptPort(Pins.ONBOARD_SW1, false, Port.ResistorMode.Disabled, Port.InterruptMode.InterruptEdgeBoth);
 
@@ -32,7 +31,14 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
         //ManualResetEvent boardLedEvent = new ManualResetEvent(false);
 
-        public bool ledState = false;
+        bool ledState = false;
+
+        TemperatureSensor temperatureSensor = new TemperatureSensor(Pins.GPIO_PIN_D2);
+
+        public Process()
+        {
+
+        }
 
         public void Start(string ipAddress, int port)
         {
@@ -95,6 +101,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             }
         }
 
+
         private void DoWork(object state)
         {
             try
@@ -106,7 +113,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
                 //Sensor data
                 //string sensorDataString = new Random().NextDouble().ToString();
-                string sensorDataString = new TemperatureSensor().ReadTemperature().ToString();
+                string sensorDataString = temperatureSensor.ReadTemperature().ToString();
                 if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino3.OBJECT_TEMPERATURE_SENSOR, Environment.Netduino3.DATA_SENSOR_TEMPERATURE, sensorDataString);
 

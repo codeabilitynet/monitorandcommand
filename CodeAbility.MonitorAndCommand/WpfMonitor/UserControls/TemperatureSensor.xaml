@@ -15,7 +15,7 @@
             <Setter Property="Foreground" Value="White"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -24,5 +24,6 @@
 
         <TextBlock Text="DS18B20" Style="{StaticResource DeviceNameStyle}"></TextBlock>
         <TextBlock Grid.Row="1" Text="{Binding Temperature, StringFormat='\{0\}°c', FallbackValue='N/A'}" Style="{StaticResource TemperatureStyle}"/>
+
     </Grid>
 </UserControl>
