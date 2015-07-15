@@ -1,10 +1,13 @@
 using System;
+using System.Threading; 
 
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
 using SecretLabs.NETMF.Hardware;
 using SecretLabs.NETMF.Hardware.Netduino;
+
+using CodeAbility.MonitorAndCommand.MFClient;
 
 namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {
@@ -14,48 +17,70 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
         // center pin is connected to digital pin 0, right pin is connected to 5V,
         // left pin GND, 4k7 pull-up resistor between 5V and the center pin
 
-        OneWire oneWireSensor;
+        // DS18B20
+        const byte FamilyCode = 0x28;
 
-        public TemperatureSensor()
+        // Commands
+        const byte ConvertT = 0x44;
+        const byte CopyScratchpad = 0x48;
+        const byte WriteScratchpad = 0x4E;
+        const byte ReadPowerSupply = 0xB4;
+        const byte RecallE2 = 0xB8;
+        const byte ReadScratchpad = 0xBE;
+        const byte MatchROM = 0x55;
+        const byte SkipROM = 0xCC;
+
+        OneWire oneWire;
+
+        public TemperatureSensor(Cpu.Pin pin)
         {
-            oneWireSensor = new OneWire(new OutputPort(Pins.GPIO_PIN_D2, false));     
+            oneWire = new OneWire(new OutputPort(pin, false));     
         }
 
-        public double ReadTemperature()
+        public float ReadTemperature()
         {
-            //TODO : debug, raises an exception after three calls 
-
-            ushort temperature = 0;
-
-            if (oneWireSensor.TouchReset() > 0)
+            try
             {
-                oneWireSensor.TouchReset();
+                oneWire.TouchReset();
 
-                oneWireSensor.WriteByte(0xCC); // Skip ROM, we only have one device
+                oneWire.WriteByte(SkipROM); // Skip ROM, we only have one device
+                oneWire.WriteByte(ConvertT); // Start temperature conversion
+                Thread.Sleep(750);  // Wait Tconv (for default 12-bit resolution)
 
-                oneWireSensor.WriteByte(0x44); // Start temperature conversion
+                oneWire.TouchReset();
+                oneWire.WriteByte(SkipROM); // Skip ROM
+                oneWire.WriteByte(ReadScratchpad); // Read Scratchpad
 
-                while (oneWireSensor.ReadByte() == 0) ; // wait while busy
+                // Read just the temperature (2 bytes)
+                var tempLo = oneWire.ReadByte();
+                var tempHi = oneWire.ReadByte();
+                float temperature = GetTemperature((byte)tempLo, (byte)tempHi);
 
-                oneWireSensor.TouchReset();
-
-                oneWireSensor.WriteByte(0xCC); // Skip ROM
-
-                oneWireSensor.WriteByte(0xBE); // Read Scratchpad
-
-                temperature = (byte)oneWireSensor.ReadByte(); // LSB
-
-                temperature |= (ushort)(oneWireSensor.ReadByte() << 8); // MSB
-
-                //Temperature in C, If you will in F would be: ((1.80 * (temperature / 16.0)) + 32);
-                double convertedTemperature = temperature / 16.0;
-
-                return convertedTemperature;
+                return temperature;
             }
-            else
+            catch(Exception exception)
             {
-                return 0d;
+                Logger.Instance.Write(exception.ToString());
+                return 0f;    
             }
         }
+
+        // Get temperature
+        float GetTemperature(byte tempLo, byte tempHi)
+        {
+            float temperature = ((short)((tempHi << 8) | tempLo)) / 16F;
+            //Farenheit conversion : ret = (ret * 9 / 5) + 32;            
+            return temperature;
+        }
+
+        //byte[] SetDevice(OneWire oneWire, object device)
+        //{
+        //    byte[] b = (byte[])device;
+        //    foreach (var bTmp in b)
+        //    {
+        //        oneWire.TouchByte(bTmp);
+        //    }
+        //    return b;
+        //}
     }
 }
