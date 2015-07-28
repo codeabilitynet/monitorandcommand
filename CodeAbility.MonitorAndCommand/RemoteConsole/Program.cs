@@ -63,19 +63,19 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-                if (keyInfo.Key == ConsoleKey.NumPad0)
+                if (keyInfo.KeyChar.Equals('0'))
                 {
                     messageClient.SendCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, null);
                 }
-				if (keyInfo.Key == ConsoleKey.NumPad1)
+                if (keyInfo.KeyChar.Equals('1'))
 				{
                     messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,  null);
 				}
-				else if (keyInfo.Key == ConsoleKey.NumPad2)
+                else if (keyInfo.KeyChar.Equals('2'))
 				{
                     messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
 				}
-				else if (keyInfo.Key == ConsoleKey.NumPad3)
+                else if (keyInfo.KeyChar.Equals('3'))
 				{
                     messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
 				}

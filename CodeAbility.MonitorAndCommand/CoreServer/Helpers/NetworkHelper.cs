@@ -28,26 +28,5 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             return localIP;
         }
-
-        /// <summary>
-        /// Send data to the target network machine.
-        /// </summary>
-        /// <param name="destination">The target machine IP.</param>
-        /// <param name="data">Data to be sent, in string format.</param>
-        /// <param name="sanitizeIp">Determines whether to remove the port from the given IP string.</param>
-        public static void SendData(string destination, string data, bool sanitizeIp = true)
-        {
-            using (Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                string completeIp = string.Empty;
-
-                if (sanitizeIp)
-                    completeIp = destination.Remove(destination.IndexOf(":"), destination.Length - destination.IndexOf(":"));
-
-                client.Connect(completeIp, 6169);
-                client.Send(Encoding.UTF8.GetBytes(data));
-
-            }
-        }
     }
 }

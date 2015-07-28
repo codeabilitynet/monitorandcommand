@@ -177,7 +177,7 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         public override string ToString()
         {
-            const string NOT_AVAILABLE = "N/A";
+            const string NOT_AVAILABLE = "[NA]";
 
 #if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
@@ -188,8 +188,7 @@ namespace CodeAbility.MonitorAndCommand.Models
             string parameter =  (Parameter != null) ? Parameter.ToString() : NOT_AVAILABLE;
             string content = (Content != null) ? Content.ToString() : NOT_AVAILABLE;
 
-            return Timestamp + ", "
-                 + SendingDevice + ": "
+            return SendingDevice + ": "
                  + ContentType + ", "
                  + Name + " - "
                  + " From:" + FromDevice
