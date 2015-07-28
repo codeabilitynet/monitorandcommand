@@ -38,6 +38,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5,5,5,5"/>
             <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Foreground" Value="White"/>
         </Style>
 
     </Application.Resources>

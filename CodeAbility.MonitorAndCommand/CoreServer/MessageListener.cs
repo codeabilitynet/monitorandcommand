@@ -210,6 +210,7 @@ namespace CodeAbility.MonitorAndCommand.Server
         private void Receiver(object socketObject)
         {
             Socket socket = socketObject as Socket;
+            Address address = new Address(socket.RemoteEndPoint.ToString());
 
             Trace.WriteLine(String.Format("Starting Receiver thread for socket {0}", socket.RemoteEndPoint.ToString()));
 
@@ -219,13 +220,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     // Receive buffer.
                     byte[] buffer = new byte[Constants.BUFFER_SIZE];
-
                     socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
 
                     string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
-
-                    Trace.WriteLine(String.Format("Receiving   : {0}", paddedSerializedData));
-
                     string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
                     Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
@@ -235,16 +232,17 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     messagesReceived.Enqueue(receivedMessage);
 
-                    Trace.WriteLine(String.Format("Received    : {0}", receivedMessage));
+                    Trace.WriteLine(String.Format("Message  : {0}", receivedMessage));
 
                     if (IsMessageServiceActivated)       
                         StoreMessage(receivedMessage);
 
                     processDone.Set();
                 }
-                catch(Exception)
+                catch(Exception exception)
                 {
-                    Address address = new Address(socket.RemoteEndPoint.ToString());
+                    Trace.WriteLine(exception);
+
                     CleanUp(address);
                     break;
                 }
@@ -266,11 +264,18 @@ namespace CodeAbility.MonitorAndCommand.Server
             {
                 Socket _socket = null;
                 if (clientsSockets.TryRemove(address, out _socket))
-                    _socket.Close();
+                { 
+                    if (_socket.Connected)
+                        _socket.Close();
+
+                    _socket.Dispose();
+                }
+
+                Trace.WriteLine(String.Format("Device {0} socket closed.", deviceName));
 
                 thread.Abort();
 
-                Trace.WriteLine(String.Format("Device {0} thread & socket cleaned up.", deviceName));
+                Trace.WriteLine(String.Format("Device {0} thread aborted.", deviceName));
             }
         }
 

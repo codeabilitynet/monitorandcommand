@@ -48,13 +48,13 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             {
                 keyInfo = Console.ReadKey();
             }
-            while (!(keyInfo.Key == ConsoleKey.NumPad1 || keyInfo.Key == ConsoleKey.NumPad2 || keyInfo.Key == ConsoleKey.NumPad3)); 
+            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3')));
 
-            if (keyInfo.Key == ConsoleKey.NumPad1)
+            if (keyInfo.KeyChar.Equals('1'))
                 DataGeneratorProcess.Start(ipAddress, portNumber);
-            else if (keyInfo.Key == ConsoleKey.NumPad2)
+            else if (keyInfo.KeyChar.Equals('2'))
                 PibrellaSimulator.Start(ipAddress, portNumber);
-            else if (keyInfo.Key == ConsoleKey.NumPad3)
+            else if (keyInfo.KeyChar.Equals('3'))
                 NetduinoSimulator.Start(ipAddress, portNumber);
         }
     }

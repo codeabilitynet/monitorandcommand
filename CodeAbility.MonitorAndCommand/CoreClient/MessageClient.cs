@@ -71,7 +71,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #region Properties
 
-        public bool IsConnected { get { return client != null && client.Connected; } }
+        public bool IsConnected { get { return socket != null && socket.Connected; } }
 
         string DeviceName { get; set; }
 
@@ -81,7 +81,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #endregion 
 
-        private Socket client = null;
+        private Socket socket = null;
 
         private ConcurrentQueue<Message> messagesToSend = new ConcurrentQueue<Message>();
 
@@ -117,10 +117,10 @@ namespace CodeAbility.MonitorAndCommand.Client
                 IPAddress _ipAddress = ipHostInfo.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
                 IPEndPoint remoteEP = new IPEndPoint(_ipAddress, PortNumber);
 
-                client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.
-                client.Connect(remoteEP);
+                socket.Connect(remoteEP);
 
                 receiveThread.Start();
                 sendThread.Start();
@@ -142,7 +142,10 @@ namespace CodeAbility.MonitorAndCommand.Client
             Thread.Sleep(1000);
 
             receiveThread.Abort();
-            client.Shutdown(SocketShutdown.Both);
+
+            if (socket.Connected)
+                socket.Shutdown(SocketShutdown.Both);
+            
             sendThread.Abort();
         }
 
@@ -223,7 +226,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             Trace.WriteLine("Starting Sender() thread.");
 
-            while (client.Connected)
+            while (socket.Connected)
             {
                 try
                 {
@@ -256,7 +259,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
                 byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-                client.Send(byteData, 0, byteData.Length, 0);
+                socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
 
                 Trace.WriteLine(String.Format("Sent        : {0}", message));
             }
@@ -270,13 +273,13 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             Trace.WriteLine("Starting Receiver() thread.");
 
-            while (client.Connected)
+            while (socket.Connected)
             {
                 try
                 {
                     byte[] buffer = new byte[Constants.BUFFER_SIZE];
 
-                    client.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
+                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
                     string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
                     string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 

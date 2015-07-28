@@ -67,16 +67,16 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-                if (keyInfo.Key == ConsoleKey.NumPad0)
+                if (keyInfo.KeyChar.Equals('0'))
                 {
                     messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_BUTTON_PRESSED, Netduino.OBJECT_BUTTON, Netduino.CONTENT_BUTTON_PRESSED);
                 }
-                else if (keyInfo.Key == ConsoleKey.NumPad1)
+                else if (keyInfo.KeyChar.Equals('1'))
                 {
                     RedLedStatus = !RedLedStatus;
                     messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_TOGGLE_LED, Netduino.OBJECT_RED_LED, RedLedStatus ? Netduino.CONTENT_LED_STATUS_ON : Netduino.CONTENT_LED_STATUS_OFF);
                 }
-                else if (keyInfo.Key == ConsoleKey.NumPad2)
+                else if (keyInfo.KeyChar.Equals('2'))
                 {
                     GreenLedStatus = !GreenLedStatus;
                     messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_TOGGLE_LED, Netduino.OBJECT_GREEN_LED, GreenLedStatus ? Netduino.CONTENT_LED_STATUS_ON : Netduino.CONTENT_LED_STATUS_OFF);

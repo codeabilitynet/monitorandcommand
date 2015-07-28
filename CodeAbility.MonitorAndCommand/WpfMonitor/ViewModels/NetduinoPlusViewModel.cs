@@ -120,7 +120,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             }
             else if (e.Name.Equals(Netduino.OBJECT_SENSOR))
             {
-                RandomValue = e.Content.ToString();
+                RandomValue = e.Content.ToString().Substring(0,6);
             }
             else if (e.Name.Equals(Pibrella.OBJECT_BUTTON))
             {

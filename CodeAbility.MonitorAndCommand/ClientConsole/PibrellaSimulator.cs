@@ -69,14 +69,14 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-                if (keyInfo.Key == ConsoleKey.NumPad0)
+                if (keyInfo.KeyChar.Equals('0'))
                 {
                     messageClient.SendData(Devices.ALL,
                                            Environment.Pibrella.OBJECT_BUTTON,
                                            Environment.Pibrella.DATA_BUTTON_STATUS,
                                            Environment.Pibrella.CONTENT_BUTTON_PRESSED);
                 }
-                else if (keyInfo.Key == ConsoleKey.NumPad1)
+                else if (keyInfo.KeyChar.Equals('1'))
                 {
                     RedLedStatus = !RedLedStatus;
                     messageClient.SendData(Devices.ALL,
@@ -86,7 +86,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                                                Pibrella.CONTENT_LED_STATUS_ON :
                                                Pibrella.CONTENT_LED_STATUS_OFF);
                 }
-                else if (keyInfo.Key == ConsoleKey.NumPad2)
+                else if (keyInfo.KeyChar.Equals('2'))
                 {
                     YellowLedStatus = !YellowLedStatus;
                     messageClient.SendData(Devices.ALL,
@@ -96,7 +96,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                                                Pibrella.CONTENT_LED_STATUS_ON :
                                                Pibrella.CONTENT_LED_STATUS_OFF);
                 }
-                else if (keyInfo.Key == ConsoleKey.NumPad3)
+                else if (keyInfo.KeyChar.Equals('3'))
                 {
                     GreenLedStatus = !GreenLedStatus;
                     messageClient.SendData(Devices.ALL,

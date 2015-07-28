@@ -91,11 +91,15 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 IPEndPoint endpoint = new IPEndPoint(_ipAddress, PortNumber);
                 this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("Connecting to " + endpoint.ToString() + ".");
+
                 this.socket.Connect(endpoint);
 
-                receiveThread.Start();
-
                 Register();
+
+                receiveThread.Start();
 
                 if (IsLoggingEnabled)
                     Logger.Instance.Write("MessageClient started.");
@@ -152,7 +156,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
             //TODO : add queuing
 
-            Send(message);
+            EnqueueMessage(message);
         }
 
         #endregion 
@@ -166,13 +170,25 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         private void Send(Message message)
         {
-            string serializedMessage = JsonSerializer.SerializeObject(message);
-            string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+            try 
+            { 
+                string serializedMessage = JsonSerializer.SerializeObject(message);
+                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
-            this.socket.Send(Encoding.UTF8.GetBytes(paddedSerializedData));
+                byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-            if (IsLoggingEnabled)
-                Logger.Instance.Write("Sent    : " + message.ToString());
+                this.socket.Send(byteData, 0, byteData.Length, 0);
+
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("Sent      : " + message.ToString());
+            } 
+            catch (Exception exception)
+            {
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("Send()    : " + exception.ToString());
+
+                throw;
+            }
         }
 
         #region Threads
@@ -189,7 +205,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     byte[] buffer = new byte[Constants.BUFFER_SIZE];
 
                     // Begin receiving the data from the remote device.
-                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
+                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, SocketFlags.None);
 
                     char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
                     string paddedSerializedData = new string(dataChars);
@@ -221,9 +237,9 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     if (IsLoggingEnabled)
-                        Logger.Instance.Write(exception.ToString());
-
-                    throw;
+                    { 
+                        Logger.Instance.Write("Receiver() : " + exception.ToString());
+                    }
                 }
             }
         }

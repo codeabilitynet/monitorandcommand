@@ -58,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         public bool ledState = false;
 
-        public void Start(string ipAddress, int port)
+        public void Start(string ipAddress, int port, bool isLoggingEnabled)
         {
             while (true)
             {
@@ -66,7 +66,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 {
                     autoEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, false);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, isLoggingEnabled);
 
                     if (messageClient != null)
                     { 
@@ -94,8 +94,10 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
                     autoEvent.WaitOne();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    Logger.Instance.Write("Start()   : " + exception.ToString());
+
                     if (messageClient != null)
                         messageClient.CommandReceived -= socketClient_CommandReceived;
 
@@ -111,26 +113,37 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         void socketClient_CommandReceived(object sender, MessageEventArgs e)
         {
-            //Only consider the messages addressed to me
-            if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_PLUS))
-                return;
+            try
+            {
+                //Only consider the messages addressed to me
+                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_PLUS))
+                    return;
 
-            string objectName = e.Parameter.ToString();
-            string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
+                string objectName = e.Parameter.ToString();
+                string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
-            if (objectName.Equals(Environment.Netduino.OBJECT_BUTTON))
-            {
-                //boardLedEvent.Set();
+                if (objectName.Equals(Environment.Netduino.OBJECT_BUTTON))
+                {
+                    //boardLedEvent.Set();
+                }
+                else if (objectName.Equals(Environment.Netduino.OBJECT_RED_LED))
+                {
+                    ToggleRedLed(commandValue == Environment.Netduino.CONTENT_LED_STATUS_ON);
+                }
+                else if (objectName.Equals(Environment.Netduino.OBJECT_GREEN_LED))
+                {
+                    ToggleGreenLed(commandValue == Environment.Netduino.CONTENT_LED_STATUS_ON);
+                }
             }
-            else if (objectName.Equals(Environment.Netduino.OBJECT_RED_LED))
+            catch (Exception exception)
             {
-                ToggleRedLed(commandValue == Environment.Netduino.CONTENT_LED_STATUS_ON);
-            }
-            else if (objectName.Equals(Environment.Netduino.OBJECT_GREEN_LED))
-            {
-                ToggleGreenLed(commandValue == Environment.Netduino.CONTENT_LED_STATUS_ON);
+                Logger.Instance.Write("Command  : " + exception.ToString());
+                //throw;
             }
         }
+
+        Random random = new Random();
+        string sensorDataString = String.Empty;
 
         private void DoWork(object state)
         {
@@ -142,7 +155,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_ON);
 
                 //Sensor data
-                string sensorDataString = new Random().NextDouble().ToString();
+                sensorDataString = random.NextDouble().ToString();
                 if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_SENSOR, Environment.Netduino.DATA_SENSOR_RANDOM, sensorDataString);
                     
@@ -151,9 +164,10 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 if (messageClient != null)
                     messageClient.SendData(Environment.Devices.ALL, Environment.Netduino.OBJECT_BOARD_LED, Environment.Netduino.DATA_LED_STATUS, Environment.Netduino.CONTENT_LED_STATUS_OFF);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                throw;
+                Logger.Instance.Write("DoWork   : " + exception.ToString());
+                //throw;
             }
         }
 
