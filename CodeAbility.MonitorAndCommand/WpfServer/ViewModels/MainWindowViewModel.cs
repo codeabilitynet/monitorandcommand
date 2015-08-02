@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        const int COMPUTATION_PERIOD_IN_MILLISECONDS = 50; 
         const int COMPUTATION_PERIOD_IN_SECONDS = 1; 
 
         protected List<DeviceData> devicesData = new List<DeviceData>();
@@ -40,6 +42,11 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             get { return new ObservableCollection<DeviceData>(devicesData); }
         }
 
+        private ConcurrentQueue<RegistrationEventArgs> registrationEventArgs = new ConcurrentQueue<RegistrationEventArgs>();
+        private ConcurrentQueue<MessageEventArgs> receivedEventArgs = new ConcurrentQueue<MessageEventArgs>();
+        private ConcurrentQueue<MessageEventArgs> sentEventArgs = new ConcurrentQueue<MessageEventArgs>();
+
+        Timer uiNotifyTimer; 
         Timer computationTimer;
 
         public MainWindowViewModel()
@@ -50,7 +57,7 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             devicesData.Add(new DeviceData(Environment.Devices.NETDUINO_3, COMPUTATION_PERIOD_IN_SECONDS));
             devicesData.Add(new DeviceData(Environment.Devices.DATA_GENERATOR, COMPUTATION_PERIOD_IN_SECONDS));
             devicesData.Add(new DeviceData(Environment.Devices.WINDOWS_PHONE, COMPUTATION_PERIOD_IN_SECONDS));
-            //devicesData.Add(new DeviceData(Environment.Devices.WPF_MONITOR, COMPUTATION_PERIOD_IN_SECONDS));
+            devicesData.Add(new DeviceData(Environment.Devices.WPF_MONITOR, COMPUTATION_PERIOD_IN_SECONDS));
 
             new Thread(StartServer).Start();
         }
@@ -66,10 +73,39 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             messageListener.MessageReceived += messageListener_MessageReceived;
             messageListener.MessageSent += messageListener_MessageSent;
 
+            TimerCallback uiNotifyTimerCallBack = DoNotify;
+            uiNotifyTimer = new Timer(uiNotifyTimerCallBack, null, 0, COMPUTATION_PERIOD_IN_MILLISECONDS); 
+
             TimerCallback computationTimerCallBack = DoCompute;
             computationTimer = new Timer(computationTimerCallBack, null, 0, COMPUTATION_PERIOD_IN_SECONDS * 1000);
 
             messageListener.StartListening();
+        }
+
+        #region Timer methods 
+
+        private void DoNotify(object state)
+        {
+            while (registrationEventArgs.Count > 0)
+            {
+                RegistrationEventArgs eventArgs = null;
+                if (registrationEventArgs.TryDequeue(out eventArgs))
+                    NotifyRegistrationChanged(eventArgs);
+            }
+
+            while (receivedEventArgs.Count > 0)
+            {
+                MessageEventArgs args = null;
+                if (receivedEventArgs.TryDequeue(out args))
+                    NotifyMessageReceived(args);
+            }
+
+            while (sentEventArgs.Count > 0)
+            {
+                MessageEventArgs args = null;
+                if (sentEventArgs.TryDequeue(out args))
+                    NotifyMessageSent(args);
+            }
         }
 
         private void DoCompute(object state)
@@ -80,25 +116,50 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             }
         }
 
+        #endregion 
+
+        #region Server events 
+
         void messageListener_RegistrationChanged(object sender, RegistrationEventArgs e)
         {
-            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == e.DeviceName);
-            if (deviceData != null)
-                deviceData.SetConnectionState(e.RegistrationEvent);
+            registrationEventArgs.Enqueue(e); 
         }
 
         void messageListener_MessageReceived(object sender, MessageEventArgs e)
         {
-            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == e.SendingDevice);
-            if (deviceData != null)
-                deviceData.HandleSentMessageEvent(); //Received by the server, but sent by the device
+            receivedEventArgs.Enqueue(e); 
         }
 
         void messageListener_MessageSent(object sender, MessageEventArgs e)
         {
-            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == e.ReceivingDevice);
+            sentEventArgs.Enqueue(e); 
+        }
+
+        #endregion 
+
+        #region Notification Methods
+
+        void NotifyRegistrationChanged(RegistrationEventArgs args)
+        {
+            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == args.DeviceName);
+            if (deviceData != null)
+                deviceData.SetConnectionState(args.RegistrationEvent);
+        }
+
+        void NotifyMessageReceived(MessageEventArgs args)
+        {
+            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == args.SendingDevice);
+            if (deviceData != null)
+                deviceData.HandleSentMessageEvent(); //Received by the server, but sent by the device
+        }
+
+        void NotifyMessageSent(MessageEventArgs args)
+        {
+            DeviceData deviceData = devicesData.FirstOrDefault(x => x.Name == args.ReceivingDevice);
             if (deviceData != null)
                 deviceData.HandleReceivedMessageEvent(); //Sent by the server, but received by the device
         }
+
+        #endregion 
     }
 }

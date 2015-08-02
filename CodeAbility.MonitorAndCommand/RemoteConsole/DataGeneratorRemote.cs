@@ -15,44 +15,56 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CodeAbility.MonitorAndCommand.Client;
+using CodeAbility.MonitorAndCommand.Environment;
+using CodeAbility.MonitorAndCommand.Models;
+
 namespace CodeAbility.MonitorAndCommand.RemoteConsole
 {
-    class Program
+    public class DataGeneratorRemote
     {
-        static void Main(string[] args)
+        public static void Start(string ipAddress, int portNumber)
         {
-            string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
-            int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
+            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE);
 
-            Console.WriteLine("Device console.");
-            Console.WriteLine("Hit [1] to start a Data Generator remote");
-            Console.WriteLine("Hit [2] to start a Pibrella remote");
-            //Console.WriteLine("Hit [3] to start a Netduino Plus remote");
+            messageClient.DataReceived += client_DataReceived;
 
-            ConsoleKeyInfo keyInfo;
+            Console.WriteLine("Remote console");
+            Console.WriteLine("Hit a key to start client, hit ESC to exit.");
+            Console.ReadKey();
 
-            do
+            messageClient.Start(ipAddress, portNumber);
+
+            Console.WriteLine("Running.");
+
+            messageClient.SubscribeToData(Devices.DATA_GENERATOR, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
+
+            bool running = true;
+            while (running)
             {
-                keyInfo = Console.ReadKey();
-            }
-            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3')));
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-            if (keyInfo.KeyChar.Equals('1'))
-                DataGeneratorRemote.Start(ipAddress, portNumber);
-            else if (keyInfo.KeyChar.Equals('2'))
-                PibrellaRemote.Start(ipAddress, portNumber);
-            else if (keyInfo.KeyChar.Equals('3'))
-                NetduinoRemote.Start(ipAddress, portNumber);
+                if (keyInfo.Key == ConsoleKey.Escape)
+                {
+                    running = false;
+                    break;
+                }
+            }
+
+            Console.WriteLine("Stopped.");
+
+            messageClient.Stop();
         }
 
-
+        static void client_DataReceived(object sender, MessageEventArgs e)
+        {
+            Console.WriteLine(e);
+        }       
     }
 }

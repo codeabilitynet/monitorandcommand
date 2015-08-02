@@ -194,9 +194,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         public void SendData(string toDevice, string dataName, string dataSource, object dataValue)
         {
             Message message = Message.InstanciateDataMessage(DeviceName, toDevice, dataName, dataSource, dataValue);
-            messagesToSend.Enqueue(message);
-
-            sendDone.Set();
+            EnqueueMessage(message);
         }
 
         #endregion 
@@ -218,7 +216,6 @@ namespace CodeAbility.MonitorAndCommand.Client
         protected void EnqueueMessage(Message message)
         {
             messagesToSend.Enqueue(message);
-
             sendDone.Set();
         }
 
@@ -232,14 +229,14 @@ namespace CodeAbility.MonitorAndCommand.Client
                 {
                     sendDone.Reset();
 
-                    if (messagesToSend.Count > 0)
+                    while (messagesToSend.Count > 0)
                     {
                         Message message = null;
                         if (messagesToSend.TryDequeue(out message))
                             Send(message);
                     }
-                    else
-                        sendDone.WaitOne();
+
+                    sendDone.WaitOne();
                 }
                 catch (Exception exception)
                 {

@@ -66,15 +66,19 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         Socket socket = null;
 
+        private Queue messagesToSend = new Queue();
+
+        private Thread sendThread = null; 
         private Thread receiveThread = null;
+
+        // ManualResetEvent instances signal completion.
+        private ManualResetEvent sendDone = new ManualResetEvent(false);
 
         public MessageClient(string deviceName, bool isLoggingEnabled)
         { 
             DeviceName = deviceName;
 
             IsLoggingEnabled = isLoggingEnabled;
-
-            receiveThread = new Thread(new ThreadStart(Receiver));
         }
 
         #region Public Methods
@@ -97,9 +101,13 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 this.socket.Connect(endpoint);
 
-                Register();
+                sendThread = new Thread(new ThreadStart(Sender));
+                receiveThread = new Thread(new ThreadStart(Receiver));
 
+                sendThread.Start();
                 receiveThread.Start();
+                    
+                Register();
 
                 if (IsLoggingEnabled)
                     Logger.Instance.Write("MessageClient started.");
@@ -107,9 +115,10 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             catch (Exception exception)
             {
                 if (IsLoggingEnabled)
+                {
+                    Logger.Instance.Write("MessageClient Start() exception !");
                     Logger.Instance.Write(exception.ToString());
-
-                throw;
+                }
             }
         }
 
@@ -118,6 +127,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             try
             {
                 this.receiveThread.Abort();
+                this.sendThread.Abort();
+
                 this.socket.Close();
 
                 if (IsLoggingEnabled)
@@ -127,8 +138,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             {
                 if (IsLoggingEnabled)
                     Logger.Instance.Write(exception.ToString());
-
-                throw;
             }
         }
 
@@ -153,25 +162,62 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         public void SendData(string toDevice, string dataSource, string dataName, object dataValue)
         {
             Message message = Message.InstanciateDataMessage(DeviceName, toDevice, dataSource, dataName, dataValue);
-
-            //TODO : add queuing
-
             EnqueueMessage(message);
         }
 
         #endregion 
 
         private void EnqueueMessage(Message message)
-        {          
-            //TODO : add queuing
+        {
+            lock (messagesToSend)
+            {
+                messagesToSend.Enqueue(message);
+            }
 
-            Send(message);
+            sendDone.Set();
+        }
+
+        private void Sender()
+        {
+            if (IsLoggingEnabled)
+                Logger.Instance.Write("Starting Sender() thread.");
+
+            while (true)
+            {
+                try
+                {
+                    sendDone.Reset();
+
+                    while(messagesToSend.Count > 0)
+                    {
+                        Message message = null; 
+
+                        lock (messagesToSend)
+                        {
+                            message = messagesToSend.Dequeue() as Message;
+                        }
+
+                        if (message != null)
+                            Send(message);
+                    }
+                    
+                    sendDone.WaitOne();
+                }
+                catch (Exception exception)
+                {
+                    if (IsLoggingEnabled)
+                        Logger.Instance.Write(exception.ToString());
+                }
+            }
         }
 
         private void Send(Message message)
         {
             try 
-            { 
+            {
+                if (IsLoggingEnabled)
+                    Logger.Instance.Write("Sending   : " + message.ToString());
+
                 string serializedMessage = JsonSerializer.SerializeObject(message);
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
@@ -186,8 +232,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             {
                 if (IsLoggingEnabled)
                     Logger.Instance.Write("Send()    : " + exception.ToString());
-
-                throw;
             }
         }
 
@@ -196,6 +240,9 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         private void Receiver()
         {
             Thread.Sleep(1000);
+
+            if (IsLoggingEnabled)
+                Logger.Instance.Write("Starting Receiver() thread.");
 
             while (true)
             {
@@ -237,9 +284,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     if (IsLoggingEnabled)
-                    { 
-                        Logger.Instance.Write("Receiver() : " + exception.ToString());
-                    }
+                        Logger.Instance.Write("Receiver() : " + exception.ToString());                   
                 }
             }
         }
