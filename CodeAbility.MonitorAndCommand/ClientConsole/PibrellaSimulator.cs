@@ -35,9 +35,9 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
         public static void Start(string ipAddress, int portNumber)
         {
-            bool RedLedStatus = false;
-            bool GreenLedStatus = false;
-            bool YellowLedStatus = false;
+            bool redLedStatus = false;
+            bool greenLedStatus = false;
+            bool yellowLedStatus = false;
 
             messageClient = new MessageClient(Devices.PIBRELLA);
 
@@ -78,31 +78,31 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 }
                 else if (keyInfo.KeyChar.Equals('1'))
                 {
-                    RedLedStatus = !RedLedStatus;
+                    redLedStatus = !redLedStatus;
                     messageClient.SendData(Devices.ALL,
                                            Pibrella.OBJECT_RED_LED,
                                            Pibrella.DATA_LED_STATUS,
-                                           RedLedStatus ?
+                                           redLedStatus ?
                                                Pibrella.CONTENT_LED_STATUS_ON :
                                                Pibrella.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
-                    YellowLedStatus = !YellowLedStatus;
+                    yellowLedStatus = !yellowLedStatus;
                     messageClient.SendData(Devices.ALL,
                                            Pibrella.OBJECT_YELLOW_LED,
                                            Pibrella.DATA_LED_STATUS,
-                                           YellowLedStatus ?
+                                           yellowLedStatus ?
                                                Pibrella.CONTENT_LED_STATUS_ON :
                                                Pibrella.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.KeyChar.Equals('3'))
                 {
-                    GreenLedStatus = !GreenLedStatus;
+                    greenLedStatus = !greenLedStatus;
                     messageClient.SendData(Devices.ALL,
                                            Pibrella.OBJECT_GREEN_LED,
                                            Pibrella.DATA_LED_STATUS,
-                                           GreenLedStatus ?
+                                           greenLedStatus ?
                                                Pibrella.CONTENT_LED_STATUS_ON :
                                                Pibrella.CONTENT_LED_STATUS_OFF);
                 }

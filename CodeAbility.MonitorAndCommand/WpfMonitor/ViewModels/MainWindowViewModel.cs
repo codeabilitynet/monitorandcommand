@@ -52,6 +52,17 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             get { return new ObservableCollection<DeviceData>(devicesData); }
         }
 
+        bool? connected = null;
+        public bool? Connected
+        {
+            get { return connected; }
+            set
+            {
+                connected = value;
+                OnPropertyChanged("Connected");
+            }
+        }
+
         public MainWindowViewModel()
         {
             messageClient = new MessageClient(Devices.WPF_MONITOR);
@@ -68,16 +79,25 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-            messageClient.Start(ipAddress, portNumber);
+            try
+            {
+                messageClient.Start(ipAddress, portNumber);
 
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3);
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
 
-            PibrellaViewModel.Subscribe();
-            NetduinoPlusViewModel.Subscribe();
-            DataGeneratorViewModel.Subscribe();
-            TemperatureSensorViewModel.Subscribe(); 
+                PibrellaViewModel.Subscribe();
+                NetduinoPlusViewModel.Subscribe();
+                DataGeneratorViewModel.Subscribe();
+                TemperatureSensorViewModel.Subscribe();
+
+                Connected = true;
+            }
+            catch(Exception exception)
+            {
+                Connected = false;
+            }
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)

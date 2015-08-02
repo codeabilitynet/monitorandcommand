@@ -3,30 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.UserControls"
-        Title="Monitor" Height="300" Width="1000"
+        Title="Monitor" Height="340" Width="1000"
         Loaded="Window_Loaded">
         
+    <Window.Resources>
+        <converters:ConnectedToStringConverter x:Key="ConnectedToString"/>
+    </Window.Resources>
+    
     <Grid Background="Black">
-        <!--<ListView ItemsSource="{Binding DevicesData}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <usercontrols:DeviceDataUserControl />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->      
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
         
-        <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
-        <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
-        <usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>
-        <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
-        
+            <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
+            <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
+            <usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>
+            <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
+        </Grid>
+
+        <StatusBar Grid.Row="1" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="ConnectButton" 
+                        Margin="5"
+                        Content="{Binding Connected, Converter={StaticResource ConnectedToString}, FallbackValue=Connect}"                         
+                        Click="ConnectButton_Click"></Button>
+            </StackPanel>
+        </StatusBar>
+
     </Grid>
 </Window>
