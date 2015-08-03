@@ -33,14 +33,9 @@ namespace CodeAbility.MonitorAndCommand.Helpers
         {
             IPHostEntry host;
             IPAddress localIP = null;
+
             host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    localIP = ip;
-                }
-            }
+            localIp = host.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
             return localIP;
         }
     }

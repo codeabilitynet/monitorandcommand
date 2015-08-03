@@ -75,7 +75,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         string DeviceName { get; set; }
 
-        string IpAddress { get; set; }
+        string ServerIpAddress { get; set; }
 
         int PortNumber { get; set; }
 
@@ -102,20 +102,19 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #region Public Methods
 
-        public void Start(string ipAddress, int port)
+        public void Start(string serverIpAddress, int port)
         {
-            IpAddress = ipAddress;
+            ServerIpAddress = serverIpAddress;
             PortNumber = port;
 
             // Connect to a remote device.
             try
             {
                 // Establish the remote endpoint for the socket.
-                // The name of the 
-                // remote device is "host.contoso.com".
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(IpAddress);
-                IPAddress _ipAddress = ipHostInfo.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
-                IPEndPoint remoteEP = new IPEndPoint(_ipAddress, PortNumber);
+                IPAddress ipAddress = IPAddress.Parse(ServerIpAddress);
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, PortNumber);
+
+                Console.WriteLine(String.Format("Device {0} connecting to server {1}.", DeviceName, remoteEP.ToString()));
 
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 

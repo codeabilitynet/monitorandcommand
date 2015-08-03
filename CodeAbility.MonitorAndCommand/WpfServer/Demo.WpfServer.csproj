@@ -62,6 +62,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToConnectionStateColorConverter.cs" />
+    <Compile Include="Converters\ConnectedToStringConverter.cs" />
     <Compile Include="Converters\BooleanToOpacityConverter.cs" />
     <Compile Include="Models\DeviceData.cs" />
     <Compile Include="UserControls\DeviceDataUserControl.xaml.cs">

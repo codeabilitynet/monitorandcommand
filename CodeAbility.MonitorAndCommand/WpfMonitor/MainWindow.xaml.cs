@@ -56,8 +56,12 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Connect when UI is loaded
-            viewModel.Connect(); 
+
+        }
+
+        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.Connect();
         }
     }
 }
