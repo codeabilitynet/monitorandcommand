@@ -40,11 +40,14 @@ namespace CodeAbility.MonitorAndCommand.WpfServer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindowViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
 
-            this.DataContext = new MainWindowViewModel();
+            ViewModel = new MainWindowViewModel();
+            this.DataContext = ViewModel;
         }
     }
 }

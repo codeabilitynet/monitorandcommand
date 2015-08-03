@@ -124,7 +124,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 }
                 catch(Exception exception)
                 {
-                    Console.WriteLine("Message service could not be reached.");
+                    Console.WriteLine("Message service cannot be reached");
                     Trace.WriteLine(String.Format("Service exception : {0}", exception));
                 }
             }

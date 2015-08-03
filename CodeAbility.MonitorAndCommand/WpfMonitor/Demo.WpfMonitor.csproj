@@ -63,6 +63,7 @@
     <Compile Include="Converters\BooleanToBrushConverter.cs" />
     <Compile Include="Converters\BooleanToOnOffConverter.cs" />
     <Compile Include="Converters\BooleanToOpacityConverter.cs" />
+    <Compile Include="Converters\ConnectedToStringConverter.cs" />
     <Compile Include="Models\DeviceData.cs" />
     <Compile Include="UserControls\Pibrella.xaml.cs">
       <DependentUpon>Pibrella.xaml</DependentUpon>
