@@ -59,6 +59,9 @@
     <Compile Include="..\Models\MonitoringEvents.cs">
       <Link>MonitoringEvents.cs</Link>
     </Compile>
+    <Compile Include="..\Models\RegistrationEventArgs.cs">
+      <Link>RegistrationEventArgs.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

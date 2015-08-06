@@ -111,6 +111,11 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			Connection = new GpioConnection (settings, Pins);	
 		}
 
+        public void Shutdown()
+        {
+            Connection.Close();
+        }
+
 		public virtual void OnButtonPressed(EventArgs e)
 		{
 			EventHandler handler = ButtonPressed;

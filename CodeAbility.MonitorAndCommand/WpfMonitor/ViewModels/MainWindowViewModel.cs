@@ -94,7 +94,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
                 Connected = true;
             }
-            catch(Exception exception)
+            catch(Exception)
             {
                 Connected = false;
             }

@@ -57,11 +57,13 @@ namespace CodeAbility.MonitorAndCommand.Server
         //Threads
         private Thread sendingThread = null;
         private Thread processingThread = null;
+        private Thread storingThread = null;
         private Timer heartbeatTimer = null;
 
         //ManualResetEvent instances signal completion.
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent processDone = new ManualResetEvent(false);
+        private ManualResetEvent storeDone = new ManualResetEvent(false);
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
         /// <summary>
@@ -83,6 +85,11 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// Queue containg messages to be sent
         /// </summary>
         private ConcurrentQueue<Message> messagesToSend = new ConcurrentQueue<Message>();
+
+        /// <summary>
+        /// Queue containg messages to be "stored"
+        /// </summary>
+        private ConcurrentQueue<Message> messagesToStore = new ConcurrentQueue<Message>();
        
         /// <summary>
         /// Object managing references to devices (connected clients)
@@ -132,6 +139,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             //Threads
             processingThread = new Thread(new ThreadStart(Processor));
             sendingThread = new Thread(new ThreadStart(Sender));
+            storingThread = new Thread(new ThreadStart(Storer));
 
             //Heart beat Timer
             if (HeartbeatPeriod > 0)
@@ -163,6 +171,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                 Console.WriteLine("Listening on " + listener.LocalEndPoint); 
 
                 sendingThread.Start();
+
+                if (IsMessageServiceActivated)
+                    storingThread.Start();
 
                 while (true)
                 {
@@ -232,7 +243,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     messagesReceived.Enqueue(receivedMessage);
 
-                    Trace.WriteLine(String.Format("Message  : {0}", receivedMessage));
+                    //Console.WriteLine(String.Format("Message     : {0}", receivedMessage));
+                    Trace.WriteLine(String.Format("Message   : {0}", receivedMessage));
 
                     if (IsMessageServiceActivated)       
                         StoreMessage(receivedMessage);
@@ -243,8 +255,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     Trace.WriteLine(exception);
 
-                    CleanUp(address);
-                    break;
+                    //CleanUp(address);
+                    //break;
                 }
             }
         }
@@ -336,7 +348,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         throw new NotImplementedException();
                 }
 
-                Trace.WriteLine(String.Format("Processed   : {0}", message));
+                Trace.WriteLine(String.Format("Processed : {0}", message));
             }
             catch (Exception exception)
             {
@@ -464,14 +476,14 @@ namespace CodeAbility.MonitorAndCommand.Server
             {
                 sendDone.Reset();
 
-                if (messagesToSend.Count > 0)
+                while (messagesToSend.Count > 0)
                 {
                     Message message = null;
                     if (messagesToSend.TryDequeue(out message))
                         Send(message);
                 }
-                else
-                    sendDone.WaitOne();
+                
+                sendDone.WaitOne();
             }
         }
 
@@ -496,7 +508,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                     Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
                     if (socket != null && socket.Connected)
                     {
-                        socket.Send(byteData, 0, byteData.Length, 0);
+                        socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
 
                         PostSend(message);
 
@@ -541,11 +553,38 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void StoreMessage(Message message)
         {
+            //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
+            message.Timestamp = DateTime.Now;
+            messagesToStore.Enqueue(message);
+            storeDone.Set();
+        }
+
+        private void Storer()
+        {
+            Trace.WriteLine("Starting Sender() thread");
+
+            while (true)
+            {
+                storeDone.Reset();
+
+                while (messagesToStore.Count > 0)
+                {
+                    Message message = null;
+                    if (messagesToStore.TryDequeue(out message))
+                        Store(message);
+                }
+
+                storeDone.WaitOne();
+            }
+        }
+
+        private void Store(Message message)
+        {
             try
             { 
                 if (messageServiceClient != null && messageServiceClient.State == System.ServiceModel.CommunicationState.Opened)
                 {
-                    messageServiceClient.StoreMessageAsync(message);
+                    messageServiceClient.StoreMessage(message);
                 }
             }
             catch(Exception exception)

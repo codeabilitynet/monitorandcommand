@@ -54,14 +54,18 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             Console.WriteLine("Running.");
 
             //Simulating a Netduino device with two LEDs
-            messageClient.SubscribeToData(Devices.NETDUINO_PLUS, Netduino.OBJECT_BOARD_LED, Netduino.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_PLUS, Netduino.OBJECT_BUTTON, Netduino.DATA_BUTTON_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_PLUS, Netduino.OBJECT_SENSOR, Netduino.DATA_SENSOR_RANDOM);
+            messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
+            messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.DATA_BUTTON_STATUS);
+            messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM);
 
-            messageClient.SubscribeToData(Devices.NETDUINO_PLUS, Netduino.OBJECT_RED_LED, Netduino.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_PLUS, Netduino.OBJECT_GREEN_LED, Netduino.DATA_LED_STATUS);
+            messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
+            messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
 
-            messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
+            messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.COMMAND_BUTTON_PRESSED);
+
 
             while (running)
             {
@@ -69,17 +73,17 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_BUTTON_PRESSED, Netduino.OBJECT_BUTTON, Netduino.CONTENT_BUTTON_PRESSED);
+                    messageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_BUTTON_PRESSED, NetduinoPlus.OBJECT_BUTTON, NetduinoPlus.CONTENT_BUTTON_PRESSED);
                 }
                 else if (keyInfo.KeyChar.Equals('1'))
                 {
                     RedLedStatus = !RedLedStatus;
-                    messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_TOGGLE_LED, Netduino.OBJECT_RED_LED, RedLedStatus ? Netduino.CONTENT_LED_STATUS_ON : Netduino.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_RED_LED, RedLedStatus ? NetduinoPlus.CONTENT_LED_STATUS_ON : NetduinoPlus.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
                     GreenLedStatus = !GreenLedStatus;
-                    messageClient.SendCommand(Devices.NETDUINO_PLUS, Netduino.COMMAND_TOGGLE_LED, Netduino.OBJECT_GREEN_LED, GreenLedStatus ? Netduino.CONTENT_LED_STATUS_ON : Netduino.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_GREEN_LED, GreenLedStatus ? NetduinoPlus.CONTENT_LED_STATUS_ON : NetduinoPlus.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {

@@ -106,19 +106,19 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             if (!fromDevice.Equals(Environment.Devices.NETDUINO_PLUS))
                 return;
 
-            if (e.Name.Equals(Netduino.OBJECT_BOARD_LED))
+            if (e.Name.Equals(NetduinoPlus.OBJECT_BOARD_LED))
             {
-                BlueLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                BlueLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(Netduino.OBJECT_RED_LED))
+            else if (e.Name.Equals(NetduinoPlus.OBJECT_RED_LED))
             {
-                RedLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                RedLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(Netduino.OBJECT_GREEN_LED))
+            else if (e.Name.Equals(NetduinoPlus.OBJECT_GREEN_LED))
             {
-                GreenLED = e.Content.Equals(Netduino.CONTENT_LED_STATUS_ON);
+                GreenLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(Netduino.OBJECT_SENSOR))
+            else if (e.Name.Equals(NetduinoPlus.OBJECT_SENSOR))
             {
                 RandomValue = e.Content.ToString().Substring(0,6);
             }

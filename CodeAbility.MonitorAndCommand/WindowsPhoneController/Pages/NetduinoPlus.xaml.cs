@@ -30,11 +30,11 @@ using CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels;
 
 namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.Pages
 {
-    public partial class Netduino : PhoneApplicationPage
+    public partial class NetduinoPlus : PhoneApplicationPage
     {
         NetduinoViewModel ViewModel { get; set; }
 
-        public Netduino()
+        public NetduinoPlus()
         {
             InitializeComponent();
 

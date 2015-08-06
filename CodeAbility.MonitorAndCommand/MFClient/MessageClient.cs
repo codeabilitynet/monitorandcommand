@@ -96,10 +96,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 IPEndPoint endpoint = new IPEndPoint(_ipAddress, PortNumber);
                 this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("Connecting to " + endpoint.ToString() + ".");
+                Log("Connecting to " + ipAddress + ".");
 
                 this.socket.Connect(endpoint);
+
+                Log("Connected to " + endpoint.ToString() + ".");
 
                 sendThread = new Thread(new ThreadStart(Sender));
                 receiveThread = new Thread(new ThreadStart(Receiver));
@@ -109,16 +110,12 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     
                 Register();
 
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("MessageClient started.");
+                Log("MessageClient started.");
             }
             catch (Exception exception)
             {
-                if (IsLoggingEnabled)
-                {
-                    Logger.Instance.Write("MessageClient Start() exception !");
-                    Logger.Instance.Write(exception.ToString());
-                }
+                Log("MessageClient Start() exception !");
+                Log(exception.ToString());
             }
         }
 
@@ -131,13 +128,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 this.socket.Close();
 
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("MessageClient stopped");
+                Log("MessageClient stopped");
             }
             catch (Exception exception)
             {
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write(exception.ToString());
+                Log(exception.ToString());
             }
         }
 
@@ -179,8 +174,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         private void Sender()
         {
-            if (IsLoggingEnabled)
-                Logger.Instance.Write("Starting Sender() thread.");
+            Log("Starting Sender() thread.");
 
             while (true)
             {
@@ -205,8 +199,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 }
                 catch (Exception exception)
                 {
-                    if (IsLoggingEnabled)
-                        Logger.Instance.Write(exception.ToString());
+                    Log(exception.ToString());
                 }
             }
         }
@@ -215,23 +208,20 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         {
             try 
             {
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("Sending   : " + message.ToString());
+                Log("Sending   : " + message.ToString());
 
                 string serializedMessage = JsonSerializer.SerializeObject(message);
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
                 byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-                this.socket.Send(byteData, 0, byteData.Length, 0);
+                this.socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
 
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("Sent      : " + message.ToString());
+                Log("Sent      : " + message.ToString());
             } 
             catch (Exception exception)
             {
-                if (IsLoggingEnabled)
-                    Logger.Instance.Write("Send()    : " + exception.ToString());
+                Log("Send()    : " + exception.ToString());
             }
         }
 
@@ -241,8 +231,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         {
             Thread.Sleep(1000);
 
-            if (IsLoggingEnabled)
-                Logger.Instance.Write("Starting Receiver() thread.");
+            Log("Starting Receiver() thread.");
 
             while (true)
             {
@@ -274,8 +263,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
     
                     if (message != null)
                     {
-                        if (IsLoggingEnabled)
-                            Logger.Instance.Write("Received: " + message.ToString());
+                        Log("Received  :" + message.ToString());
 
                         if (message.ContentType == ContentTypes.COMMAND)
                             OnCommandReceived(new MessageEventArgs(message));
@@ -283,12 +271,18 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 }
                 catch (Exception exception)
                 {
-                    if (IsLoggingEnabled)
-                        Logger.Instance.Write("Receiver() : " + exception.ToString());                   
+                    Log("Receiver() : " + exception.ToString());                   
                 }
             }
         }
 
         #endregion 
+
+        void Log(string message)
+        {
+            if (IsLoggingEnabled)
+                Logger.Instance.Write(message);
+        }
+
     }
 }

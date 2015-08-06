@@ -85,6 +85,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Helpers\JsonHelpers.cs">
+      <Link>JsonHelpers.cs</Link>
+    </Compile>
     <Compile Include="DataStringEventArgs.cs" />
     <Compile Include="MessageClient.cs">
       <SubType>Code</SubType>
