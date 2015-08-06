@@ -51,7 +51,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             //Debug.Print(Resources.GetString(Resources.StringResources.String1));
 
             Process process = new Process();
-            process.Start(IP_ADDRESS, PORT);
+            process.Start(IP_ADDRESS, PORT, false);
         }
 
         static void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)

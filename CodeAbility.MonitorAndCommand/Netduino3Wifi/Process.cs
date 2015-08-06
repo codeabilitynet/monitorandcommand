@@ -27,11 +27,9 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
         InterruptPort button = new InterruptPort(Pins.ONBOARD_SW1, false, Port.ResistorMode.Disabled, Port.InterruptMode.InterruptEdgeBoth);
 
-        AutoResetEvent autoEvent = new AutoResetEvent(false);
+        AutoResetEvent reconnectEvent = new AutoResetEvent(false);
 
         //ManualResetEvent boardLedEvent = new ManualResetEvent(false);
-
-        bool ledState = false;
 
         TemperatureSensor temperatureSensor = new TemperatureSensor(Pins.GPIO_PIN_D2);
 
@@ -40,15 +38,15 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
         }
 
-        public void Start(string ipAddress, int port)
+        public void Start(string ipAddress, int port, bool isLoggingEnabled)
         {
             while (true)
             {
                 try
                 {
-                    autoEvent.Reset();
+                    reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_3, false);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_3, isLoggingEnabled);
 
                     if (messageClient != null)
                     {
@@ -69,10 +67,12 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
                     TimerCallback workTimerCallBack = DoWork;
                     Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
 
-                    autoEvent.WaitOne();
+                    reconnectEvent.WaitOne();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    Logger.Instance.Write("Start()   : " + exception.ToString());
+
                     if (messageClient != null)
                         messageClient.CommandReceived -= socketClient_CommandReceived;
 
@@ -81,7 +81,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
                     AutoResetEvent autoResetEvent = new AutoResetEvent(false);
                     autoResetEvent.WaitOne(RECONNECTION_TIMER_DURATION, false);
 
-                    autoEvent.Set();
+                    reconnectEvent.Set();
                 }
             }
         }

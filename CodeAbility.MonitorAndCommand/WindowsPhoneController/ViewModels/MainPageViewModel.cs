@@ -70,6 +70,17 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             }
         }
 
+        bool îsDisconnected = true;
+        public bool IsDisconnected
+        {
+            get { return îsDisconnected; }
+            set
+            {
+                îsDisconnected = value;
+                OnPropertyChanged("IsDisconnected");
+            }
+        }
+
         public MainPageViewModel()
         {
             IpAddress = !String.IsNullOrEmpty(ApplicationSettings.IpAddress) ? ApplicationSettings.IpAddress : DEFAULT_IP_ADDRESS;
@@ -81,8 +92,9 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             MessageClient messageClient = App.Current.Resources["MessageClient"] as MessageClient;
 
             if (messageClient.Start(IpAddress, PortNumber))
-            { 
-                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_PLUS, "Netduino"), 
+            {
+                IsDisconnected = false;
+                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_PLUS, "NetduinoPlus"), 
                                                                new Device(Environment.Devices.PIBRELLA, "Pibrella") };
             }
         }

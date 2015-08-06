@@ -121,9 +121,9 @@ namespace CodeAbility.MonitorAndCommand.WPClient
                     clientDone.Set();
                 });
 
-                data = data.PadRight(256, '.');
-                byte[] payload = Encoding.UTF8.GetBytes(data);
-                socketEventArg.SetBuffer(payload, 0, payload.Length);
+                string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Constants.BUFFER_SIZE);
+                byte[] payload = Encoding.UTF8.GetBytes(paddedData);
+                socketEventArg.SetBuffer(payload, 0, Constants.BUFFER_SIZE);
 
                 clientDone.Reset();
 

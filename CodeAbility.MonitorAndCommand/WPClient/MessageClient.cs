@@ -74,14 +74,20 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 
         void client_DataStringReceived(object sender, DataStringEventArgs e)
         {
-            string serializedData = e.Data;
-            int firstBraceIndex = serializedData.IndexOf('{');
-            int lastBraceIndex = serializedData.LastIndexOf('}');
-            string cleanedUpSerializedData = serializedData.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
+            try
+            { 
+                string paddedSerializedData = e.Data;
 
-            Message message = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
-            if (DataReceived != null)
-                DataReceived(this, new MessageEventArgs(message));          
+                string cleanedUpSerializedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                Message message = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
+
+                if (DataReceived != null)
+                    DataReceived(this, new MessageEventArgs(message));        
+            }
+            catch(Exception exception)
+            {
+
+            }
         }
 
         #region Public methods

@@ -59,11 +59,11 @@
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             <Button Grid.Row="3" 
-                    FontSize="36" Width="120"
+                    FontSize="54" Width="150"
                     BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
                     Content="{Binding ButtonPressed, Converter={StaticResource BooleanToOnOff}, FallbackValue=Off}"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" />
-            
+
         </Grid>
     </Grid>
 

@@ -199,7 +199,7 @@ namespace CodeAbility.RaspberryPi.Pibrella
         {
 			aTimer.Enabled = false;
 		
-            pibrella.Connection.Close (); 
+            pibrella.Shutdown(); 
         }
     }
 }

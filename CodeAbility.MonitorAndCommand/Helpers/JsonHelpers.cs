@@ -51,7 +51,12 @@ namespace CodeAbility.MonitorAndCommand.Helpers
         {
             int firstBraceIndex = paddedSerializedData.IndexOf('{');
             int lastBraceIndex = paddedSerializedData.LastIndexOf('}');
-            string serializedMessage = paddedSerializedData.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
+            string serializedMessage = String.Empty;
+
+            if (firstBraceIndex >= 0 && lastBraceIndex > firstBraceIndex)
+                serializedMessage = paddedSerializedData.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
+            else
+                throw new Exception("Invalid content : not a JSON formatted string.");
 
             return serializedMessage;
         }

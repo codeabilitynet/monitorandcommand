@@ -105,8 +105,8 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Device.cs" />
-    <Compile Include="Pages\Netduino.xaml.cs">
-      <DependentUpon>Netduino.xaml</DependentUpon>
+    <Compile Include="Pages\NetduinoPlus.xaml.cs">
+      <DependentUpon>NetduinoPlus.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Pibrella.xaml.cs">
       <DependentUpon>Pibrella.xaml</DependentUpon>
@@ -131,7 +131,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Netduino.xaml">
+    <Page Include="Pages\NetduinoPlus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
