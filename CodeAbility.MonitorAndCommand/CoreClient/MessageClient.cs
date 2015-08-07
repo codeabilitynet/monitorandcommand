@@ -112,6 +112,9 @@ namespace CodeAbility.MonitorAndCommand.Client
             {
                 // Establish the remote endpoint for the socket.
                 IPAddress ipAddress = IPAddress.Parse(ServerIpAddress);
+                if (!CodeAbility.MonitorAndCommand.Helpers.NetworkHelpers.CheckAddressValidity(ipAddress))
+                    throw new Exception("Invalid Ip address for this machine.");
+
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, PortNumber);
 
                 Console.WriteLine(String.Format("Device {0} connecting to server {1}.", DeviceName, remoteEP.ToString()));

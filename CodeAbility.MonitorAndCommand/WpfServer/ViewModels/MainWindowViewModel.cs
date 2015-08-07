@@ -64,11 +64,12 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
 
         void StartServer()
         {
+            string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
             int heartbeatPeriod = Int32.Parse(ConfigurationManager.AppSettings["HeartbeatPeriod"]);
             bool isMessageServiceActivated = ConfigurationManager.AppSettings["IsMessageServiceActivated"].Equals("true");
            
-            ExtendedMessageListener messageListener = new ExtendedMessageListener(portNumber, heartbeatPeriod, isMessageServiceActivated);
+            ExtendedMessageListener messageListener = new ExtendedMessageListener(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated);
             messageListener.RegistrationChanged += messageListener_RegistrationChanged;
             messageListener.MessageReceived += messageListener_MessageReceived;
             messageListener.MessageSent += messageListener_MessageSent;

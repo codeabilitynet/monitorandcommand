@@ -31,11 +31,12 @@ namespace CodeAbility.MonitorAndCommand.ServerConsole
     {
         static void Main(string[] args)
         {
+            string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
             int heartbeatPeriod = Int32.Parse(ConfigurationManager.AppSettings["HeartbeatPeriod"]);
             bool isMessageServiceActivated = ConfigurationManager.AppSettings["IsMessageServiceActivated"].Equals("true");
 
-            MessageListener messageListener = new MessageListener(portNumber, heartbeatPeriod, isMessageServiceActivated);
+            MessageListener messageListener = new MessageListener(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated);
             messageListener.StartListening();
         }
     }

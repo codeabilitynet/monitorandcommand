@@ -29,14 +29,20 @@ namespace CodeAbility.MonitorAndCommand.Helpers
         /// Get the IP address of the local server.
         /// </summary>
         /// <returns>The local IP address.</returns>
-        public static IPAddress GetLocalIPAddress()
-        {
-            IPHostEntry host;
-            IPAddress localIP = null;
+        //public static IPAddress GetLocalIPAddress()
+        //{
+        //    IPHostEntry host;
+        //    IPAddress localIP = null;
 
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            localIp = host.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
-            return localIP;
+        //    host = Dns.GetHostEntry(Dns.GetHostName());
+        //    localIp = host.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
+        //    return localIP;
+        //}
+
+        public static bool CheckAddressValidity(IPAddress ipAddress)
+        {
+            IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
+            return addresses.Contains(ipAddress);
         }
     }
 }
