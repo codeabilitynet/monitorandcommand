@@ -5,6 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ServerConsole", "ServerConsole\Test.ServerConsole.csproj", "{7440F256-26D6-4755-B39F-901B8063935C}"
 	ProjectSection(ProjectDependencies) = postProject
+		{C8632312-2D6E-4C77-9178-F627135130BB} = {C8632312-2D6E-4C77-9178-F627135130BB}
 		{A5792C5D-9006-456B-9E9A-79644BA17060} = {A5792C5D-9006-456B-9E9A-79644BA17060}
 	EndProjectSection
 EndProject
@@ -16,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DeviceConsole", "Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "CoreServer\Core.Server.csproj", "{A5792C5D-9006-456B-9E9A-79644BA17060}"
 	ProjectSection(ProjectDependencies) = postProject
-		{6659F566-475B-4327-A10A-149ED59A5CFE} = {6659F566-475B-4327-A10A-149ED59A5CFE}
+		{C8632312-2D6E-4C77-9178-F627135130BB} = {C8632312-2D6E-4C77-9178-F627135130BB}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Client", "CoreClient\Core.Client.csproj", "{0FC23514-74FE-4107-831F-F57D557BBC2F}"

@@ -99,8 +99,9 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// <summary>
         /// Object managing the "message routing rules" derived from publish/subscribe messages sent by the clients
         /// </summary>
-        RulesManager rulesManager = new RulesManager(); 
+        RulesManager rulesManager = new RulesManager();
 
+        string IpAddressString { get; set; }
         int PortNumber { get; set; }
         int HeartbeatPeriod { get; set; }
 
@@ -112,9 +113,10 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         MessageServiceReference.MessageServiceClient messageServiceClient = null;
 
-        public MessageListener(int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
+        public MessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
         {
             //Parameters
+            IpAddressString = ipAddress;
             PortNumber = portNumber;
             HeartbeatPeriod = heartbeatPeriod;
             IsMessageServiceActivated = isMessageServiceActivated;
@@ -154,7 +156,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// </summary>
         public void StartListening()
         {
-            IPAddress ipAddress = CodeAbility.MonitorAndCommand.Server.NetworkHelper.GetLocalIPAddress();
+            IPAddress ipAddress = IPAddress.Parse(IpAddressString);
+            if (!CodeAbility.MonitorAndCommand.Helpers.NetworkHelpers.CheckAddressValidity(ipAddress))
+                throw new Exception("Invalid Ip address for this machine.");
+
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, PortNumber);
 
             // Create a TCP/IP socket.
@@ -255,8 +260,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     Trace.WriteLine(exception);
 
-                    //CleanUp(address);
-                    //break;
+                    CleanUp(address);
+                    break;
                 }
             }
         }
@@ -505,7 +510,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 Address destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
                 if (destinationAddress != null)
                 {
-                    Socket socket = clientsSockets.First(x => x.Key.Equals(destinationAddress)).Value as Socket;
+                    Socket socket = clientsSockets.FirstOrDefault(x => x.Key.Equals(destinationAddress)).Value as Socket;
                     if (socket != null && socket.Connected)
                     {
                         socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
