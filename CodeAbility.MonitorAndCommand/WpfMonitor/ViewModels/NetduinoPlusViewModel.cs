@@ -96,7 +96,8 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
             messageClient.DataReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.NETDUINO_PLUS, Devices.ALL);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO_PLUS, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_PLUS);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)

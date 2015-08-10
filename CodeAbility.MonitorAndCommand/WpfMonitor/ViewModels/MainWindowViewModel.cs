@@ -84,6 +84,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
                 messageClient.Start(ipAddress, portNumber);
 
                 messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_PLUS);
                 messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3);
                 messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
 

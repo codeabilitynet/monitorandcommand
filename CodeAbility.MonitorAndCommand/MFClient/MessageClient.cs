@@ -62,6 +62,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         bool IsLoggingEnabled { get; set; }
 
+        public bool IsConnected { get; set; }
+
         #endregion 
 
         Socket socket = null;
@@ -110,12 +112,16 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     
                 Register();
 
+                IsConnected = true;
+
                 Log("MessageClient started.");
             }
             catch (Exception exception)
             {
                 Log("MessageClient Start() exception !");
                 Log(exception.ToString());
+
+                Stop(); 
             }
         }
 
@@ -126,7 +132,10 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 this.receiveThread.Abort();
                 this.sendThread.Abort();
 
-                this.socket.Close();
+                if (this.socket != null)
+                    this.socket.Close();
+
+                IsConnected = false;
 
                 Log("MessageClient stopped");
             }
@@ -200,6 +209,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     Log(exception.ToString());
+                    throw;
                 }
             }
         }
@@ -222,6 +232,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             catch (Exception exception)
             {
                 Log("Send()    : " + exception.ToString());
+                throw;
             }
         }
 
@@ -271,7 +282,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 }
                 catch (Exception exception)
                 {
-                    Log("Receiver() : " + exception.ToString());                   
+                    Log("Receiver() : " + exception.ToString());
+                    throw;
                 }
             }
         }
