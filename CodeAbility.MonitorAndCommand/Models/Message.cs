@@ -146,6 +146,11 @@ namespace CodeAbility.MonitorAndCommand.Models
             return new Message(SERVER, SERVER, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
         }
 
+        public static Message InstanciateHeartbeatRequestMessage(string fromDevice)
+        {
+            return new Message(fromDevice, fromDevice, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
+        }
+
         #endregion 
 
         /// <summary>

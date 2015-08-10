@@ -22,7 +22,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             messageClient.DataReceived += client_DataReceived;
 
             Console.WriteLine("Remote console");
-            Console.WriteLine("Hit a key to start client, hit [0,2] to send Pibrella commands, hit ESC to exit.");
+            Console.WriteLine("Hit a key to start client, hit [0,2] to send Netduino command, hit ESC to exit.");
             Console.ReadKey();
 
             messageClient.Start(ipAddress, portNumber);
@@ -37,6 +37,8 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             messageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_GREEN_LED, NetduinoPlus.DATA_LED_STATUS);
 
             messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
 
             bool running = true;
             while (running)

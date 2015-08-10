@@ -346,7 +346,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         SendToAuthorizedDevices(message);
                         break;
                     case ContentTypes.HEARTBEAT:
-                        HandleReturnedHeartbeat(message);
+                        ReturnHeartbeatRequest(message);
                         break;
                     case ContentTypes.HEALTH:
                     case ContentTypes.RESPONSE:
@@ -432,13 +432,9 @@ namespace CodeAbility.MonitorAndCommand.Server
             rulesManager.RemoveRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
         }
 
-        protected void HandleReturnedHeartbeat(Message message)
+        protected void ReturnHeartbeatRequest(Message heartbeatMessage)
         {
-            DateTime sentOn = (DateTime)message.Timestamp;
-            DateTime now = DateTime.Now;
-            TimeSpan span = now - sentOn;
-
-            //Health monitoring is not implemented yet
+            messagesToSend.Enqueue(heartbeatMessage);
         }
 
         #endregion 
