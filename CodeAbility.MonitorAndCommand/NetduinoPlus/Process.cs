@@ -90,7 +90,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                     button.OnInterrupt += new NativeEventHandler(button_OnInterrupt);
 
                     TimerCallback workTimerCallBack = DoWork;
-                    Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
+                    Timer workTimer = new Timer(workTimerCallBack, null, STARTUP_TIME, PERIOD);
 
                     reconnectEvent.WaitOne();
                 }

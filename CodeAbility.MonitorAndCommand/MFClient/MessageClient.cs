@@ -56,7 +56,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         public string DeviceName { get; protected set; }
 
-        string IpAddress { get; set; }
+        string ServerIpAddress { get; set; }
 
         int PortNumber { get; set; }
 
@@ -85,24 +85,22 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         #region Public Methods
 
-        public void Start(string ipAddress, int port)
+        public void Start(string serverIpAddress, int port)
         {
-            IpAddress = ipAddress;
+            ServerIpAddress = serverIpAddress;
             PortNumber = port;
 
             try
             {
-                IPHostEntry ipHostEntry = Dns.GetHostEntry(IpAddress);
-                IPAddress _ipAddress = ipHostEntry.AddressList[0];
-
-                IPEndPoint endpoint = new IPEndPoint(_ipAddress, PortNumber);
+                IPAddress ipAddress = IPAddress.Parse(ServerIpAddress);
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, PortNumber);
                 this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 Log("Connecting to " + ipAddress + ".");
 
-                this.socket.Connect(endpoint);
+                this.socket.Connect(remoteEP);
 
-                Log("Connected to " + endpoint.ToString() + ".");
+                Log("Connected to " + remoteEP.ToString() + ".");
 
                 sendThread = new Thread(new ThreadStart(Sender));
                 receiveThread = new Thread(new ThreadStart(Receiver));
