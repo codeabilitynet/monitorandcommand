@@ -96,7 +96,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 }
                 catch (Exception exception)
                 {
-                    Logger.Instance.Write("Start()   : " + exception.ToString());
+                    messageClient.Log("Start()   : " + exception.ToString());
 
                     if (messageClient != null)
                         messageClient.CommandReceived -= socketClient_CommandReceived;
@@ -137,7 +137,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             }
             catch (Exception exception)
             {
-                Logger.Instance.Write("Command  : " + exception.ToString());
+                messageClient.Log("Command  : " + exception.ToString());
                 //throw;
             }
         }
@@ -166,7 +166,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             }
             catch (Exception exception)
             {
-                Logger.Instance.Write("DoWork   : " + exception.ToString());
+                messageClient.Log("DoWork   : " + exception.ToString());
                 //throw;
             }
         }

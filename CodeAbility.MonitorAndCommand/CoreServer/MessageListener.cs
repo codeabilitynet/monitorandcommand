@@ -240,6 +240,11 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
                     string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+
+#if DEBUG
+                    Trace.WriteLine(String.Format("JSON      : {0}", cleanedUpSerializedData));
+#endif
+
                     Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
                     //HACK : we pass the ip:port address in the Property argument
