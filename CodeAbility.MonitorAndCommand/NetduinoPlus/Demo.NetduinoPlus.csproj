@@ -61,13 +61,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MFClient\Core.MFClient.csproj">
-      <Project>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</Project>
-      <Name>Core.MFClient</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\MFClient\Core.MF42Client.csproj">
+      <Project>{D6949075-0DE7-4ADB-8968-C52A16AF3325}</Project>
+      <Name>Core.MF42Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

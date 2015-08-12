@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{b69e3092-b931-443c-abe7-7e7b65f2a37f};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</ProjectGuid>
+    <ProjectGuid>{D6949075-0DE7-4ADB-8968-C52A16AF3325}</ProjectGuid>
     <TargetFrameworkVersion>v4.2</TargetFrameworkVersion>
     <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
     <TargetFrameworkProfile />
@@ -40,6 +40,12 @@
     <Compile Include="..\Helpers\JsonHelpers.cs">
       <Link>JsonHelpers.cs</Link>
     </Compile>
+    <Compile Include="..\MFClientShared\Logger.cs">
+      <Link>Logger.cs</Link>
+    </Compile>
+    <Compile Include="..\MFClientShared\MessageClient.cs">
+      <Link>MessageClient.cs</Link>
+    </Compile>
     <Compile Include="..\Models\Address.cs">
       <Link>Address.cs</Link>
     </Compile>
@@ -58,12 +64,11 @@
     <Compile Include="..\Models\MessageEventArgs.cs">
       <Link>MessageEventArgs.cs</Link>
     </Compile>
-    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MessageClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Json.NetMF">
+    <Reference Include="Json.NetMF, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Json.NetMF.1.3.0.0\lib\netmf43\Json.NetMF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SPOT.Hardware" />

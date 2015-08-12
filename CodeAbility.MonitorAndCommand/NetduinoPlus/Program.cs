@@ -26,9 +26,9 @@ namespace CodeAbility.MonitorAndCommand.Netduino
     public class Program
     {
         //The following values are hard coded, but one could read them from the device's microSD card.
-        const string IP_ADDRESS = "192.168.178.22";
+        const string IP_ADDRESS = "192.168.178.26";
         const int PORT = 11000;
-        const bool IsLoggingEnabled = true;
+        const bool IsLoggingEnabled = false;
 
         public static void Main()
         {

@@ -81,6 +81,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             DeviceName = deviceName;
 
             IsLoggingEnabled = isLoggingEnabled;
+
+            IsConnected = false;
         }
 
         #region Public Methods
@@ -100,6 +102,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 this.socket.Connect(remoteEP);
 
+                IsConnected = true;
+
                 Log("Connected to " + remoteEP.ToString() + ".");
 
                 sendThread = new Thread(new ThreadStart(Sender));
@@ -109,8 +113,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 receiveThread.Start();
                     
                 Register();
-
-                IsConnected = true;
 
                 Log("MessageClient started.");
             }
@@ -207,7 +209,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     Log(exception.ToString());
-                    throw;
+                    //throw;
                 }
             }
         }
@@ -221,16 +223,16 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 string serializedMessage = JsonSerializer.SerializeObject(message);
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
 
-                byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
+                byte[] buffer = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-                this.socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
+                this.socket.Send(buffer, 0, Constants.BUFFER_SIZE, 0);
 
                 Log("Sent      : " + message.ToString());
             } 
             catch (Exception exception)
             {
                 Log("Send()    : " + exception.ToString());
-                throw;
+                //throw;
             }
         }
 
@@ -254,41 +256,45 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                     char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
                     string paddedSerializedData = new string(dataChars);
-                    string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData.ToString());
 
-                    object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
-                    Hashtable hashTable = deserializedObject as Hashtable;
-                    Message message = new Message()
-                    {
-                        SendingDevice = (string)hashTable["SendingDevice"],
-                        ReceivingDevice = (string)hashTable["ReceivingDevice"],
-                        FromDevice = (string)hashTable["FromDevice"],
-                        ToDevice = (string)hashTable["ToDevice"],
-                        ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
-                        Name = (string)hashTable["Name"],
-                        Parameter = (string)hashTable["Parameter"],
-                        Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
-                    };
+                    if (paddedSerializedData != null)
+                    { 
+                        string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                        object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
+                        Hashtable hashTable = deserializedObject as Hashtable;
+                        Message message = new Message()
+                        {
+                            SendingDevice = (string)hashTable["SendingDevice"],
+                            ReceivingDevice = (string)hashTable["ReceivingDevice"],
+                            FromDevice = (string)hashTable["FromDevice"],
+                            ToDevice = (string)hashTable["ToDevice"],
+                            ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
+                            Name = (string)hashTable["Name"],
+                            Parameter = (string)hashTable["Parameter"],
+                            Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
+                        };
     
-                    if (message != null)
-                    {
-                        Log("Received  :" + message.ToString());
+                        if (message != null)
+                        {
+                            Log("Received  :" + message.ToString());
 
-                        if (message.ContentType == ContentTypes.COMMAND)
-                            OnCommandReceived(new MessageEventArgs(message));
+                            if (message.ContentType == ContentTypes.COMMAND)
+                                OnCommandReceived(new MessageEventArgs(message));
+                        }
+
                     }
                 }
                 catch (Exception exception)
                 {
                     Log("Receiver() : " + exception.ToString());
-                    throw;
+                    //throw;
                 }
             }
         }
 
         #endregion 
 
-        void Log(string message)
+        public void Log(string message)
         {
             if (IsLoggingEnabled)
                 Logger.Instance.Write(message);
