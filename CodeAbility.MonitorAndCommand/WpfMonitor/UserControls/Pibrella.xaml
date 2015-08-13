@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="250" d:DesignWidth="250">
     
     <UserControl.Resources>
     </UserControl.Resources>
@@ -32,7 +32,7 @@
                  Style="{StaticResource EllipseStyle}"/>
 
         <Button Grid.Row="4" 
-                    FontSize="24" Width="60"
+                    FontSize="22" Width="60"
                     BorderBrush="{Binding ButtonPressed, Converter={StaticResource BooleanToBrush}}"
                     Content="{Binding ButtonPressed, Converter={StaticResource BooleanToOnOff}, FallbackValue=Off}"
                     Style="{StaticResource ButtonStyle}" />

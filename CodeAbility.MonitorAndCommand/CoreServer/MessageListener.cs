@@ -242,6 +242,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                     string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 
 #if DEBUG
+                    // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
                     Trace.WriteLine(String.Format("JSON      : {0}", cleanedUpSerializedData));
 #endif
 

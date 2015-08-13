@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.UserControls"
-        Title="Monitor" Height="340" Width="1000"
+        Title="Monitor" Height="280" Width="680"
         Loaded="Window_Loaded">
         
     <Window.Resources>
@@ -18,10 +18,10 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
         
             <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
@@ -30,7 +30,7 @@
             <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
         </Grid>
 
-        <StatusBar Grid.Row="1" Background="Transparent" Height="40">
+        <StatusBar Grid.Row="1" Background="Transparent" Height="35">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="ConnectButton" 
                         Margin="5"

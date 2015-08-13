@@ -89,9 +89,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.MF43Client", "MF43Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.MF42Client", "MFClient\Core.MF42Client.csproj", "{D6949075-0DE7-4ADB-8968-C52A16AF3325}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.AzureStorage", "AzureStorage\Core.AzureStorage.csproj", "{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.SqlStorage", "SqlStorage\Core.SqlStorage.csproj", "{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs20
 		SccProjectUniqueName0 = T-SQL\\Core.T-SQL.sqlproj
@@ -199,11 +203,6 @@ Global
 		SccAuxPath20 = https://tfs.codeplex.com/tfs/tfs20
 		SccLocalPath20 = MFClient
 		SccProvider20 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName21 = MF43Client\\Core.MF43Client.csproj
-		SccProjectName21 = MF43Client
-		SccAuxPath21 = https://tfs.codeplex.com/tfs/tfs20
-		SccLocalPath21 = MF43Client
-		SccProvider21 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -533,6 +532,30 @@ Global
 		{D6949075-0DE7-4ADB-8968-C52A16AF3325}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D6949075-0DE7-4ADB-8968-C52A16AF3325}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D6949075-0DE7-4ADB-8968-C52A16AF3325}.Release|x86.ActiveCfg = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{058D9126-C9C7-4CB2-B38A-5849F7BFC32D}.Release|x86.ActiveCfg = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AC8292CC-9B85-4C5B-B7DE-CC6B77A6EC8D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

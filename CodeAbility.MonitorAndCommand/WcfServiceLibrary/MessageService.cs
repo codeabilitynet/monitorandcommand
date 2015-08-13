@@ -26,13 +26,16 @@ using System.Text;
 
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Repository;
+using CodeAbility.MonitorAndCommand.SqlStorage;
+using CodeAbility.MonitorAndCommand.AzureStorage;
 
 namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class MessageService : IMessageService
     {
-        IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        //IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
 
         public void StoreMessage(Message message)
         {
