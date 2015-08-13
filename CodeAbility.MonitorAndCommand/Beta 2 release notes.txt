@@ -1,0 +1,15 @@
+Corrected/improved many details: some bugs: 
+- when deployed to Mono, some UTF8 encoding implementation differences caused the server to crash when receiving data from a NETMF client; 
+- sockets failures do not cause.
+
+Improved reliability
+
+Splitted MFClient project into two projects, one for NETMF 4.2 & one form NETMF 4.3, sharing common code.
+ 
+Added several features to facilitate troubleshooting & debugging: 
+- .NET Trace for Core.Server & Core.Client
+- logging to a file on the SD card for Core.MFClient;
+
+Added two extra demo projects :
+- Demo.Server, extending the Core.Server to present additional monitoring data on a WFP UI; 
+- Demo.Netduino3Wifi, sending B18D20 temperature sensor data.
