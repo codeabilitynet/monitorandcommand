@@ -57,6 +57,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AzureStorage\Core.AzureStorage.csproj">
+      <Project>{058d9126-c9c7-4cb2-b38a-5849f7bfc32d}</Project>
+      <Name>Core.AzureStorage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Core.Models.csproj">
       <Project>{c8632312-2d6e-4c77-9178-f627135130bb}</Project>
       <Name>Core.Models</Name>
@@ -64,6 +68,10 @@
     <ProjectReference Include="..\Repository\Core.Repository.csproj">
       <Project>{497d9949-4f94-4806-9182-63d516cfb79c}</Project>
       <Name>Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlStorage\Core.SqlStorage.csproj">
+      <Project>{ac8292cc-9b85-4c5b-b7de-cc6b77a6ec8d}</Project>
+      <Name>Core.SqlStorage</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

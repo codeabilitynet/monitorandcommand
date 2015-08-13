@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.UserControls"
-        Title="Monitor and Command Server" Height="400" Width="550" Background="Black">
+        Title="Monitor and Command Server" Height="350" Width="510" Background="Black">
     <Window.Resources>
         <Style x:Key="LegendStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="SubLegendStyle" TargetType="TextBlock">
@@ -35,17 +35,17 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" 
                        Text="Device" 
                        Style="{StaticResource LegendStyle}"></TextBlock>
             <TextBlock Grid.Row="0" Grid.Column="1" 
-                       Text="Connection" 
+                       Text="Status" 
                        Style="{StaticResource LegendStyle}"></TextBlock>
 
             <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"                       
