@@ -49,5 +49,15 @@ namespace CodeAbility.MonitorAndCommand.WpfServer
             ViewModel = new MainWindowViewModel();
             this.DataContext = ViewModel;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ViewModel.Close();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            ViewModel.Dispose();
+        }
     }
 }

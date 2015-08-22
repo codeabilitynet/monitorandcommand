@@ -32,7 +32,7 @@ using CodeAbility.MonitorAndCommand.WpfMonitor.Models;
 
 namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 {
-    class MainWindowViewModel : BaseViewModel
+    class MainWindowViewModel : BaseViewModel, IDisposable
     {
         const int COMPUTATION_PERIOD = 1000;
 
@@ -101,10 +101,20 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             }
         }
 
+        public void Close()
+        {
+            messageClient.Stop();
+        }
+
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             string toDevice = e.ToDevice;
             string fromDevice = e.FromDevice;                  
-        }   
+        }
+
+        public void Dispose()
+        {
+            messageClient = null;
+        }
     }
 }

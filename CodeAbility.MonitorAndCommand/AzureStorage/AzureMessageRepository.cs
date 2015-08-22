@@ -100,7 +100,16 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
         {
             int startRowKey = RowKey - ReturnedMessageNumber;
 
-            return null;// PartitionRangeQueryAsync(table, PartitionKey, startRowKey.ToString(), RowKey.ToString()).Result;
+            List<Models.Message> messages = new List<Models.Message>();
+
+            IEnumerable<MessageEntity> entities = PartitionRangeQueryAsync(table, PartitionKey, startRowKey.ToString(), RowKey.ToString()).Result;
+
+            foreach(MessageEntity entity in entities)
+            {
+                messages.Add(new Models.Message(entity.SendingDevice, entity.FromDevice, entity.ToDevice, entity.ContentType, entity.Name, entity.Parameter, entity.Content));
+            }
+
+            return messages;
         }
 
         public void Purge()

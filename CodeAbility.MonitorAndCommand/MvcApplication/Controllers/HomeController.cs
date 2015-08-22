@@ -7,13 +7,17 @@ using System.Web.Mvc;
 
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Repository;
+using CodeAbility.MonitorAndCommand.SqlStorage;
+using CodeAbility.MonitorAndCommand.AzureStorage;
+
 using System.Web.UI;
 
 namespace MvcApplication.Controllers
 {
     public class HomeController : Controller
     {
-        IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        //IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
 
         public ActionResult Index()
         {
