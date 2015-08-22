@@ -162,9 +162,9 @@ namespace CodeAbility.MonitorAndCommand.Models
             this(message.SendingDevice, message.FromDevice, message.ToDevice, message.ContentType, message.Name, message.Parameter, message.Content) { }
 
 #if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
-        protected Message(string sendingDevice, string fromDevice, string toDevice, ContentTypes contentType, string name, object parameter, object content)
+        public Message(string sendingDevice, string fromDevice, string toDevice, ContentTypes contentType, string name, object parameter, object content)
 #else
-        protected Message(string sendingDevice, string fromDevice, string toDevice, int contentType, string name, object parameter, object content)
+        public Message(string sendingDevice, string fromDevice, string toDevice, int contentType, string name, object parameter, object content)
 #endif
         {
             SendingDevice = sendingDevice;

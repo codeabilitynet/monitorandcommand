@@ -4,7 +4,7 @@
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.UserControls"
         Title="Monitor" Height="280" Width="680"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
         
     <Window.Resources>
         <converters:ConnectedToStringConverter x:Key="ConnectedToString"/>

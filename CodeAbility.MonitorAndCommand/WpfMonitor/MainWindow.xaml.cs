@@ -59,6 +59,17 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor
 
         }
 
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.Close();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            viewModel.Dispose();
+        }
+
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             viewModel.Connect();

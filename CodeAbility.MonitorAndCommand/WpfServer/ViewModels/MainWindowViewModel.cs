@@ -31,7 +31,7 @@ using CodeAbility.MonitorAndCommand.Environment;
 
 namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
 {
-    public class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel, IDisposable
     {
         const int COMPUTATION_PERIOD_IN_MILLISECONDS = 50; 
         const int COMPUTATION_PERIOD_IN_SECONDS = 1; 
@@ -48,6 +48,8 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
 
         Timer uiNotifyTimer; 
         Timer computationTimer;
+
+        ExtendedMessageListener messageListener;
 
         public MainWindowViewModel()
             : base()
@@ -69,7 +71,7 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             int heartbeatPeriod = Int32.Parse(ConfigurationManager.AppSettings["HeartbeatPeriod"]);
             bool isMessageServiceActivated = ConfigurationManager.AppSettings["IsMessageServiceActivated"].Equals("true");
            
-            ExtendedMessageListener messageListener = new ExtendedMessageListener(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated);
+            messageListener = new ExtendedMessageListener(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated);
             messageListener.RegistrationChanged += messageListener_RegistrationChanged;
             messageListener.MessageReceived += messageListener_MessageReceived;
             messageListener.MessageSent += messageListener_MessageSent;
@@ -81,6 +83,11 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             computationTimer = new Timer(computationTimerCallBack, null, 0, COMPUTATION_PERIOD_IN_SECONDS * 1000);
 
             messageListener.StartListening();
+        }
+
+        public void Close()
+        {
+            messageListener.StopListening();
         }
 
         #region Timer methods 
@@ -162,5 +169,10 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
         }
 
         #endregion 
+    
+        public void Dispose()
+        {
+            messageListener = null;
+        }
     }
 }

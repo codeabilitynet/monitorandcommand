@@ -35,7 +35,7 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
     public class MessageService : IMessageService
     {
         //IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
-        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
 
         public void StoreMessage(Message message)
         {
