@@ -13,6 +13,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {
     public class TemperatureSensor
     {
+        //Taken from : http://bergonline.dk/post/2013/07/14/howto-Netduino-read-temperature-from-DS18B20.aspx
+
         // DS18B20, NETMF 4.2
         // center pin is connected to digital pin 0, right pin is connected to 5V,
         // left pin GND, 4k7 pull-up resistor between 5V and the center pin
@@ -43,13 +45,13 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             {
                 oneWire.TouchReset();
 
-                oneWire.WriteByte(SkipROM); // Skip ROM, we only have one device
-                oneWire.WriteByte(ConvertT); // Start temperature conversion
-                Thread.Sleep(750);  // Wait Tconv (for default 12-bit resolution)
+                oneWire.WriteByte(SkipROM); 
+                oneWire.WriteByte(ConvertT); 
+                Thread.Sleep(750);  
 
                 oneWire.TouchReset();
-                oneWire.WriteByte(SkipROM); // Skip ROM
-                oneWire.WriteByte(ReadScratchpad); // Read Scratchpad
+                oneWire.WriteByte(SkipROM);
+                oneWire.WriteByte(ReadScratchpad); 
 
                 // Read just the temperature (2 bytes)
                 var tempLo = oneWire.ReadByte();
@@ -72,15 +74,5 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             //Farenheit conversion : ret = (ret * 9 / 5) + 32;            
             return temperature;
         }
-
-        //byte[] SetDevice(OneWire oneWire, object device)
-        //{
-        //    byte[] b = (byte[])device;
-        //    foreach (var bTmp in b)
-        //    {
-        //        oneWire.TouchByte(bTmp);
-        //    }
-        //    return b;
-        //}
     }
 }
