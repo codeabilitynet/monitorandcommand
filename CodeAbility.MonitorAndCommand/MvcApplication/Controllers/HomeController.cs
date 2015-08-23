@@ -16,8 +16,8 @@ namespace MvcApplication.Controllers
 {
     public class HomeController : Controller
     {
-        //IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
-        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
+        IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        //IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
 
         public ActionResult Index()
         {
