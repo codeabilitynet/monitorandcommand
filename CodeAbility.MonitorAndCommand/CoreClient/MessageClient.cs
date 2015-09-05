@@ -90,7 +90,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         private Thread sendThread = null;
 
         // ManualResetEvent instances signal completion.
-        private ManualResetEvent sendDone = new ManualResetEvent(false);
+        private ManualResetEvent sendEvent = new ManualResetEvent(false);
 
         public MessageClient(string deviceName)
         {
@@ -117,6 +117,8 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Console.WriteLine(String.Format("Device {0} connecting to server {1}.", DeviceName, remoteEP.ToString()));
 
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, Constants.BUFFER_SIZE * 8);
+                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, Constants.BUFFER_SIZE * 8);
 
                 // Connect to the remote endpoint.
                 socket.Connect(remoteEP);
@@ -215,7 +217,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         protected void EnqueueMessage(Message message)
         {
             messagesToSend.Enqueue(message);
-            sendDone.Set();
+            sendEvent.Set();
         }
 
         private void Sender()
@@ -226,7 +228,7 @@ namespace CodeAbility.MonitorAndCommand.Client
             {
                 try
                 {
-                    sendDone.Reset();
+                    sendEvent.Reset();
 
                     while (messagesToSend.Count > 0)
                     {
@@ -235,7 +237,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                             Send(message);
                     }
 
-                    sendDone.WaitOne();
+                    sendEvent.WaitOne();
                 }
                 catch (Exception exception)
                 {
@@ -252,7 +254,17 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Trace.WriteLine(String.Format("Sending     : {0}", message));
 
                 string serializedMessage = JsonConvert.SerializeObject(message);
+
+#if DEBUG
+                Trace.WriteLine(String.Format("JSON        : {0}", serializedMessage));
+#endif
+
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+
+#if DEBUG
+                Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
+#endif
+
                 byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
                 socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);

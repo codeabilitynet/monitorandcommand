@@ -38,8 +38,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 {
     public class Process
     {
-        const int STARTUP_TIME = 10000;
-        const int PERIOD = 10000;
+        const int STARTUP_TIME = 3000;
+        const int PERIOD = 3000;
 
         const int BUTTON_PRESSED_DURATION = 500;
         const int RECONNECTION_TIMER_DURATION = 60000;
@@ -64,7 +64,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             {
                 try
                 {
-                    reconnectEvent.Reset();
+                    //reconnectEvent.Reset();
 
                     messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, isLoggingEnabled);
 

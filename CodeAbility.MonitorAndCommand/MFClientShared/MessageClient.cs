@@ -74,7 +74,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         private Thread receiveThread = null;
 
         // ManualResetEvent instances signal completion.
-        private ManualResetEvent sendDone = new ManualResetEvent(false);
+        private ManualResetEvent sendEvent = new ManualResetEvent(false);
 
         public MessageClient(string deviceName, bool isLoggingEnabled)
         { 
@@ -96,11 +96,13 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             {
                 IPAddress ipAddress = IPAddress.Parse(ServerIpAddress);
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, PortNumber);
-                this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, Constants.BUFFER_SIZE * 8);
+                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, Constants.BUFFER_SIZE * 8);
 
                 Log("Connecting to " + ipAddress + ".");
 
-                this.socket.Connect(remoteEP);
+                socket.Connect(remoteEP);
 
                 IsConnected = true;
 
@@ -132,8 +134,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 this.receiveThread.Abort();
                 this.sendThread.Abort();
 
-                if (this.socket != null)
-                    this.socket.Close();
+                if (socket != null)
+                    socket.Close();
 
                 IsConnected = false;
 
@@ -178,7 +180,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 messagesToSend.Enqueue(message);
             }
 
-            sendDone.Set();
+            sendEvent.Set();
         }
 
         private void Sender()
@@ -189,7 +191,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             {
                 try
                 {
-                    sendDone.Reset();
+                    sendEvent.Reset();
 
                     while(messagesToSend.Count > 0)
                     {
@@ -204,7 +206,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                             Send(message);
                     }
                     
-                    sendDone.WaitOne();
+                    sendEvent.WaitOne();
                 }
                 catch (Exception exception)
                 {

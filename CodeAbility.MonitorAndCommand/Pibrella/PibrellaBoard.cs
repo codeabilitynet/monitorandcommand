@@ -23,39 +23,39 @@ namespace CodeAbility.RaspberryPi.Pibrella
 {
 	public class PibrellaBoard
 	{
-		public event EventHandler ButtonPressed;
+        public event EventHandler ButtonPressed;
 
-		//Infrastructure
-		IGpioConnectionDriver driver;
-		GpioConnectionSettings settings;
+        //Infrastructure
+        IGpioConnectionDriver driver;
+        GpioConnectionSettings settings;
 
-		//Connection
-		public GpioConnection Connection { get; protected set; }
+        //Connection
+        public GpioConnection Connection { get; protected set; }
 
-		//Connectors
-		ConnectorPin ledPinGreen = ConnectorPin.P1Pin7; //4
-		ConnectorPin ledPinYellow = ConnectorPin.P1Pin11; //17
-		ConnectorPin ledPinRed = ConnectorPin.P1Pin13; //21
+        //Connectors
+        ConnectorPin ledPinGreen = ConnectorPin.P1Pin7; //4
+        ConnectorPin ledPinYellow = ConnectorPin.P1Pin11; //17
+        ConnectorPin ledPinRed = ConnectorPin.P1Pin13; //21
 
-		ConnectorPin inputPinA = ConnectorPin.P1Pin21; //9
-		ConnectorPin inputPinB = ConnectorPin.P1Pin26; //7
-		ConnectorPin inputPinC = ConnectorPin.P1Pin24; //8
-		ConnectorPin inputPinD = ConnectorPin.P1Pin19; //10
+        ConnectorPin inputPinA = ConnectorPin.P1Pin21; //9
+        ConnectorPin inputPinB = ConnectorPin.P1Pin26; //7
+        ConnectorPin inputPinC = ConnectorPin.P1Pin24; //8
+        ConnectorPin inputPinD = ConnectorPin.P1Pin19; //10
 
-		ConnectorPin outputPinA = ConnectorPin.P1Pin15; //22
-		ConnectorPin outputPinB = ConnectorPin.P1Pin16; //23
-		ConnectorPin outputPinC = ConnectorPin.P1Pin18; //24
-	    ConnectorPin outputPinD = ConnectorPin.P1Pin22; //25
+        ConnectorPin outputPinA = ConnectorPin.P1Pin15; //22
+        ConnectorPin outputPinB = ConnectorPin.P1Pin16; //23
+        ConnectorPin outputPinC = ConnectorPin.P1Pin18; //24
+        ConnectorPin outputPinD = ConnectorPin.P1Pin22; //25
 	
-		ConnectorPin buttonPin = ConnectorPin.P1Pin23; //11
-		ConnectorPin buzzerPin = ConnectorPin.P1Pin12; //18
+        ConnectorPin buttonPin = ConnectorPin.P1Pin23; //11
+        ConnectorPin buzzerPin = ConnectorPin.P1Pin12; //18
 
-		//Pin configurations
-		public OutputPinConfiguration LedPinGreen { get; protected set; }
+        //Pin configurations
+        public OutputPinConfiguration LedPinGreen { get; protected set; }
         public OutputPinConfiguration LedPinYellow { get; protected set; }
         public OutputPinConfiguration LedPinRed { get; protected set; }
 
-		public InputPinConfiguration InputPinA { get; protected set; }
+        public InputPinConfiguration InputPinA { get; protected set; }
         public InputPinConfiguration InputPinB { get; protected set; }
         public InputPinConfiguration InputPinC { get; protected set; }
         public InputPinConfiguration InputPinD { get; protected set; }
@@ -66,9 +66,9 @@ namespace CodeAbility.RaspberryPi.Pibrella
         public OutputPinConfiguration OutputPinD { get; protected set; }
 
         public OutputPinConfiguration BuzzerPin { get; protected set; }
-		public PinConfiguration ButtonPin { get; protected set; }
+        public PinConfiguration ButtonPin { get; protected set; }
 
-		protected PinConfiguration[] Pins { get; set; }
+        protected PinConfiguration[] Pins { get; set; }
 
 		public PibrellaBoard ()
 		{
@@ -77,38 +77,38 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
 		private void Initialize()
 		{
-			driver = new GpioConnectionDriver();
-			settings = new GpioConnectionSettings () { Driver = driver };
+            driver = new GpioConnectionDriver();
+            settings = new GpioConnectionSettings () { Driver = driver };
 
-			//Configure pins
-			LedPinGreen = ledPinGreen.Output ();
-			LedPinYellow = ledPinYellow.Output ();
-			LedPinRed = ledPinRed.Output ();
+            //Configure pins
+            LedPinGreen = ledPinGreen.Output ();
+            LedPinYellow = ledPinYellow.Output ();
+            LedPinRed = ledPinRed.Output ();
 
-			InputPinA = inputPinA.Input ();
-			InputPinB = inputPinB.Input ();
-			InputPinC = inputPinC.Input ();
-			InputPinD = inputPinD.Input ();
+            InputPinA = inputPinA.Input ();
+            InputPinB = inputPinB.Input ();
+            InputPinC = inputPinC.Input ();
+            InputPinD = inputPinD.Input ();
 
-			OutputPinA = outputPinA.Output ();
-			OutputPinB = outputPinB.Output ();
-			OutputPinC = outputPinC.Output ();
-			OutputPinD = outputPinD.Output ();
+            OutputPinA = outputPinA.Output ();
+            OutputPinB = outputPinB.Output ();
+            OutputPinC = outputPinC.Output ();
+            OutputPinD = outputPinD.Output ();
 
-			BuzzerPin = buzzerPin.Output ();
+            BuzzerPin = buzzerPin.Output ();
 
             //Declaring a ButtonPressed handler
-			ButtonPin = buttonPin.Input().Name("Button").Revert().Switch().Enable().OnStatusChanged(x =>
-				{
-					OnButtonPressed(new EventArgs());
-				});
+            ButtonPin = buttonPin.Input().Name("Button").Revert().Switch().Enable().OnStatusChanged(x =>
+            {
+	            OnButtonPressed(new EventArgs());
+            });
 
-			Pins = new PinConfiguration[] { LedPinGreen, LedPinYellow, LedPinRed, 
-											InputPinA, InputPinB, InputPinC, InputPinD,
-											OutputPinA, OutputPinB, OutputPinC, OutputPinD,
-											BuzzerPin, ButtonPin };
+            Pins = new PinConfiguration[] { LedPinGreen, LedPinYellow, LedPinRed, 
+                                            InputPinA, InputPinB, InputPinC, InputPinD,
+                                            OutputPinA, OutputPinB, OutputPinC, OutputPinD,
+                                            BuzzerPin, ButtonPin };
 
-			Connection = new GpioConnection (settings, Pins);	
+            Connection = new GpioConnection (settings, Pins);	
 		}
 
         public void Shutdown()

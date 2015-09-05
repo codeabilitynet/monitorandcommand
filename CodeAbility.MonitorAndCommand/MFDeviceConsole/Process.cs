@@ -46,7 +46,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
 
         MessageClient messageClient = null;
 
-        AutoResetEvent autoEvent = new AutoResetEvent(false);
+        AutoResetEvent reconnectEvent = new AutoResetEvent(false);
 
         public bool ledState = false;
 
@@ -56,7 +56,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
             {
                 try
                 {
-                    autoEvent.Reset();
+                    reconnectEvent.Reset();
 
                     messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, false);
 
@@ -82,7 +82,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                     TimerCallback workTimerCallBack = DoWork;
                     Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
 
-                    autoEvent.WaitOne();
+                    reconnectEvent.WaitOne();
                 }
                 catch (Exception exception)
                 {
@@ -94,7 +94,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                     AutoResetEvent autoResetEvent = new AutoResetEvent(false);
                     autoResetEvent.WaitOne(RECONNECTION_TIMER_DURATION, false);
 
-                    autoEvent.Set();
+                    reconnectEvent.Set();
                 }
             }
         }

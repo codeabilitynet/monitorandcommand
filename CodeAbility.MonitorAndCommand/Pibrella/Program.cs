@@ -26,19 +26,19 @@ namespace CodeAbility.RaspberryPi.Pibrella
 	{
 		public static void Main (string[] args)
 		{
-			Blinker blinker = new Blinker(args.GetPeriod()); 
+            Blinker blinker = new Blinker(args.GetPeriod()); 
 
-			Console.WriteLine ("Hit a key to start, pressed the board's button to start/stop blinking.");
-			Console.ReadKey();
+            Console.WriteLine ("Hit a key to start, pressed the board's button to start/stop blinking.");
+            Console.ReadKey();
 
             blinker.Start(); 
 
-			Console.WriteLine ("Hit a key to quit.");
-			Console.ReadKey();
+            Console.WriteLine ("Hit a key to quit.");
+            Console.ReadKey();
 
             blinker.Stop(); 
 
-			return; 
+            return; 
 		}
 	}
 }
