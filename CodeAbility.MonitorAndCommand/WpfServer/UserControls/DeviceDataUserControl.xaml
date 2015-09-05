@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="500">
+             d:DesignHeight="50" d:DesignWidth="600">
     
     <UserControl.Resources>
         
@@ -15,28 +15,28 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontSize" Value="32"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="MessageIndicatorStyle" TargetType="Rectangle">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"></Setter>
-            <Setter Property="Width" Value="24"></Setter>
-            <Setter Property="Height" Value="24"></Setter>
+            <Setter Property="Width" Value="28"></Setter>
+            <Setter Property="Height" Value="28"></Setter>
         </Style>
         <Style x:Key="ValueStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5,5,15,5"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="24"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="EllipseStyle" TargetType="Ellipse">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Width" Value="25"/>
-            <Setter Property="Height" Value="25"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Stroke" Value="White"/>
             <Setter Property="StrokeThickness" Value="2"/>
@@ -46,15 +46,15 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="60"/>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="80"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource DeviceStyle}"></TextBlock>

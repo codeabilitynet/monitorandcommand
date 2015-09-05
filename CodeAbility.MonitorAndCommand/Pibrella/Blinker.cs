@@ -36,16 +36,16 @@ namespace CodeAbility.RaspberryPi.Pibrella
 {
     public class Blinker
     {
-        const int BLINKING_PERIOD = 500;
+        const int BLINKING_PERIOD = 1000;
 
         const int BUTTON_PRESSED_DURATION = 250;
         public int Period { get; set; }
-		public bool Blinking { get; set; }
+        public bool Blinking { get; set; }
 
         string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
         int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-		private Timer aTimer;
+        private Timer aTimer;
 
         PibrellaBoard pibrella = new PibrellaBoard();
         MessageClient messageClient = null; 
@@ -54,12 +54,12 @@ namespace CodeAbility.RaspberryPi.Pibrella
         {
             Period = period;
 
-			Blinking = false;
+            Blinking = false;
 
             messageClient = new MessageClient(Environment.Devices.PIBRELLA);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
-			pibrella.Connection.Open();            
+            pibrella.Connection.Open();            
         }
 
         void client_CommandReceived(object sender, MessageEventArgs e)
@@ -68,23 +68,23 @@ namespace CodeAbility.RaspberryPi.Pibrella
             if (!e.ToDevice.Equals(Environment.Devices.PIBRELLA))
                 return;
 
-			string commandName = e.Name; 
-			string parameter = e.Parameter.ToString();
+            string commandName = e.Name; 
+            string parameter = e.Parameter.ToString();
             string content = e.Content.ToString();
 
-			if (commandName.Equals(Environment.Pibrella.COMMAND_TOGGLE_LED))
+            if (commandName.Equals(Environment.Pibrella.COMMAND_TOGGLE_LED))
             {
-				if (parameter.Equals(Environment.Pibrella.OBJECT_GREEN_LED))
-					ToggleGreenLed();
+                if (parameter.Equals(Environment.Pibrella.OBJECT_GREEN_LED))
+	                ToggleGreenLed();
                 else if (parameter.Equals(Environment.Pibrella.OBJECT_YELLOW_LED))
-					ToggleYellowLed();
+	                ToggleYellowLed();
                 else if (parameter.Equals(Environment.Pibrella.OBJECT_RED_LED))
-					ToggleRedLed();
+	                ToggleRedLed();
             }
             else if (commandName.Equals(Environment.Pibrella.COMMAND_BUTTON_PRESSED))
             {
-				ToggleRunningState();
-			}
+                ToggleRunningState();
+            }
         }
 
         void HandleButtonPressed (object sender, EventArgs e)
@@ -100,12 +100,12 @@ namespace CodeAbility.RaspberryPi.Pibrella
 
         public void Start()
         {
-            Blinking = false;
+            Blinking = true;
 
             messageClient.CommandReceived += client_CommandReceived;
             messageClient.Start(ipAddress, portNumber);
 
-			if (pibrella.Connection.IsOpened)
+            if (pibrella.Connection.IsOpened)
             {
                 messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_GREEN_LED, Environment.Pibrella.DATA_LED_STATUS);
                 messageClient.PublishData(Environment.Devices.ALL, Environment.Pibrella.OBJECT_YELLOW_LED, Environment.Pibrella.DATA_LED_STATUS);
@@ -118,10 +118,10 @@ namespace CodeAbility.RaspberryPi.Pibrella
                 messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Pibrella.OBJECT_BUTTON, Environment.Pibrella.COMMAND_BUTTON_PRESSED);
 
                 aTimer = new Timer(BLINKING_PERIOD);
-				// Hook up the Elapsed event for the timer. 
-				aTimer.Elapsed += OnTimedEvent;
-				aTimer.Enabled = true;
-			}
+                // Hook up the Elapsed event for the timer. 
+                aTimer.Elapsed += OnTimedEvent;
+                aTimer.Enabled = true;
+            }
         }
 
         const int RESET_LED_INDEX = 0;
@@ -134,23 +134,23 @@ namespace CodeAbility.RaspberryPi.Pibrella
 		{
             ledIndex++;
 
-			if (Blinking) 
+            if (Blinking) 
             {
                 if (ledIndex == GREEN_LED_INDEX)
                 { 
-					ToggleGreenLed ();
+                    ToggleGreenLed ();
                 }
 
                 if (ledIndex == YELLOW_LED_INDEX)
                 { 
-					ToggleYellowLed ();
+                    ToggleYellowLed ();
                 }
 
                 if (ledIndex == RED_LED_INDEX)
                 { 
-					ToggleRedLed ();
+                    ToggleRedLed ();
                 }
-			}
+            }
 
             if (ledIndex == RED_LED_INDEX)
                 ledIndex = RESET_LED_INDEX;
@@ -162,37 +162,37 @@ namespace CodeAbility.RaspberryPi.Pibrella
 			pibrella.Connection.Toggle (pibrella.LedPinGreen);
             greenLedStatus = !greenLedStatus;
             messageClient.SendData(Environment.Devices.ALL, 
-                            Environment.Pibrella.OBJECT_GREEN_LED, 
-                            Environment.Pibrella.DATA_LED_STATUS,
-                            greenLedStatus ? 
-                                Environment.Pibrella.CONTENT_LED_STATUS_ON : 
-                                Environment.Pibrella.CONTENT_LED_STATUS_OFF);
+                                    Environment.Pibrella.OBJECT_GREEN_LED, 
+                                    Environment.Pibrella.DATA_LED_STATUS,
+                                    greenLedStatus ? 
+                                        Environment.Pibrella.CONTENT_LED_STATUS_ON : 
+                                        Environment.Pibrella.CONTENT_LED_STATUS_OFF);
 		}
 
         bool yellowLedStatus = false;
 		protected void ToggleYellowLed()
 		{
-			pibrella.Connection.Toggle (pibrella.LedPinYellow);
+            pibrella.Connection.Toggle (pibrella.LedPinYellow);
             yellowLedStatus = !yellowLedStatus;
             messageClient.SendData(Environment.Devices.ALL, 
-                            Environment.Pibrella.OBJECT_YELLOW_LED, 
-                            Environment.Pibrella.DATA_LED_STATUS,
-                            yellowLedStatus ?
-                                Environment.Pibrella.CONTENT_LED_STATUS_ON :
-                                Environment.Pibrella.CONTENT_LED_STATUS_OFF);		
+                                    Environment.Pibrella.OBJECT_YELLOW_LED, 
+                                    Environment.Pibrella.DATA_LED_STATUS,
+                                    yellowLedStatus ?
+                                        Environment.Pibrella.CONTENT_LED_STATUS_ON :
+                                        Environment.Pibrella.CONTENT_LED_STATUS_OFF);		
 		}
 
         bool redLedStatus = false;
 		protected void ToggleRedLed()
 		{
-			pibrella.Connection.Toggle (pibrella.LedPinRed);            
+            pibrella.Connection.Toggle (pibrella.LedPinRed);            
             redLedStatus = !redLedStatus;
             messageClient.SendData(Environment.Devices.ALL, 
-                            Environment.Pibrella.OBJECT_RED_LED, 
-                            Environment.Pibrella.DATA_LED_STATUS,
-                            redLedStatus ?
-                                Environment.Pibrella.CONTENT_LED_STATUS_ON :
-                                Environment.Pibrella.CONTENT_LED_STATUS_OFF);
+                                    Environment.Pibrella.OBJECT_RED_LED, 
+                                    Environment.Pibrella.DATA_LED_STATUS,
+                                    redLedStatus ?
+                                        Environment.Pibrella.CONTENT_LED_STATUS_ON :
+                                        Environment.Pibrella.CONTENT_LED_STATUS_OFF);
 		}
 			
         public void Stop()

@@ -38,7 +38,7 @@ namespace CodeAbility.MonitorAndCommand.Server
     /// </summary>
     public class MessageListener
     {
-        #region 
+        #region Registration Event Handler
 
         public delegate void RegistrationEventHandler(object sender, RegistrationEventArgs e);
 
@@ -52,69 +52,76 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         #endregion 
 
+        #region Constants
+
         const string ALL = "*";
+
+        const int PROCESS_PERIOD = 50; 
+        const int PROCESS_START_DELAY = 0; 
+
+        const int HEARTBEAT_START_DELAY = 1000;
+
+        #endregion 
+
+        #region Properties 
+
+        private string IpAddressString { get; set; }
+        private int PortNumber { get; set; }
+        private int HeartbeatPeriod { get; set; }
+
+        private bool IsMessageServiceActivated { get; set; }
+
+        #endregion 
+
+        #region Private variables
 
         //Threads
         private Thread sendingThread = null;
         private Thread processingThread = null;
         private Thread storingThread = null;
+
+        private Timer processTimer = null;
         private Timer heartbeatTimer = null;
 
         //ManualResetEvent instances signal completion.
-        private ManualResetEvent sendDone = new ManualResetEvent(false);
-        private ManualResetEvent processDone = new ManualResetEvent(false);
-        private ManualResetEvent storeDone = new ManualResetEvent(false);
+        private ManualResetEvent sendEvent = new ManualResetEvent(false);
+        private ManualResetEvent processEvent = new ManualResetEvent(false);
+        private ManualResetEvent storeEvent = new ManualResetEvent(false);
+
+        //private AutoResetEvent processTimerEvent = new AutoResetEvent(false);
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
-
-        /// <summary>
-        /// Dictionary holding references to the threads receiving messages from connected clients
-        /// </summary>
+  
+        // Dictionary holding references to the threads receiving messages from connected clients        
         private ConcurrentDictionary<Address, Thread> receiveThreads = new ConcurrentDictionary<Address, Thread>();
-
-        /// <summary>
-        /// Dictionary holding references to the sockets opened for each connected client
-        /// </summary>
+        
+        // Dictionary holding references to the sockets opened for each connected client        
         private ConcurrentDictionary<Address, Socket> clientsSockets = new ConcurrentDictionary<Address, Socket>();
 
-        /// <summary>
-        /// Queue containing messages received from clients through each "message receiving" thread
-        /// </summary>
+        // Queue containing messages received from clients through each "message receiving" thread        
         private ConcurrentQueue<Message> messagesReceived = new ConcurrentQueue<Message>();
-
-        /// <summary>
-        /// Queue containg messages to be sent
-        /// </summary>
+   
+        // Queue containg messages to be sent
         private ConcurrentQueue<Message> messagesToSend = new ConcurrentQueue<Message>();
-
-        /// <summary>
-        /// Queue containg messages to be "stored"
-        /// </summary>
+        
+        // Queue containg messages to be "stored"        
         private ConcurrentQueue<Message> messagesToStore = new ConcurrentQueue<Message>();
        
-        /// <summary>
-        /// Object managing references to devices (connected clients)
-        /// </summary>
+        // Object managing references to devices (connected clients)
         DevicesManager devicesManager = new DevicesManager();
 
-        /// <summary>
-        /// Object managing the "message routing rules" derived from publish/subscribe messages sent by the clients
-        /// </summary>
+        // Object managing the "message routing rules" derived from publish/subscribe messages sent by the clients
         RulesManager rulesManager = new RulesManager();
 
-        string IpAddressString { get; set; }
-        int PortNumber { get; set; }
-        int HeartbeatPeriod { get; set; }
+        private Socket listener = null;
 
-        bool IsMessageServiceActivated { get; set; }
-
-        Socket listener = null;
+        #endregion 
 
         public string LocalEndPoint { get { return (listener != null) ? listener.LocalEndPoint.ToString() : String.Empty; } }
 
         MessageServiceReference.MessageServiceClient messageServiceClient = null;
 
         public MessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
-        {
+        {           
             //Parameters
             IpAddressString = ipAddress;
             PortNumber = portNumber;
@@ -137,18 +144,6 @@ namespace CodeAbility.MonitorAndCommand.Server
                     Trace.WriteLine(String.Format("Service exception : {0}", exception));
                 }
             }
-
-            //Threads
-            processingThread = new Thread(new ThreadStart(Processor));
-            sendingThread = new Thread(new ThreadStart(Sender));
-            storingThread = new Thread(new ThreadStart(Storer));
-
-            //Heart beat Timer
-            if (HeartbeatPeriod > 0)
-            { 
-                TimerCallback tcb = Heartbeat;
-                heartbeatTimer = new Timer(tcb, heartbeatEvent, HeartbeatPeriod, HeartbeatPeriod);
-            }
         }
 
         /// <summary>
@@ -167,24 +162,46 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             // Bind the socket to the local endpoint and listen for incoming connections.
             try
-            {
+            {                           
+                //Start main Threads
+
+                //Processing using ManualResetEvent
+                processingThread = new Thread(new ThreadStart(SynchronizedProcessor));
                 processingThread.Start();
 
+                //Processing using a Timer
+                //TimerCallback processCallBack = PeriodicProcessor;
+                //processTimer = new Timer(processCallBack, null, PROCESS_START_DELAY, PROCESS_PERIOD);
+
+                sendingThread = new Thread(new ThreadStart(Sender));
+                storingThread = new Thread(new ThreadStart(Storer));
+
+                //Start listening
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
 
-                Console.WriteLine("Listening on " + listener.LocalEndPoint); 
-
                 sendingThread.Start();
 
+                Console.WriteLine("Listening on " + listener.LocalEndPoint); 
+
+                //Start storing thread
                 if (IsMessageServiceActivated)
                     storingThread.Start();
+
+                //Start, if period is set, the Heartbeat Timer
+                if (HeartbeatPeriod > 0)
+                {
+                    TimerCallback heartbeatCallBack = Heartbeat;
+                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HeartbeatPeriod);
+                }
 
                 while (true)
                 {
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
                     Socket socket = listener.Accept();
+                    //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, 8192);
+                    //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, 8192);
 
                     Address address = new Address(socket.RemoteEndPoint.ToString());
 
@@ -230,37 +247,61 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             Trace.WriteLine(String.Format("Starting Receiver thread for socket {0}", socket.RemoteEndPoint.ToString()));
 
+            // Receive buffer.
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            int offset = 0;
+
             while (socket.Connected)
             {
                 try
                 {
-                    // Receive buffer.
-                    byte[] buffer = new byte[Constants.BUFFER_SIZE];
-                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
+                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
+                    int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
 
-                    string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
-                    string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+//#if DEBUG 
+//                    Trace.WriteLine(String.Format("Extracted : {0}", receivedBytes)); 
+//                    Trace.WriteLine(String.Format("Available : {0}", socket.Available)); 
+//#endif 
 
-#if DEBUG
-                    // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
-                    Trace.WriteLine(String.Format("JSON      : {0}", cleanedUpSerializedData));
-#endif
+                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
+                    { 
+                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
 
-                    Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
+//#if DEBUG
+//                        // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
+//                        Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
+//#endif
+
+                        string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+
+//#if DEBUG
+//                    // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
+//                    Trace.WriteLine(String.Format("JSON      : {0}", cleanedUpSerializedData));
+//#endif
+
+                        Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
                     //HACK : we pass the ip:port address in the Property argument
-                    if (receivedMessage.Name.Equals(ControlActions.REGISTER))
-                        receivedMessage.Content = socket.RemoteEndPoint.ToString();
+                        if (receivedMessage.Name.Equals(ControlActions.REGISTER))
+                            receivedMessage.Content = socket.RemoteEndPoint.ToString();
 
-                    messagesReceived.Enqueue(receivedMessage);
+                        messagesReceived.Enqueue(receivedMessage);
+                    
+#if DEBUG
+                        Trace.WriteLine(String.Format("Received  : {0}", receivedMessage));
+#endif
+                        offset = 0;
+                    }
+                    else
+                    {
+                        offset = receivedBytesLength;
+                    }
 
-                    //Console.WriteLine(String.Format("Message     : {0}", receivedMessage));
-                    Trace.WriteLine(String.Format("Message   : {0}", receivedMessage));
-
-                    if (IsMessageServiceActivated)       
-                        StoreMessage(receivedMessage);
-
-                    processDone.Set();
+                    //While there are bytes in the socket's buffer, we get them, read the messages and add them to the queue
+                    //This usually only happens during the registration/subscription phase
+                    if (socket.Available < Constants.BUFFER_SIZE)
+                        processEvent.Set();
                 }
                 catch(Exception exception)
                 {
@@ -289,7 +330,10 @@ namespace CodeAbility.MonitorAndCommand.Server
                 if (clientsSockets.TryRemove(address, out _socket))
                 { 
                     if (_socket.Connected)
-                        _socket.Close();
+					{
+						_socket.Shutdown(SocketShutdown.Both); 
+						_socket.Close();
+					}
 
                     _socket.Dispose();
                 }
@@ -309,26 +353,49 @@ namespace CodeAbility.MonitorAndCommand.Server
         /// <summary>
         /// Message processing thread method
         /// </summary>
-        private void Processor()
+        private void SynchronizedProcessor()
         {
             Trace.WriteLine("Starting Processor() thread"); 
 
             while (true)
             {
-                processDone.Reset();
+                processEvent.Reset();
 
-                while (messagesReceived.Count > 0)
+                DequeueAndProcessMessages(); 
+                
+                //Wait for a signal from any "Receiver" thread
+                processEvent.WaitOne();
+            }
+        }
+
+        /// <summary>
+        /// Message processing thread method
+        /// </summary>
+        private void PeriodicProcessor(Object stateInfo)
+        {
+            Trace.WriteLine("PeriodicProcessor()"); 
+
+            DequeueAndProcessMessages(); 
+        }
+
+        private void DequeueAndProcessMessages()
+        {
+            while (messagesReceived.Count > 0)
+            {
+                Message message = null;
+                if (messagesReceived.TryDequeue(out message))
                 {
-                    Message message = null;
-                    if (messagesReceived.TryDequeue(out message))
-                    {
-                        PreProcess(message);
-                        Process(message);
-                        PostProcess(message);
-                    }
-                }
+                    if (IsMessageServiceActivated)
+                        StoreMessage(message);
 
-                processDone.WaitOne();
+                    PreProcess(message);
+                    Process(message);
+                    PostProcess(message);
+
+#if DEBUG
+                    Trace.WriteLine(String.Format("Queued    : {0}", messagesReceived.Count));
+#endif
+                }
             }
         }
 
@@ -359,7 +426,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                         throw new NotImplementedException();
                 }
 
+#if DEBUG
                 Trace.WriteLine(String.Format("Processed : {0}", message));
+#endif 
             }
             catch (Exception exception)
             {
@@ -406,7 +475,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
+            
             Console.WriteLine(String.Format("Device {0} registered.", deviceName));
+            Trace.WriteLine(String.Format("Device {0} registered.", deviceName));
+
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Registered)); 
         }
 
@@ -414,7 +486,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             rulesManager.RemoveAllRules(deviceName);
             devicesManager.RemoveDevice(deviceName);
+            
             Console.WriteLine(String.Format("Device {0} unregistered.", deviceName));
+            Trace.WriteLine(String.Format("Device {0} unregistered.", deviceName));
+
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Unregistered)); 
         }
 
@@ -459,7 +534,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 messagesToSend.Enqueue(sendToMessage);
             }
 
-            sendDone.Set();
+            sendEvent.Set();
         }
 
         private void SendToAllDevices(Message message)
@@ -472,7 +547,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 messagesToSend.Enqueue(sendToMessage);
             }
 
-            sendDone.Set();
+            sendEvent.Set();
         }
 
         private void Sender()
@@ -481,7 +556,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             while (true)
             {
-                sendDone.Reset();
+                sendEvent.Reset();
 
                 while (messagesToSend.Count > 0)
                 {
@@ -490,7 +565,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         Send(message);
                 }
                 
-                sendDone.WaitOne();
+                sendEvent.WaitOne();
             }
         }
 
@@ -519,7 +594,9 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                         PostSend(message);
 
-                        Trace.WriteLine(String.Format("Sent        : {0}", message));
+#if DEBUG
+                        Trace.WriteLine(String.Format("Sent      : {0}", message));
+#endif
                     }
                     else
                     {
@@ -563,16 +640,16 @@ namespace CodeAbility.MonitorAndCommand.Server
             //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
             message.Timestamp = DateTime.Now;
             messagesToStore.Enqueue(message);
-            storeDone.Set();
+            storeEvent.Set();
         }
 
         private void Storer()
         {
-            Trace.WriteLine("Starting Sender() thread");
+            Trace.WriteLine("Starting Storer() thread");
 
             while (true)
             {
-                storeDone.Reset();
+                storeEvent.Reset();
 
                 while (messagesToStore.Count > 0)
                 {
@@ -581,7 +658,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         Store(message);
                 }
 
-                storeDone.WaitOne();
+                storeEvent.WaitOne();
             }
         }
 

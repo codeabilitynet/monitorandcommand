@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfMonitor.UserControls"
-        Title="Monitor" Height="280" Width="680"
+        Title="Monitor" Height="320" Width="800"
         Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
         
     <Window.Resources>
@@ -20,14 +20,14 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <!--<ColumnDefinition Width="2*"/>-->
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
         
             <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
             <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
-            <usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>
-            <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
+            <!--<usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>-->
+            <usercontrols:DataGenerator Grid.Column="2" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
         </Grid>
 
         <StatusBar Grid.Row="1" Background="Transparent" Height="35">

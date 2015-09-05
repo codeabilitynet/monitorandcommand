@@ -15,7 +15,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
     {
         //Taken from : http://bergonline.dk/post/2013/07/14/howto-Netduino-read-temperature-from-DS18B20.aspx
 
-        // DS18B20, NETMF 4.2
+        // DS18B20, NETMF 4.3
         // center pin is connected to digital pin 0, right pin is connected to 5V,
         // left pin GND, 4k7 pull-up resistor between 5V and the center pin
 

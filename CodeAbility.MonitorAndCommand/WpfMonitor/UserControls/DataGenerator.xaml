@@ -11,7 +11,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5,5"/>
-            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontSize" Value="36"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
     </UserControl.Resources>

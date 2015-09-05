@@ -76,8 +76,6 @@ namespace CodeAbility.MonitorAndCommand.WpfServer
                     default:
                         break;
                 }
-
-                Trace.WriteLine(String.Format("PostProcessed   : {0}", message));
             }
             catch (Exception exception)
             {

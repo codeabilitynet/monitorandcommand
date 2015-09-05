@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Netduino+" Style="{StaticResource DeviceNameStyle}"></TextBlock>
+        <TextBlock Text="Netduino" Style="{StaticResource DeviceNameStyle}"></TextBlock>
 
         <Ellipse Grid.Row="1" Fill="Red" 
                     Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"

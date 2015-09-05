@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.Converters"
         xmlns:usercontrols="clr-namespace:CodeAbility.MonitorAndCommand.WpfServer.UserControls"
-        Title="Monitor and Command Server" Height="350" Width="510" Background="Black"
+        Title="Monitor and Command Server" Height="440" Width="600" Background="Black"
         Closing="Window_Closing" Closed="Window_Closed">
     <Window.Resources>
         <Style x:Key="LegendStyle" TargetType="TextBlock">
@@ -36,10 +36,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="60"/>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" 

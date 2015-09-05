@@ -33,7 +33,7 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel, IDisposable
     {
-        const int COMPUTATION_PERIOD_IN_MILLISECONDS = 50; 
+        const int NOTIFICATION_PERIOD_IN_MILLISECONDS = 50; 
         const int COMPUTATION_PERIOD_IN_SECONDS = 1; 
 
         protected List<DeviceData> devicesData = new List<DeviceData>();
@@ -77,7 +77,7 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
             messageListener.MessageSent += messageListener_MessageSent;
 
             TimerCallback uiNotifyTimerCallBack = DoNotify;
-            uiNotifyTimer = new Timer(uiNotifyTimerCallBack, null, 0, COMPUTATION_PERIOD_IN_MILLISECONDS); 
+            uiNotifyTimer = new Timer(uiNotifyTimerCallBack, null, 0, NOTIFICATION_PERIOD_IN_MILLISECONDS); 
 
             TimerCallback computationTimerCallBack = DoCompute;
             computationTimer = new Timer(computationTimerCallBack, null, 0, COMPUTATION_PERIOD_IN_SECONDS * 1000);
