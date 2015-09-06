@@ -58,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                 {
                     reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, false);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_LEDs, false);
 
                     if (messageClient != null)
                     { 
@@ -66,17 +66,17 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
 
                         messageClient.Start(ipAddress, port);
 
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.DATA_BUTTON_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BUTTON, Environment.LEDs.DATA_BUTTON_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM);
 
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_RED_LED, Environment.LEDs.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_GREEN_LED, Environment.LEDs.DATA_LED_STATUS);
 
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.COMMAND_BUTTON_PRESSED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_GREEN_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_RED_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_BUTTON, Environment.LEDs.COMMAND_BUTTON_PRESSED);
                     }
 
                     TimerCallback workTimerCallBack = DoWork;
@@ -104,23 +104,23 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
             try
             {
                 //Only consider the messages addressed to me
-                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_PLUS))
+                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_LEDs))
                     return;
 
                 string objectName = e.Parameter.ToString();
                 string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
-                if (objectName.Equals(Environment.NetduinoPlus.OBJECT_BUTTON))
+                if (objectName.Equals(Environment.LEDs.OBJECT_BUTTON))
                 {
                     //boardLedEvent.Set();
                 }
-                else if (objectName.Equals(Environment.NetduinoPlus.OBJECT_RED_LED))
+                else if (objectName.Equals(Environment.LEDs.OBJECT_RED_LED))
                 {
-                    ToggleRedLed(commandValue == Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    ToggleRedLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }
-                else if (objectName.Equals(Environment.NetduinoPlus.OBJECT_GREEN_LED))
+                else if (objectName.Equals(Environment.LEDs.OBJECT_GREEN_LED))
                 {
-                    ToggleGreenLed(commandValue == Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    ToggleGreenLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }
             }
             catch (Exception exception)
@@ -143,14 +143,14 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                 if (messageClient != null)
                 {
                     //Board LED On
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS, Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS, Environment.LEDs.CONTENT_LED_STATUS_ON);
 
                     //Sensor data
                     sensorDataString = random.NextDouble().ToString();
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM, sensorDataString);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM, sensorDataString);
 
                     //Board LED Off
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS, Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS, Environment.LEDs.CONTENT_LED_STATUS_OFF);
                 }
              }
             catch (Exception exception)
@@ -164,22 +164,22 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
         {
             if (messageClient != null)
                 messageClient.SendData(Environment.Devices.ALL, 
-                                       Environment.NetduinoPlus.OBJECT_RED_LED, 
-                                       Environment.NetduinoPlus.DATA_LED_STATUS, 
+                                       Environment.LEDs.OBJECT_RED_LED, 
+                                       Environment.LEDs.DATA_LED_STATUS, 
                                        state ? 
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_ON :
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                                        Environment.LEDs.CONTENT_LED_STATUS_ON :
+                                        Environment.LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         void ToggleGreenLed(bool state)
         {
             if (messageClient != null)
                 messageClient.SendData(Environment.Devices.ALL,
-                                       Environment.NetduinoPlus.OBJECT_GREEN_LED,
-                                       Environment.NetduinoPlus.DATA_LED_STATUS,
+                                       Environment.LEDs.OBJECT_GREEN_LED,
+                                       Environment.LEDs.DATA_LED_STATUS,
                                        state ?
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_ON :
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                                        Environment.LEDs.CONTENT_LED_STATUS_ON :
+                                        Environment.LEDs.CONTENT_LED_STATUS_OFF);
         }
  
         #region Interruptions

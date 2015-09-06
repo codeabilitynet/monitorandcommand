@@ -15,11 +15,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 using System;
 using System.Collections; 
-using System.Net;
-using System.Net.Sockets;
 using System.Resources;
 using System.Text;
 using System.Threading;
@@ -28,13 +25,13 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
 using SecretLabs.NETMF.Hardware;
-using SecretLabs.NETMF.Hardware.NetduinoPlus;
+using SecretLabs.NETMF.Hardware.Netduino;
 
 using CodeAbility.MonitorAndCommand.MFClient;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Environment;
 
-namespace CodeAbility.MonitorAndCommand.Netduino
+namespace CodeAbility.MonitorAndCommand.Netduino.LEDs
 {
     public class Process
     {
@@ -66,7 +63,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 {
                     //reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_PLUS, isLoggingEnabled);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_LEDs, isLoggingEnabled);
 
                     if (messageClient != null)
                     { 
@@ -74,17 +71,17 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
                         messageClient.Start(ipAddress, port);
 
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.DATA_BUTTON_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BUTTON, Environment.LEDs.DATA_BUTTON_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM);
 
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
-                        messageClient.PublishData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_RED_LED, Environment.LEDs.DATA_LED_STATUS);
+                        messageClient.PublishData(Environment.Devices.ALL, Environment.LEDs.OBJECT_GREEN_LED, Environment.LEDs.DATA_LED_STATUS);
 
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_GREEN_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_RED_LED, Environment.NetduinoPlus.COMMAND_TOGGLE_LED);
-                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.COMMAND_BUTTON_PRESSED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_GREEN_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_RED_LED, Environment.LEDs.COMMAND_TOGGLE_LED);
+                        messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.LEDs.OBJECT_BUTTON, Environment.LEDs.COMMAND_BUTTON_PRESSED);
                     }
 
                     button.OnInterrupt += new NativeEventHandler(button_OnInterrupt);
@@ -116,23 +113,23 @@ namespace CodeAbility.MonitorAndCommand.Netduino
             try
             {
                 //Only consider the messages addressed to me
-                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_PLUS))
+                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_LEDs))
                     return;
 
                 string objectName = e.Parameter.ToString();
                 string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
-                if (objectName.Equals(Environment.NetduinoPlus.OBJECT_BUTTON))
+                if (objectName.Equals(Environment.LEDs.OBJECT_BUTTON))
                 {
                     //boardLedEvent.Set();
                 }
-                else if (objectName.Equals(Environment.NetduinoPlus.OBJECT_RED_LED))
+                else if (objectName.Equals(Environment.LEDs.OBJECT_RED_LED))
                 {
-                    ToggleRedLed(commandValue == Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    ToggleRedLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }
-                else if (objectName.Equals(Environment.NetduinoPlus.OBJECT_GREEN_LED))
+                else if (objectName.Equals(Environment.LEDs.OBJECT_GREEN_LED))
                 {
-                    ToggleGreenLed(commandValue == Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    ToggleGreenLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }
             }
             catch (Exception exception)
@@ -152,17 +149,17 @@ namespace CodeAbility.MonitorAndCommand.Netduino
                 //Board LED On
                 boardLed.Write(true);
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS, Environment.NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS, Environment.LEDs.CONTENT_LED_STATUS_ON);
 
                 //Sensor data
                 sensorDataString = random.NextDouble().ToString();
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM, sensorDataString);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM, sensorDataString);
                     
                 //Board LED Off
                 boardLed.Write(false);
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BOARD_LED, Environment.NetduinoPlus.DATA_LED_STATUS, Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BOARD_LED, Environment.LEDs.DATA_LED_STATUS, Environment.LEDs.CONTENT_LED_STATUS_OFF);
             }
             catch (Exception exception)
             {
@@ -177,11 +174,11 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
             if (messageClient != null)
                 messageClient.SendData(Environment.Devices.ALL, 
-                                       Environment.NetduinoPlus.OBJECT_RED_LED, 
-                                       Environment.NetduinoPlus.DATA_LED_STATUS, 
+                                       Environment.LEDs.OBJECT_RED_LED, 
+                                       Environment.LEDs.DATA_LED_STATUS, 
                                        state ? 
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_ON :
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                                        Environment.LEDs.CONTENT_LED_STATUS_ON :
+                                        Environment.LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         void ToggleGreenLed(bool state)
@@ -190,11 +187,11 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
             if (messageClient != null)
                 messageClient.SendData(Environment.Devices.ALL,
-                                       Environment.NetduinoPlus.OBJECT_GREEN_LED,
-                                       Environment.NetduinoPlus.DATA_LED_STATUS,
+                                       Environment.LEDs.OBJECT_GREEN_LED,
+                                       Environment.LEDs.DATA_LED_STATUS,
                                        state ?
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_ON :
-                                        Environment.NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                                        Environment.LEDs.CONTENT_LED_STATUS_ON :
+                                        Environment.LEDs.CONTENT_LED_STATUS_OFF);
         }
  
         #region Interruptions
@@ -202,7 +199,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino
         void button_OnInterrupt(uint data1, uint data2, DateTime time)
         {
             if (messageClient != null)
-                messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_BUTTON, Environment.NetduinoPlus.DATA_BUTTON_STATUS, Environment.NetduinoPlus.CONTENT_BUTTON_PRESSED);
+                messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_BUTTON, Environment.LEDs.DATA_BUTTON_STATUS, Environment.LEDs.CONTENT_BUTTON_PRESSED);
         }
 
         #endregion 

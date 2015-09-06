@@ -70,7 +70,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 //Sensor data
                 string sensorDataString = new Random().NextDouble().ToString();
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.NetduinoPlus.OBJECT_SENSOR, Environment.NetduinoPlus.DATA_SENSOR_RANDOM, sensorDataString);
+                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM, sensorDataString);
             }
             catch (Exception)
             {

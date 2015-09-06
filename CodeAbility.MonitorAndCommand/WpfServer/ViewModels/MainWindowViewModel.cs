@@ -54,10 +54,10 @@ namespace CodeAbility.MonitorAndCommand.WpfServer.ViewModels
         public MainWindowViewModel()
             : base()
         {
-            devicesData.Add(new DeviceData(Environment.Devices.PIBRELLA, COMPUTATION_PERIOD_IN_SECONDS));
-            devicesData.Add(new DeviceData(Environment.Devices.NETDUINO_PLUS, COMPUTATION_PERIOD_IN_SECONDS));
-            devicesData.Add(new DeviceData(Environment.Devices.NETDUINO_3, COMPUTATION_PERIOD_IN_SECONDS));
             devicesData.Add(new DeviceData(Environment.Devices.DATA_GENERATOR, COMPUTATION_PERIOD_IN_SECONDS));
+            devicesData.Add(new DeviceData(Environment.Devices.PIBRELLA, COMPUTATION_PERIOD_IN_SECONDS));
+            devicesData.Add(new DeviceData(Environment.Devices.NETDUINO_LEDs, COMPUTATION_PERIOD_IN_SECONDS));
+            devicesData.Add(new DeviceData(Environment.Devices.NETDUINO_DS18B20, COMPUTATION_PERIOD_IN_SECONDS));
             devicesData.Add(new DeviceData(Environment.Devices.WINDOWS_PHONE, COMPUTATION_PERIOD_IN_SECONDS));
             devicesData.Add(new DeviceData(Environment.Devices.WPF_MONITOR, COMPUTATION_PERIOD_IN_SECONDS));
 

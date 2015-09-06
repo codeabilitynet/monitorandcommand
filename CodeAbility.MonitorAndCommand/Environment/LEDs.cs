@@ -20,7 +20,7 @@ using System;
 
 namespace CodeAbility.MonitorAndCommand.Environment
 {
-    public static class NetduinoPlus
+    public static class LEDs
     {
         //Object
         public const string OBJECT_BOARD_LED = "LED";

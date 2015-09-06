@@ -71,18 +71,18 @@
     <Compile Include="UserControls\DataGenerator.xaml.cs">
       <DependentUpon>DataGenerator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\TemperatureSensor.xaml.cs">
-      <DependentUpon>TemperatureSensor.xaml</DependentUpon>
+    <Compile Include="UserControls\DS18B20.xaml.cs">
+      <DependentUpon>DS18B20.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\NetduinoPlus.xaml.cs">
-      <DependentUpon>NetduinoPlus.xaml</DependentUpon>
+    <Compile Include="UserControls\LEDs.xaml.cs">
+      <DependentUpon>LEDs.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PibrellaViewModel.cs" />
     <Compile Include="ViewModels\DataGeneratorViewModel.cs" />
-    <Compile Include="ViewModels\TemperatureSensorViewModel.cs" />
-    <Compile Include="ViewModels\NetduinoPlusViewModel.cs" />
+    <Compile Include="ViewModels\DS18B20ViewModel.cs" />
+    <Compile Include="ViewModels\LEDsViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,11 +103,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\TemperatureSensor.xaml">
+    <Page Include="UserControls\DS18B20.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\NetduinoPlus.xaml">
+    <Page Include="UserControls\LEDs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

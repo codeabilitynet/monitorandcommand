@@ -94,7 +94,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             if (messageClient.Start(IpAddress, PortNumber))
             {
                 IsDisconnected = false;
-                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_PLUS, "NetduinoPlus"), 
+                Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_LEDs, "NetduinoPlus"), 
                                                                new Device(Environment.Devices.PIBRELLA, "Pibrella") };
             }
         }

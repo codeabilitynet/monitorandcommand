@@ -21,6 +21,8 @@ using System.Resources;
 using System.Text;
 using System.Threading;
 
+using CodeAbility.MonitorAndCommand.Netduino.LEDs;
+
 namespace CodeAbility.MonitorAndCommand.Netduino
 {
     public class Program

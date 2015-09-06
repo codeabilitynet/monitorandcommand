@@ -15,31 +15,33 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace CodeAbility.MonitorAndCommand.WpfMonitor.UserControls
+using System;
+
+namespace CodeAbility.MonitorAndCommand.Environment
 {
-    /// <summary>
-    /// Interaction logic for TemperatureSensor.xaml
-    /// </summary>
-    public partial class TemperatureSensor : UserControl
+    public static class DS18B20
     {
-        public TemperatureSensor()
-        {
-            InitializeComponent();
-        }
+        //Object
+        public const string OBJECT_BOARD_LED = "LED";
+        public const string OBJECT_BUTTON = "Button";
+        public const string OBJECT_TEMPERATURE_SENSOR = "TemperatureSensor";
+
+        //Command
+        public const string COMMAND_BUTTON_PRESSED = "ButtonPressed";
+        public const string COMMAND_TOGGLE_LED = "ToggleLed";
+
+        //Data 
+        public const string DATA_LED_STATUS = "LEDStatus";
+        public const string DATA_BUTTON_STATUS = "ButtonStatus";
+        public const string DATA_SENSOR_TEMPERATURE = "SensorTemperature";
+
+        //Content
+        //public const string CONTENT_BUTTON_ON = "On";
+        //public const string CONTENT_BUTTON_OFF = "Off";
+        public const string CONTENT_BUTTON_PRESSED = "Pressed";
+
+        public const string CONTENT_LED_STATUS_ON = "On";
+        public const string CONTENT_LED_STATUS_OFF = "Off";
     }
 }

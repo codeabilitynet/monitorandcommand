@@ -43,8 +43,8 @@
   <ItemGroup>
     <Compile Include="DataGenerator.cs" />
     <Compile Include="Devices.cs" />
-    <Compile Include="Netduino3.cs" />
-    <Compile Include="Netduino.cs" />
+    <Compile Include="DS18B20.cs" />
+    <Compile Include="LEDs.cs" />
     <Compile Include="Pibrella.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindowsPhone.cs" />
