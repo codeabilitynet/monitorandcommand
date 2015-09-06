@@ -29,7 +29,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {
     public class Program
     {
-        const string IP_ADDRESS = "192.168.178.22";
+        const string IP_ADDRESS = "192.168.178.26";
         const int PORT = 11000;
 
         static System.Threading.AutoResetEvent _networkAvailableEvent = new System.Threading.AutoResetEvent(false);
