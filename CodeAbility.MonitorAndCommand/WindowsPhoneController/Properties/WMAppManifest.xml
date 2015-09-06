@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{67d85c85-4e7b-40a2-9ba1-41379c1a2b0d}" Title=".NET/Mono Monitor and Command" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="WindowsPhoneController author" Description="Sample description" Publisher="WindowsPhoneController" PublisherID="{6aea619a-8a46-4625-aaac-4fa7db34460c}">
+  <App xmlns="" ProductID="{67d85c85-4e7b-40a2-9ba1-41379c1a2b0d}" Title=".NET/Mono Monitor and Command" RuntimeType="Silverlight" Version="1.0.1.0" Genre="apps.normal" Author="WindowsPhoneController author" Description="Sample description" Publisher="WindowsPhoneController" PublisherID="{6aea619a-8a46-4625-aaac-4fa7db34460c}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
