@@ -35,9 +35,9 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.UserControls
     /// <summary>
     /// Interaction logic for TwoLeds.xaml
     /// </summary>
-    public partial class NetduinoPlus : UserControl
+    public partial class LEDs : UserControl
     {
-        public NetduinoPlus()
+        public LEDs()
         {
             InitializeComponent();
         }

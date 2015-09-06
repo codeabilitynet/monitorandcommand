@@ -32,10 +32,10 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
-            Console.WriteLine("Device console.");
-            Console.WriteLine("Hit [1] to start a Data Generator remote");
-            Console.WriteLine("Hit [2] to start a Pibrella remote");
-            Console.WriteLine("Hit [3] to start a Netduino Plus remote");
+            Console.WriteLine("Remote console.");
+            Console.WriteLine("Hit [1] to start a Data Generator receptor.");
+            Console.WriteLine("Hit [2] to start a Pibrella remote.");
+            Console.WriteLine("Hit [3] to start a LEDs remote.");
 
             ConsoleKeyInfo keyInfo;
 

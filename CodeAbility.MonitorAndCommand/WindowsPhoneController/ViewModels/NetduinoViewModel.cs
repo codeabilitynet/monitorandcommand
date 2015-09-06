@@ -101,12 +101,12 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_BOARD_LED, NetduinoPlus.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_BUTTON, NetduinoPlus.DATA_BUTTON_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_SENSOR, NetduinoPlus.DATA_SENSOR_RANDOM);
+                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
 
-                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_RED_LED, NetduinoPlus.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_GREEN_LED, NetduinoPlus.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
 
                 MessageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
@@ -116,12 +116,12 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_BOARD_LED, NetduinoPlus.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_BUTTON, NetduinoPlus.DATA_BUTTON_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_SENSOR, NetduinoPlus.DATA_SENSOR_RANDOM);
+                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
 
-                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_RED_LED, NetduinoPlus.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, NetduinoPlus.OBJECT_GREEN_LED, NetduinoPlus.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
 
                 MessageClient.Unsubscribe(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
@@ -130,61 +130,61 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_BUTTON_PRESSED, NetduinoPlus.OBJECT_BUTTON, NetduinoPlus.CONTENT_BUTTON_PRESSED);
+                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
         }
 
         public void TurnRedLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_RED_LED, NetduinoPlus.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnRedLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_RED_LED, NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         public void TurnGreenLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_GREEN_LED, NetduinoPlus.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnGreenLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, NetduinoPlus.COMMAND_TOGGLE_LED, NetduinoPlus.OBJECT_GREEN_LED, NetduinoPlus.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
-            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_PLUS))
+            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_LEDs))
                 return;
 
-            if (e.Name.Equals(NetduinoPlus.OBJECT_BOARD_LED))
+            if (e.Name.Equals(LEDs.OBJECT_BOARD_LED))
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    BlueLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    BlueLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
                 });
             }  
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_RED_LED))
+            else if (e.Name.Equals(LEDs.OBJECT_RED_LED))
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    RedLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    RedLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
                 });
             }
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_GREEN_LED))
+            else if (e.Name.Equals(LEDs.OBJECT_GREEN_LED))
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    GreenLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                    GreenLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
                 });
             }
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_SENSOR))
+            else if (e.Name.Equals(LEDs.OBJECT_SENSOR))
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {

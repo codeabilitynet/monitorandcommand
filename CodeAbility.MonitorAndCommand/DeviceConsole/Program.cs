@@ -38,9 +38,9 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
             Console.WriteLine("Device console.");
-            Console.WriteLine("Hit [1] to start a Data Generator");
-            Console.WriteLine("Hit [2] to start a Pibrella simulator");
-            Console.WriteLine("Hit [3] to start a Netduino Plus simulator");
+            Console.WriteLine("Hit [1] to start a Data Generator.");
+            Console.WriteLine("Hit [2] to start a Pibrella simulation.");
+            Console.WriteLine("Hit [3] to start a LEDs simulation.");
             
             ConsoleKeyInfo keyInfo;
 

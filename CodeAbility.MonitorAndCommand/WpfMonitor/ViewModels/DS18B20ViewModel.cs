@@ -29,7 +29,7 @@ using CodeAbility.MonitorAndCommand.WpfMonitor.Models;
 
 namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 {
-    public class TemperatureSensorViewModel : BaseViewModel
+    public class DS18B20ViewModel : BaseViewModel
     {
         MessageClient messageClient; 
 
@@ -44,7 +44,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             }
         }
 
-        public TemperatureSensorViewModel() { }
+        public DS18B20ViewModel() { }
 
         public void Subscribe()
         {
@@ -53,17 +53,17 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             messageClient.DataReceived += client_MessageReceived;
             messageClient.CommandReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.NETDUINO_3, Environment.Devices.ALL);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO_DS18B20, Environment.Devices.ALL);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.NETDUINO_3))
+            if (!fromDevice.Equals(Environment.Devices.NETDUINO_DS18B20))
                 return;
 
-            if (e.Name.Equals(Netduino3.OBJECT_TEMPERATURE_SENSOR))
+            if (e.Name.Equals(DS18B20.OBJECT_TEMPERATURE_SENSOR))
             {
                 Temperature = e.Content.ToString().Substring(0,4);
             }

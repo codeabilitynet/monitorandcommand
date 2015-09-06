@@ -36,8 +36,8 @@
     <Compile Include="..\Environment\Devices.cs">
       <Link>Devices.cs</Link>
     </Compile>
-    <Compile Include="..\Environment\Netduino.cs">
-      <Link>Netduino.cs</Link>
+    <Compile Include="..\Environment\LEDs.cs">
+      <Link>LEDs.cs</Link>
     </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,11 +49,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Json.NetMF, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Json.NetMF.1.3.0.0\lib\netmf42\Json.NetMF.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SPOT.Graphics" />
     <Reference Include="Microsoft.SPOT.Native" />
     <Reference Include="System" />
   </ItemGroup>

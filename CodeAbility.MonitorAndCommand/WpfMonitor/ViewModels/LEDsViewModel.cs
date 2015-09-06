@@ -29,7 +29,7 @@ using CodeAbility.MonitorAndCommand.WpfMonitor.Models;
 
 namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 {
-    public class NetduinoPlusViewModel : BaseViewModel
+    public class LEDsViewModel : BaseViewModel
     {
         MessageClient messageClient; 
 
@@ -88,7 +88,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             }
         }
 
-        public NetduinoPlusViewModel() { }
+        public LEDsViewModel() { }
 
         public void Subscribe()
         {
@@ -96,30 +96,30 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
             messageClient.DataReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.NETDUINO_PLUS, Devices.WINDOWS_PHONE);
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_PLUS);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO_LEDs, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.NETDUINO_PLUS))
+            if (!fromDevice.Equals(Environment.Devices.NETDUINO_LEDs))
                 return;
 
-            if (e.Name.Equals(NetduinoPlus.OBJECT_BOARD_LED))
+            if (e.Name.Equals(LEDs.OBJECT_BOARD_LED))
             {
-                BlueLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                BlueLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_RED_LED))
+            else if (e.Name.Equals(LEDs.OBJECT_RED_LED))
             {
-                RedLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                RedLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_GREEN_LED))
+            else if (e.Name.Equals(LEDs.OBJECT_GREEN_LED))
             {
-                GreenLED = e.Content.Equals(NetduinoPlus.CONTENT_LED_STATUS_ON);
+                GreenLED = e.Content.Equals(LEDs.CONTENT_LED_STATUS_ON);
             }
-            else if (e.Name.Equals(NetduinoPlus.OBJECT_SENSOR))
+            else if (e.Name.Equals(LEDs.OBJECT_SENSOR))
             {
                 RandomValue = e.Content.ToString().Substring(0,6);
             }

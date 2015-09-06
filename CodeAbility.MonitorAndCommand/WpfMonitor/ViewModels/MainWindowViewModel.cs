@@ -40,11 +40,11 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
         
         public PibrellaViewModel PibrellaViewModel { get; set; }
 
-        public NetduinoPlusViewModel NetduinoPlusViewModel { get; set; }
+        public LEDsViewModel LEDsViewModel { get; set; }
         
         public DataGeneratorViewModel DataGeneratorViewModel { get; set; }
         
-        public TemperatureSensorViewModel TemperatureSensorViewModel { get; set; }
+        public DS18B20ViewModel DS18B20ViewModel { get; set; }
 
         protected List<DeviceData> devicesData = new List<DeviceData>();
         public ObservableCollection<DeviceData> DevicesData
@@ -69,9 +69,9 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             App.Current.Resources.Add("MessageClient", messageClient);
 
             PibrellaViewModel = new PibrellaViewModel();
-            NetduinoPlusViewModel = new NetduinoPlusViewModel();
+            LEDsViewModel = new LEDsViewModel();
             DataGeneratorViewModel = new DataGeneratorViewModel();
-            TemperatureSensorViewModel = new TemperatureSensorViewModel(); 
+            DS18B20ViewModel = new DS18B20ViewModel(); 
         }
 
         public void Connect()
@@ -84,14 +84,14 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
                 messageClient.Start(ipAddress, portNumber);
 
                 messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_PLUS);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_DS18B20);
                 messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
 
                 PibrellaViewModel.Subscribe();
-                NetduinoPlusViewModel.Subscribe();
+                LEDsViewModel.Subscribe();
                 DataGeneratorViewModel.Subscribe();
-                TemperatureSensorViewModel.Subscribe();
+                DS18B20ViewModel.Subscribe();
 
                 Connected = true;
             }
