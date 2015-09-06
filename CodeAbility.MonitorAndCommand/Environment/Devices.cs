@@ -30,9 +30,9 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string DATA_GENERATOR = "DataGenerator"; 
 
-        public const string NETDUINO_LEDs = "Netduino LEDs";
+        public const string NETDUINO_LEDs = "LEDs";
 
-        public const string NETDUINO_DS18B20 = "Netduino DS18B20";
+        public const string NETDUINO_DS18B20 = "DS18B20";
 
         public const string PIBRELLA = "Pibrella";
     }

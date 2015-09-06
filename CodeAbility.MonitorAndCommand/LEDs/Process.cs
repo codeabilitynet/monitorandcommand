@@ -33,6 +33,11 @@ using CodeAbility.MonitorAndCommand.Environment;
 
 namespace CodeAbility.MonitorAndCommand.Netduino.LEDs
 {
+    //On my mini board 
+    // Black -> ground 
+    // Red -> Digital IO 0
+    // Green -> Digital I/O 1
+
     public class Process
     {
         const int STARTUP_TIME = 3000;
