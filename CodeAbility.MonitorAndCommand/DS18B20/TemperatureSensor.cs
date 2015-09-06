@@ -9,14 +9,15 @@ using SecretLabs.NETMF.Hardware.Netduino;
 
 using CodeAbility.MonitorAndCommand.MFClient;
 
-namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
+namespace CodeAbility.MonitorAndCommand.Netduino.DS18B20
 {
     public class TemperatureSensor
     {
         //Taken from : http://bergonline.dk/post/2013/07/14/howto-Netduino-read-temperature-from-DS18B20.aspx
 
         // DS18B20, NETMF 4.3
-        // center pin is connected to digital pin 0, right pin is connected to 5V,
+        // center pin is connected to digital pin 2
+        // right pin is connected to 5V
         // left pin GND, 4k7 pull-up resistor between 5V and the center pin
 
         // DS18B20

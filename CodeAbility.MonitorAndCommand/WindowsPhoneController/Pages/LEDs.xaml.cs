@@ -30,15 +30,15 @@ using CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels;
 
 namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.Pages
 {
-    public partial class NetduinoPlus : PhoneApplicationPage
+    public partial class LEDs : PhoneApplicationPage
     {
-        NetduinoViewModel ViewModel { get; set; }
+        LEDsViewModel ViewModel { get; set; }
 
-        public NetduinoPlus()
+        public LEDs()
         {
             InitializeComponent();
 
-            ViewModel = new NetduinoViewModel();
+            ViewModel = new LEDsViewModel();
             DataContext = ViewModel; 
         }
 

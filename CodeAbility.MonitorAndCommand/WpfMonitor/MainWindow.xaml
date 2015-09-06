@@ -24,9 +24,9 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
         
-            <usercontrols:TemperatureSensor Grid.Column="0" DataContext="{Binding TemperatureSensorViewModel}"></usercontrols:TemperatureSensor>
+            <usercontrols:DS18B20 Grid.Column="0" DataContext="{Binding DS18B20ViewModel}"></usercontrols:DS18B20>
             <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
-            <usercontrols:NetduinoPlus Grid.Column="2" DataContext="{Binding NetduinoPlusViewModel}"></usercontrols:NetduinoPlus>
+            <usercontrols:LEDs Grid.Column="2" DataContext="{Binding LEDsViewModel}"></usercontrols:LEDs>
             <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
         </Grid>
 

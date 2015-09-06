@@ -28,8 +28,13 @@ using CodeAbility.MonitorAndCommand.MFClient;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Environment;
 
-namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
+namespace CodeAbility.MonitorAndCommand.Netduino.DS18B20
 {
+    //On my mini board 
+    // Black -> ground 
+    // Blue -> 5V
+    // Green -> Digital I/O 2
+
     public class Process
     {
         const int STARTUP_TIME = 5000;

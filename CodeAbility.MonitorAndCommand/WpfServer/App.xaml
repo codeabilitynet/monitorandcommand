@@ -8,7 +8,7 @@
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="10"></Setter>
             <Setter Property="Foreground" Value="White"></Setter>
-            <Setter Property="FontSize" Value="48"></Setter>
+            <Setter Property="FontSize" Value="42"></Setter>
         </Style>
 
     </Application.Resources>

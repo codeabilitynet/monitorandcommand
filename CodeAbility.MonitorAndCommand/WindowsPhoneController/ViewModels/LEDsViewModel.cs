@@ -31,7 +31,7 @@ using CodeAbility.MonitorAndCommand.Models;
 
 namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 {
-    public class NetduinoViewModel : BaseViewModel
+    public class LEDsViewModel : BaseViewModel
     {
         public bool blueLED = false;
         public bool BlueLED
@@ -90,7 +90,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
         MessageClient MessageClient { get; set; }
 
-        public NetduinoViewModel()
+        public LEDsViewModel()
         {
             MessageClient = App.Current.Resources["MessageClient"] as MessageClient;
 
