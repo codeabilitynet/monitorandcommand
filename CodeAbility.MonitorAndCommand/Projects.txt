@@ -1,0 +1,40 @@
+The solution is made of several project categories :
+- Core projects build the core libraries referenced by the Demo, Test and Netduino projects;
+- Test projects build Console applications to be used for testing/troubleshooting of the Core projects;
+- Netduino projects build libraries referenced by the Demo.Netduino* projects;
+- Demo projects build the demo applications used for the "showcase" video.
+
+Core projects
+- AzureStorage defines functionalities to store Messages in a Windows Azure' Blob;
+- Client defines the core client functionnalities of the middleware for .NET;
+- Helpers defines some supporting functionnalities used by the other projects;
+- MF42Client compiles the client defined in MFClientShared for NETMF 4.2;
+- MF43Client compiles the client defined in MFClientShared for NETMF 4.3;
+- MFClientShared defines the core client messaging functionalities for NETMF;
+- Models defines the core Message class, and related data, used by the server and clients;
+- PortableModels compiles the classes defined in Models as a Portable library to be referenced by the WindowsPhone controller project;
+- Server defines the core server functionnalities of the middleware;
+- SqlStorage defines functionalities to store Message in a SQL Server Database;
+- T-SQL define the SQL Server database for Message storage;
+- WcfServiceLibrary define a WCF service receiving Messages to by stored;
+- WPClient defines the core client messaging functionalities for WindowsPhone.
+
+Demo projects
+- Environment defines the constants used by the messages exchanges by the Demo servers and clients;
+- ServerConsole defines a Console application running the Core.Server library;
+- WpfServer defines a WPF application running the Core.Server library with extended functionalities;
+- WpfMonitor defines a WPF application running a Core.Client library to monitor the messages exchanged by the "demo" devices connected to the server;
+- Demo.Netduino3Wifi references the Netduino.DS18B20 library to be run on a Netduino 3 Wifi;
+- Demo.NetduinoPlus references the Netduino.LEDs library to be run on a Netduino Plus;
+- Demo.MvcApplication defines an ASP.NET MVC application exposing the WcfServiceLibrary and presenting the received data on a Web UI.
+
+Netduino projects
+- DS18B20 defines a class providing temperature sensor reading on a DS1820 sensor using OneWire;
+- LEDs defines a class providing fake data generation and controlling the state of two LEDs.
+
+Test projects
+- DeviceConsole defines a Console application simulating the messages sent and received by Pibrella & Netduino projects;
+- MFDeviceConsole defines a NETMF Emulator application simulating the messages sent by the Netduino LEDs project;
+- RemoteConsole definie a Console application simulating the messages sent and received by the WindowsPhone remote application.
+
+
