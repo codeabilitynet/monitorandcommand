@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -69,28 +70,28 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
 
         private static async Task<CloudTable> CreateTableAsync()
         {
-            CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable table = tableClient.GetTableReference(TableName);
-            try
-            {
-                if (await table.CreateIfNotExistsAsync())
-                {
-                    Console.WriteLine("Created Table named: {0}", TableName);
-                }
-                else
-                {
-                    Console.WriteLine("Table {0} already exists", TableName);
-                }
-            }
-            catch (StorageException)
-            {
-                Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
-                Console.ReadLine();
-                throw;
-            }
+            //try
+            //{
+            //    //if (await table.CreateIfNotExistsAsync())
+            //    //{
+            //    //    Console.WriteLine("Created Table named: {0}", TableName);
+            //    //}
+            //    //else
+            //    //{
+            //    //    Console.WriteLine("Table {0} already exists", TableName);
+            //    //}
+            //}
+            //catch (StorageException)
+            //{
+            //    //Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
+            //    Console.ReadLine();
+            //    throw;
+            //}
 
             return table;
         }
@@ -104,13 +105,13 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             }
             catch (FormatException)
             {
-                Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the application.");
+                //Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the application.");
                 throw;
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
-                Console.ReadLine();
+                //Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                //Console.ReadLine();
                 throw;
             }
 

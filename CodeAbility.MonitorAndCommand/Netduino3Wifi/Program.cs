@@ -23,7 +23,8 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Net;
 
 //using CodeAbility.MonitorAndCommand.Netduino.DS18B20;
-using CodeAbility.MonitorAndCommand.Netduino.LEDs;
+//using CodeAbility.MonitorAndCommand.Netduino.LEDs;
+using CodeAbility.MonitorAndCommand.Netduino.MCP4921;
 
 namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {

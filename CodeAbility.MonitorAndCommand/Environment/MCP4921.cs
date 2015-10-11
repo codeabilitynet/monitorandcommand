@@ -20,22 +20,18 @@ using System;
 
 namespace CodeAbility.MonitorAndCommand.Environment
 {
-    public class Devices
+    public static class MCP4921
     {
-        public const string ALL = "*";
+        //Object
+        public const string OBJECT_DIGITAL_DATA = "DigitalData";
+        public const string OBJECT_ANALOG_DATA = "AnalogData";
 
-        public const string WINDOWS_PHONE = "WindowsPhone";
+        //Command
+        public const string COMMAND_CONVERT = "Convert";
+        public const string COMMAND_READ = "Read";
 
-        public const string WPF_MONITOR = "WpfMonitor";
-
-        public const string DATA_GENERATOR = "DataGenerator"; 
-
-        public const string NETDUINO_LEDs = "LEDs";
-
-        public const string NETDUINO_DS18B20 = "DS18B20";
-
-        public const string NETDUINO_MCP4921 = "MCP4921";
-
-        public const string PIBRELLA = "Pibrella";
+        //Data
+        public const string DATA_DIGITAL_VALUE = "DigitalValue";
+        public const string DATA_ANALOG_VALUE = "AnalogValue";
     }
 }

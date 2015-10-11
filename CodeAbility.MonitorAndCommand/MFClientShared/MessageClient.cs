@@ -50,6 +50,26 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 CommandReceived(this, e);
         }
 
+        public delegate void DataReceivedEventHandler(object sender, MessageEventArgs e);
+
+        public event DataReceivedEventHandler DataReceived;
+
+        protected void OnDataReceived(MessageEventArgs e)
+        {
+            if (DataReceived != null)
+                DataReceived(this, e);
+        }
+
+        public delegate void HealthInfoReceivedEventHandler(object sender, MessageEventArgs e);
+
+        public event HealthInfoReceivedEventHandler HealthInfoReceived;
+
+        protected void OnHealthInfoReceived(MessageEventArgs e)
+        {
+            if (HealthInfoReceived != null)
+                HealthInfoReceived(this, e);
+        }
+
         #endregion 
 
         #region Properties
@@ -156,6 +176,12 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         public void PublishData(string toDevice, string dataSource, string dataName)
         {
             Message message = Message.InstanciatePublishMessage(DeviceName, toDevice, dataSource, dataName);
+            EnqueueMessage(message);
+        }
+
+        public void SubscribeToData(string fromDevice, string dataSource, string dataName)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, dataSource, dataName);
             EnqueueMessage(message);
         }
 
@@ -280,8 +306,12 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                         {
                             Log("Received  :" + message.ToString());
 
-                            if (message.ContentType == ContentTypes.COMMAND)
+                            if (message.ContentType.Equals(ContentTypes.DATA))
+                                OnDataReceived(new MessageEventArgs(message));
+                            else if (message.ContentType == ContentTypes.COMMAND)
                                 OnCommandReceived(new MessageEventArgs(message));
+                            else if (message.ContentType.Equals(ContentTypes.HEALTH))
+                                OnHealthInfoReceived(new MessageEventArgs(message));
                         }
 
                     }
