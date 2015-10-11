@@ -98,6 +98,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netduino.LEDs", "LEDs\Netdu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netduino.DS18B20", "DS18B20\Netduino.DS18B20.csproj", "{1404629A-CA55-46F6-B48C-2A1A3DA354F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netduino.MCP4921", "MCP4921\Netduino.MCP4921.csproj", "{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 21
@@ -286,9 +288,9 @@ Global
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|ARM.ActiveCfg = Debug|ARM
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|ARM.Build.0 = Debug|ARM
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|ARM.Deploy.0 = Debug|ARM
-		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.ActiveCfg = Debug|ARM
-		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.Build.0 = Debug|ARM
-		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.Deploy.0 = Debug|ARM
+		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|x86.ActiveCfg = Debug|x86
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|x86.Build.0 = Debug|x86
 		{67D85C85-4E7B-40A2-9BA1-41379C1A2B0D}.Debug|x86.Deploy.0 = Debug|x86
@@ -589,6 +591,18 @@ Global
 		{1404629A-CA55-46F6-B48C-2A1A3DA354F3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1404629A-CA55-46F6-B48C-2A1A3DA354F3}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{1404629A-CA55-46F6-B48C-2A1A3DA354F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

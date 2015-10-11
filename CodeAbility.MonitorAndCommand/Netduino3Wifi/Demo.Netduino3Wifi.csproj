@@ -62,6 +62,10 @@
       <Project>{E329BD83-D409-468E-92D7-2C676B390D75}</Project>
       <Name>Netduino.LEDs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MCP4921\Netduino.MCP4921.csproj">
+      <Project>{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}</Project>
+      <Name>Netduino.MCP4921</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MF43Client\Core.MF43Client.csproj">
       <Project>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</Project>
       <Name>Core.MF43Client</Name>

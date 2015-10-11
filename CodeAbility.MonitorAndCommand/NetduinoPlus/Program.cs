@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading;
 
 //using CodeAbility.MonitorAndCommand.Netduino.LEDs;
+using CodeAbility.MonitorAndCommand.Netduino.MCP4921;
 
 namespace CodeAbility.MonitorAndCommand.Netduino
 {
@@ -34,8 +35,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino
 
         public static void Main()
         {
-            //Process process = new Process();
-            //process.Start(IP_ADDRESS, PORT, IsLoggingEnabled);
+            Process process = new Process();
+            process.Start(IP_ADDRESS, PORT, IsLoggingEnabled);
         }
     }
 }
