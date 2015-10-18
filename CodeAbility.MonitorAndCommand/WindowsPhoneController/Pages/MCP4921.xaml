@@ -45,7 +45,7 @@
                      Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Voltage, StringFormat='\{0\}V'}" FontSize="24"></TextBlock>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Voltage, StringFormat='\{0\}V'}" FontSize="36"></TextBlock>
             
             <Slider x:Name="Slider" Grid.Row="2" Maximum="100" Margin="10" />
 

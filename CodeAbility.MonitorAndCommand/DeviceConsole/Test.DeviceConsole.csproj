@@ -73,6 +73,10 @@
       <Project>{9a68efd0-24a4-4df3-86de-ee35f9e2f778}</Project>
       <Name>Demo.Environment</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Core.Interfaces.csproj">
+      <Project>{ae064e10-2a94-496c-ac4a-82fa4106e8e3}</Project>
+      <Name>Core.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Core.Models.csproj">
       <Project>{C8632312-2D6E-4C77-9178-F627135130BB}</Project>
       <Name>Core.Models</Name>

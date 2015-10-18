@@ -33,6 +33,9 @@
     <Compile Include="..\Helpers\JsonHelpers.cs">
       <Link>JsonHelpers.cs</Link>
     </Compile>
+    <Compile Include="..\Interfaces\IMessageClient.cs">
+      <Link>IMessageClient.cs</Link>
+    </Compile>
     <Compile Include="..\Models\Address.cs">
       <Link>Address.cs</Link>
     </Compile>

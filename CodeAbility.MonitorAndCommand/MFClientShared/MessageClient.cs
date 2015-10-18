@@ -27,12 +27,13 @@ using System.Threading;
 
 using Json.NETMF;
 
+using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Helpers;
 
 namespace CodeAbility.MonitorAndCommand.MFClient
 {
-    public class MessageClient
+    public class MessageClient : IMessageClient
     {
         #region Event
 
@@ -134,7 +135,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 sendThread.Start();
                 receiveThread.Start();
                     
-                Register();
+                Register(DeviceName);
 
                 Log("MessageClient started.");
             }
@@ -151,6 +152,10 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         {
             try
             {
+                Unregister(DeviceName);
+
+                Thread.Sleep(1000);
+
                 this.receiveThread.Abort();
                 this.sendThread.Abort();
 
@@ -167,9 +172,21 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             }
         }
 
-        public void Register()
+        public void Register(string deviceName)
         {
-            Message message = Message.InstanciateRegisterMessage(DeviceName);
+            Message message = Message.InstanciateRegisterMessage(deviceName);
+            EnqueueMessage(message);
+        }
+
+        public void Unregister(string deviceName)
+        {
+            Message message = Message.InstanciateUnregisterMessage(deviceName);
+            EnqueueMessage(message);
+        }
+
+        public void PublishCommand(string toDevice, string commandTarget, string commandName)
+        {
+            Message message = Message.InstanciatePublishMessage(DeviceName, toDevice, commandTarget, commandName);
             EnqueueMessage(message);
         }
 
@@ -179,15 +196,21 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             EnqueueMessage(message);
         }
 
+        public void SubscribeToCommand(string fromDevice, string commandName, string commandTarget)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandName, commandTarget);
+            EnqueueMessage(message);
+        }
+
         public void SubscribeToData(string fromDevice, string dataSource, string dataName)
         {
             Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, dataSource, dataName);
             EnqueueMessage(message);
         }
 
-        public void SubscribeToCommand(string fromDevice, string commandName, string commandTarget)
+        public void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue)
         {
-            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandName, commandTarget);
+            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandName, commandTarget, commandValue);
             EnqueueMessage(message);
         }
 

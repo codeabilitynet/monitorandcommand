@@ -6,8 +6,8 @@
     <Application.Resources>
 
         <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"/>
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrush"></converters:BooleanToBrushConverter>
-        <converters:BooleanToOnOffConverter x:Key="BooleanToOnOff"></converters:BooleanToOnOffConverter>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrush" />
+        <converters:BooleanToOnOffConverter x:Key="BooleanToOnOff" />
 
         <Style TargetType="Grid">
             <Setter Property="Background" Value="Transparent"></Setter>

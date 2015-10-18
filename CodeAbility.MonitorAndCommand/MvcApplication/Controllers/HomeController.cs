@@ -16,8 +16,13 @@ namespace MvcApplication.Controllers
 {
     public class HomeController : Controller
     {
-        //IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
-        IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
+        static IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
+        //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
+
+        public HomeController()
+        {
+
+        }
 
         public ActionResult Index()
         {
@@ -28,7 +33,7 @@ namespace MvcApplication.Controllers
             return View(lastMessages);
         }
 
-        [OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 60)]
+        [OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 3)]
         public ActionResult RefreshMessagePartial()
         {
             IEnumerable<Message> lastMessages = messageRepository.ListMessages();

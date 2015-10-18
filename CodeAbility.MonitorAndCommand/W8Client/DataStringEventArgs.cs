@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
  * All rights reserved.
 
@@ -17,25 +17,23 @@
 
 
 using System;
-using System.Resources;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 
-//using CodeAbility.MonitorAndCommand.Netduino.LEDs;
+using CodeAbility.MonitorAndCommand.Models;
 
-namespace CodeAbility.MonitorAndCommand.Netduino
+namespace CodeAbility.MonitorAndCommand.W8Client
 {
-    public class Program
+    public class DataStringEventArgs : EventArgs
     {
-        //The following values are hard coded, but one could read them from the device's microSD card.
-        const string IP_ADDRESS = "192.168.178.26";
-        const int PORT = 11000;
-        const bool IsLoggingEnabled = false;
+        public string Data { get; set; }
 
-        public static void Main()
+        public DataStringEventArgs(string data)
+            : base()
         {
-            //Process process = new Process();
-            //process.Start(IP_ADDRESS, PORT, IsLoggingEnabled);
+            Data = data;
         }
     }
 }

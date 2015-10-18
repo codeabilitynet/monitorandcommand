@@ -52,10 +52,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MCP4921\Netduino.MCP4921.csproj">
-      <Project>{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}</Project>
-      <Name>Netduino.MCP4921</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MFClient\Core.MF42Client.csproj">
       <Project>{D6949075-0DE7-4ADB-8968-C52A16AF3325}</Project>
       <Name>Core.MF42Client</Name>

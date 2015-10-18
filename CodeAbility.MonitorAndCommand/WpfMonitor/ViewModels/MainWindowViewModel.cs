@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Client;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Environment;
@@ -45,6 +46,8 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
         public DataGeneratorViewModel DataGeneratorViewModel { get; set; }
         
         public DS18B20ViewModel DS18B20ViewModel { get; set; }
+
+        public MCP4921ViewModel MCP4921ViewModel { get; set; }
 
         protected List<DeviceData> devicesData = new List<DeviceData>();
         public ObservableCollection<DeviceData> DevicesData
@@ -71,7 +74,8 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             PibrellaViewModel = new PibrellaViewModel();
             LEDsViewModel = new LEDsViewModel();
             DataGeneratorViewModel = new DataGeneratorViewModel();
-            DS18B20ViewModel = new DS18B20ViewModel(); 
+            DS18B20ViewModel = new DS18B20ViewModel();
+            MCP4921ViewModel = new MCP4921ViewModel();
         }
 
         public void Connect()
@@ -83,15 +87,17 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             {
                 messageClient.Start(ipAddress, portNumber);
 
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_DS18B20);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_DS18B20);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_MCP4921);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
 
-                PibrellaViewModel.Subscribe();
-                LEDsViewModel.Subscribe();
-                DataGeneratorViewModel.Subscribe();
-                DS18B20ViewModel.Subscribe();
+                //PibrellaViewModel.Subscribe();
+                //LEDsViewModel.Subscribe();
+                //DataGeneratorViewModel.Subscribe();
+                //DS18B20ViewModel.Subscribe();
+                MCP4921ViewModel.Subscribe();
 
                 Connected = true;
             }
@@ -103,6 +109,13 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
         public void Close()
         {
+            //TODO : implement Unsubscribe methods
+            //PibrellaViewModel.Unsubscribe();
+            //LEDsViewModel.Unsubscribe();
+            //DataGeneratorViewModel.Unsubscribe();
+            //DS18B20ViewModel.Unsubscribe();
+            //MCP4921ViewModel.Unsubscribe();
+
             messageClient.Stop();
         }
 
