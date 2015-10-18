@@ -29,9 +29,13 @@ namespace CodeAbility.MonitorAndCommand.Netduino.MCP4921
     {
         public static int STEPS = 4096;
 
+        //Synchronization Input on Pin 5
         OutputPort LDAC = new OutputPort(Pins.GPIO_PIN_D4, false);
+        //Serial Data Input on Pint 4
         OutputPort SDI = new OutputPort(Pins.GPIO_PIN_D5, false);
+        //Chip Select Input on Pin 2
         OutputPort CS = new OutputPort(Pins.GPIO_PIN_D6, true);
+        //Serial Clock Input on Pin 3
         OutputPort SCK = new OutputPort(Pins.GPIO_PIN_D7, true);
 
         const string INVALID_VALUE = "Invalid value.";

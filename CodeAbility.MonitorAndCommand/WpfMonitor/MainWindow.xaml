@@ -19,15 +19,17 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
+                <!--<ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>-->
             </Grid.ColumnDefinitions>
         
-            <usercontrols:DS18B20 Grid.Column="0" DataContext="{Binding DS18B20ViewModel}"></usercontrols:DS18B20>
+            <!--<usercontrols:DS18B20 Grid.Column="0" DataContext="{Binding DS18B20ViewModel}"></usercontrols:DS18B20>
             <usercontrols:Pibrella Grid.Column="1" DataContext="{Binding PibrellaViewModel}"></usercontrols:Pibrella>
             <usercontrols:LEDs Grid.Column="2" DataContext="{Binding LEDsViewModel}"></usercontrols:LEDs>
-            <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>
+            <usercontrols:DataGenerator Grid.Column="3" DataContext="{Binding DataGeneratorViewModel}"></usercontrols:DataGenerator>-->
+
+            <usercontrols:MCP4921 Grid.Column="0" DataContext="{Binding MCP4921ViewModel}"></usercontrols:MCP4921>
         </Grid>
 
         <StatusBar Grid.Row="1" Background="Transparent" Height="35">

@@ -17,23 +17,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel; 
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
-using CodeAbility.MonitorAndCommand.WPClient;
-using CodeAbility.MonitorAndCommand.Environment;
+using CodeAbility.MonitorAndCommand.Client;
 using CodeAbility.MonitorAndCommand.Models;
-using System.Windows.Threading;
+using CodeAbility.MonitorAndCommand.Environment;
 
-namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
+using CodeAbility.MonitorAndCommand.WpfMonitor.Models;
+
+namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 {
     public class MCP4921ViewModel : BaseViewModel
     {
-
         private string voltage = String.Empty;
         public string Voltage
         {
@@ -90,15 +87,9 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             }
         }
 
-        int previousData = 0;
-
         public void SendControlValue(double value)
         {
             int data = (int)value;
-
-            //We only send message if they contains a different value than the previous one
-            if (data == previousData)
-                return;
 
             if (MessageClient != null)
                 MessageClient.SendCommand(Devices.NETDUINO_MCP4921, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, data.ToString());
@@ -114,12 +105,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
 
             if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
             {                   
-                Deployment.Current.Dispatcher.BeginInvoke(() => 
-                {
-                    Voltage = e.Content.ToString().Substring(0, 4); 
-                });
+                Voltage = e.Content.ToString().Substring(0, 4); 
             }          
         }
-
     }
 }

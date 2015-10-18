@@ -62,6 +62,10 @@
       <Project>{C5749F33-7C79-4991-B43F-7A83B234CD5A}</Project>
       <Name>Core.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Core.Interfaces.csproj">
+      <Project>{ae064e10-2a94-496c-ac4a-82fa4106e8e3}</Project>
+      <Name>Core.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Core.Models.csproj">
       <Project>{C8632312-2D6E-4C77-9178-F627135130BB}</Project>
       <Name>Core.Models</Name>

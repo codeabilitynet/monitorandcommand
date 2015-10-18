@@ -51,7 +51,7 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
 
             IEnumerable<MessageEntity> entities = PartitionRangeQueryAsync(table, PartitionKey, startRowKey.ToString(), RowKey.ToString()).Result;
 
-            foreach(MessageEntity entity in entities)
+            foreach (MessageEntity entity in entities)
             {
                 messages.Add(new Models.Message(entity.SendingDevice, entity.FromDevice, entity.ToDevice, entity.ContentType, entity.Name, entity.Parameter, entity.Content));
             }
@@ -68,35 +68,36 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
 
         #region Private methods
 
-        private static async Task<CloudTable> CreateTableAsync()
+        private async Task<CloudTable> CreateTableAsync()
         {
             CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable table = tableClient.GetTableReference(TableName);
-            //try
-            //{
-            //    //if (await table.CreateIfNotExistsAsync())
-            //    //{
-            //    //    Console.WriteLine("Created Table named: {0}", TableName);
-            //    //}
-            //    //else
-            //    //{
-            //    //    Console.WriteLine("Table {0} already exists", TableName);
-            //    //}
-            //}
-            //catch (StorageException)
-            //{
-            //    //Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
-            //    Console.ReadLine();
-            //    throw;
-            //}
+            try
+            {
+                //BUG : the following method hangs forever, even though it created the table...
+                //if (await table.CreateIfNotExistsAsync())
+                //{
+                //    Console.WriteLine("Created Table named: {0}", TableName);
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Table {0} already exists", TableName);
+                //}
+            }
+            catch (StorageException)
+            {
+                //Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
+                //Console.ReadLine();
+                throw;
+            }
 
             return table;
         }
 
-        private static CloudStorageAccount CreateStorageAccountFromConnectionString(string storageConnectionString)
+        private CloudStorageAccount CreateStorageAccountFromConnectionString(string storageConnectionString)
         {
             CloudStorageAccount storageAccount;
             try
@@ -118,7 +119,7 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             return storageAccount;
         }
 
-        private static async Task<MessageEntity> InsertOrMergeEntityAsync(CloudTable table, MessageEntity entity)
+        private async Task<MessageEntity> InsertOrMergeEntityAsync(CloudTable table, MessageEntity entity)
         {
             if (entity == null)
             {
@@ -132,7 +133,7 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             return insertedMessage;
         }
 
-        private static async Task<IEnumerable<MessageEntity>> PartitionRangeQueryAsync(CloudTable table, string partitionKey, string startRowKey, string endRowKey)
+        private async Task<IEnumerable<MessageEntity>> PartitionRangeQueryAsync(CloudTable table, string partitionKey, string startRowKey, string endRowKey)
         {
             List<MessageEntity> entities = new List<MessageEntity>();
 
@@ -161,7 +162,7 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             return entities;
         }
 
-        private static async Task DeleteTableAsync(CloudTable table)
+        private async Task DeleteTableAsync(CloudTable table)
         {
             await table.DeleteIfExistsAsync();
         }

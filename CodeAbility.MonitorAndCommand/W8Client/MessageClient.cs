@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Models;
 
-namespace CodeAbility.MonitorAndCommand.WPClient
+namespace CodeAbility.MonitorAndCommand.W8Client
 {
     public class MessageClient : IMessageClient
     {

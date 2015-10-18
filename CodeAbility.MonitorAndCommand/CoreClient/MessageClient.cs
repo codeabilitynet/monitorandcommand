@@ -28,12 +28,13 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
+using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Helpers;
 
 namespace CodeAbility.MonitorAndCommand.Client
 {
-    public class MessageClient
+    public class MessageClient : IMessageClient
     {
         #region Events
 
@@ -126,7 +127,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                 receiveThread.Start();
                 sendThread.Start();
                 
-                Register();
+                Register(DeviceName);
 
                 Console.WriteLine(String.Format("Device {0} connected to server.", DeviceName));
             }
@@ -138,13 +139,13 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         public void Stop()
         {
-            Unregister();
+            Unregister(DeviceName);
 
             Thread.Sleep(1000);
 
             receiveThread.Abort();
 
-            if (socket.Connected)
+            if (socket != null && socket.Connected)
                 socket.Shutdown(SocketShutdown.Both);
             
             sendThread.Abort();
@@ -202,15 +203,15 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #region Internals
 
-        public void Register()
+        public void Register(string deviceName)
         {
-            Message message = Message.InstanciateRegisterMessage(DeviceName);
+            Message message = Message.InstanciateRegisterMessage(deviceName);
             EnqueueMessage(message);
         }
 
-        public void Unregister()
+        public void Unregister(string deviceName)
         {
-            Message message = Message.InstanciateUnregisterMessage(DeviceName);
+            Message message = Message.InstanciateUnregisterMessage(deviceName);
             EnqueueMessage(message);
         }
 

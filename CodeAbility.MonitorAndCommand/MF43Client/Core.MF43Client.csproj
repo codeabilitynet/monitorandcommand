@@ -44,6 +44,9 @@
     <Compile Include="..\Helpers\JsonHelpers.cs">
       <Link>JsonHelpers.cs</Link>
     </Compile>
+    <Compile Include="..\Interfaces\IMessageClient.cs">
+      <Link>IMessageClient.cs</Link>
+    </Compile>
     <Compile Include="..\MFClientShared\Logger.cs">
       <Link>Logger.cs</Link>
     </Compile>
