@@ -53,6 +53,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ControlActions.cs" />
     <Compile Include="ContentTypes.cs" />
+    <Compile Include="HeartbeatStatus.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageEventArgs.cs" />
     <Compile Include="MonitoringEvents.cs" />

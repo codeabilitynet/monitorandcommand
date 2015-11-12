@@ -1,0 +1,38 @@
+﻿@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Event>
+
+<table id="DataTable" style="width: 100%;">
+    <!-- Header -->
+    <tr>
+        <th>
+            Device
+        </th>
+        <th>
+            Content
+        </th>
+        <th>
+            Timestamp
+        </th>
+    </tr>
+
+    <!-- Items -->
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.FromDevice) 
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Content)
+            </td>
+            <td>
+                <a href="#" data-toggle="timestamp" data-placement="top" title="@item.Timestamp.ToString("hh:mm:ss.fff tt")">
+                    @item.Timestamp.ToString("hh:mm:ss.fff") <!-- "hh:mm:ss.fff tt" -->
+                    @*@Html.DisplayFor(modelitem => item.Timestamp)*@
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<br />
+@Html.ActionLink("Purge", "Purge", "Event")

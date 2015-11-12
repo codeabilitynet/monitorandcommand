@@ -19,7 +19,6 @@
       <xs:enumeration value="CONTROL" />
       <xs:enumeration value="COMMAND" />
       <xs:enumeration value="DATA" />
-      <xs:enumeration value="HEALTH" />
       <xs:enumeration value="HEARTBEAT" />
       <xs:enumeration value="RESPONSE" />
     </xs:restriction>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://monitorandcommand.azurewebsites.net/MessageService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/CodeAbility.MonitorAndCommand.Models" />
+  <xs:element name="StoreMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/CodeAbility.MonitorAndCommand.Models" minOccurs="0" name="message" nillable="true" type="q1:Message" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StoreMessageResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListLastMessages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="numberOfMessages" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListLastMessagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/CodeAbility.MonitorAndCommand.Models" minOccurs="0" name="ListLastMessagesResult" nillable="true" type="q2:ArrayOfMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListDeviceLastMessages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="numberOfMessages" type="xs:int" />
+        <xs:element minOccurs="0" name="deviceName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="objectName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="parameterName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="rowInterval" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListDeviceLastMessagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/CodeAbility.MonitorAndCommand.Models" minOccurs="0" name="ListDeviceLastMessagesResult" nillable="true" type="q3:ArrayOfMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

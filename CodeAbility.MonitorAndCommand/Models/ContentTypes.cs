@@ -28,9 +28,8 @@ namespace CodeAbility.MonitorAndCommand.Models
         CONTROL = 0,
         COMMAND = 1,
         DATA = 2,
-        HEALTH = 3,
-        HEARTBEAT = 4,
-        RESPONSE = 5
+        HEARTBEAT = 3,
+        RESPONSE = 4
     }
 
 #endif
@@ -44,9 +43,8 @@ namespace CodeAbility.MonitorAndCommand.Models
         public const int CONTROL = 0;
         public const int COMMAND = 1;
         public const int DATA = 2;
-        public const int HEALTH = 3; 
-        public const int HEARTBEAT = 4;
-        public const int RESPONSE = 5;
+        public const int HEARTBEAT = 3;
+        public const int RESPONSE = 4;
     }
 
 #endif

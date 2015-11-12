@@ -54,8 +54,6 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         #region Constants
 
-        const string ALL = "*";
-
         const int PROCESS_PERIOD = 50; 
         const int PROCESS_START_DELAY = 0; 
 
@@ -78,7 +76,8 @@ namespace CodeAbility.MonitorAndCommand.Server
         //Threads
         private Thread sendingThread = null;
         private Thread processingThread = null;
-        private Thread storingThread = null;
+        private Thread messageStoringThread = null;
+        private Thread eventStoringThread = null;
 
         private Timer processTimer = null;
         private Timer heartbeatTimer = null;
@@ -86,7 +85,8 @@ namespace CodeAbility.MonitorAndCommand.Server
         //ManualResetEvent instances signal completion.
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
         private ManualResetEvent processEvent = new ManualResetEvent(false);
-        private ManualResetEvent storeEvent = new ManualResetEvent(false);
+        private ManualResetEvent storeMessageEvent = new ManualResetEvent(false);
+        private ManualResetEvent storeEventEvent = new ManualResetEvent(false); 
 
         //private AutoResetEvent processTimerEvent = new AutoResetEvent(false);
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
@@ -105,7 +105,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         
         // Queue containg messages to be "stored"        
         private ConcurrentQueue<Message> messagesToStore = new ConcurrentQueue<Message>();
-       
+
+        // Queue containg messages to be "stored"        
+        private ConcurrentQueue<Event> eventsToStore = new ConcurrentQueue<Event>();
+
         // Object managing references to devices (connected clients)
         DevicesManager devicesManager = new DevicesManager();
 
@@ -119,6 +122,7 @@ namespace CodeAbility.MonitorAndCommand.Server
         public string LocalEndPoint { get { return (listener != null) ? listener.LocalEndPoint.ToString() : String.Empty; } }
 
         MessageServiceReference.MessageServiceClient messageServiceClient = null;
+        EventServiceReference.EventServiceClient eventServiceClient = null;
 
         public MessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
         {           
@@ -136,12 +140,17 @@ namespace CodeAbility.MonitorAndCommand.Server
                     messageServiceClient = new MessageServiceReference.MessageServiceClient();
                     messageServiceClient.Open();
 
+                    eventServiceClient = new EventServiceReference.EventServiceClient();
+                    eventServiceClient.Open();
+
                     Console.WriteLine("Message service is activated."); 
                 }
                 catch(Exception exception)
                 {
                     Console.WriteLine("Message service cannot be reached");
-                    Trace.WriteLine(String.Format("Service exception : {0}", exception));
+
+                    string content = String.Format("Service exception : {0}", exception);
+                    LogEvent(content);
                 }
             }
         }
@@ -174,7 +183,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                 //processTimer = new Timer(processCallBack, null, PROCESS_START_DELAY, PROCESS_PERIOD);
 
                 sendingThread = new Thread(new ThreadStart(Sender));
-                storingThread = new Thread(new ThreadStart(Storer));
+                messageStoringThread = new Thread(new ThreadStart(MessageStorer));
+                eventStoringThread = new Thread(new ThreadStart(EventStorer));
 
                 //Start listening
                 listener.Bind(localEndPoint);
@@ -182,17 +192,16 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                 sendingThread.Start();
 
-                Console.WriteLine("Listening on " + listener.LocalEndPoint); 
+                string listening = "Listening on " + listener.LocalEndPoint;
+                Console.WriteLine(listening);
+                LogEvent(listening);
+
 
                 //Start storing thread
                 if (IsMessageServiceActivated)
-                    storingThread.Start();
-
-                //Start, if period is set, the Heartbeat Timer
-                if (HeartbeatPeriod > 0)
                 {
-                    TimerCallback heartbeatCallBack = Heartbeat;
-                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HeartbeatPeriod);
+                    messageStoringThread.Start();
+                    eventStoringThread.Start();
                 }
 
                 while (true)
@@ -213,9 +222,10 @@ namespace CodeAbility.MonitorAndCommand.Server
                     receiveThread.Start(socket);
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Trace.WriteLine(e);
+                string content = String.Format("Listener error : {0}", exception);
+                LogEvent(content);
             }
         }
 
@@ -257,28 +267,14 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     int missingBytesLength = Constants.BUFFER_SIZE - offset;
                     int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
+                    
                     int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
-
-//#if DEBUG 
-//                    Trace.WriteLine(String.Format("Extracted : {0}", receivedBytes)); 
-//                    Trace.WriteLine(String.Format("Available : {0}", socket.Available)); 
-//#endif 
 
                     if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
                     { 
                         string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
 
-//#if DEBUG
-//                        // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
-//                        Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
-//#endif
-
                         string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
-
-//#if DEBUG
-//                    // Objects serialized with json.netmf's 4.2 .dll cannot be deserialized when the server is running on Mono
-//                    Trace.WriteLine(String.Format("JSON      : {0}", cleanedUpSerializedData));
-//#endif
 
                         Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
 
@@ -305,7 +301,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                 }
                 catch(Exception exception)
                 {
-                    Trace.WriteLine(exception);
+                    string content = String.Format("Receiver error : {0}", exception);
+                    LogEvent(content);
 
                     CleanUp(address);
                     break;
@@ -317,7 +314,9 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             string deviceName = devicesManager.GetDeviceNameFromAddress(address);
 
-            Console.WriteLine(String.Format("Device {0} disconnected.", deviceName));
+            string content = String.Format("Device {0} disconnected.", deviceName);
+            Console.WriteLine(content);
+            LogEvent(content);
 
             //Close socket and abort thread
             Thread thread = null;
@@ -391,10 +390,6 @@ namespace CodeAbility.MonitorAndCommand.Server
                     PreProcess(message);
                     Process(message);
                     PostProcess(message);
-
-#if DEBUG
-                    Trace.WriteLine(String.Format("Queued    : {0}", messagesReceived.Count));
-#endif
                 }
             }
         }
@@ -419,9 +414,8 @@ namespace CodeAbility.MonitorAndCommand.Server
                         SendToAuthorizedDevices(message);
                         break;
                     case ContentTypes.HEARTBEAT:
-                        ReturnHeartbeatRequest(message);
+                        HandleHeartbeatMessage(message);
                         break;
-                    case ContentTypes.HEALTH:
                     case ContentTypes.RESPONSE:
                         throw new NotImplementedException();
                 }
@@ -432,7 +426,10 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception exception)
             {
-                Trace.WriteLine(String.Format("Processing exception : {0}", exception));
+                string content = String.Format("Processing exception : {0}", exception);
+
+                Trace.WriteLine(content);
+                StoreEvent(new Event(Message.SERVER, content));
             }
         }
 
@@ -475,9 +472,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
-            
-            Console.WriteLine(String.Format("Device {0} registered.", deviceName));
-            Trace.WriteLine(String.Format("Device {0} registered.", deviceName));
+
+            string content = String.Format("Device {0} registered.", deviceName);
+            Console.WriteLine(content);
+            LogEvent(content);
 
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Registered)); 
         }
@@ -486,9 +484,10 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             rulesManager.RemoveAllRules(deviceName);
             devicesManager.RemoveDevice(deviceName);
-            
-            Console.WriteLine(String.Format("Device {0} unregistered.", deviceName));
-            Trace.WriteLine(String.Format("Device {0} unregistered.", deviceName));
+
+            string content = String.Format("Device {0} unregistered.", deviceName);
+            Console.WriteLine(content);
+            LogEvent(content);
 
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Unregistered)); 
         }
@@ -511,11 +510,6 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected void Unsubscribe(Message message)
         {
             rulesManager.RemoveRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
-        }
-
-        protected void ReturnHeartbeatRequest(Message heartbeatMessage)
-        {
-            messagesToSend.Enqueue(heartbeatMessage);
         }
 
         #endregion 
@@ -549,6 +543,16 @@ namespace CodeAbility.MonitorAndCommand.Server
 
             sendEvent.Set();
         }
+
+        private void SendDirectlyToDevice(string deviceName, Message message)
+        {
+            Message sendToMessage = new Message(message);
+            sendToMessage.ReceivingDevice = deviceName;
+            messagesToSend.Enqueue(sendToMessage);
+            
+            sendEvent.Set();
+        }
+
 
         private void Sender()
         {
@@ -612,7 +616,8 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception exception)
             {
-                Trace.WriteLine(String.Format("Send exception : {0}", exception));
+                string content = String.Format("Send exception : {0}", exception);
+                LogEvent(content);
             }
         }
 
@@ -624,11 +629,23 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             foreach (Device device in devicesManager.Devices)
             {
-                Message heartbeat = Message.InstanciateHeartbeatMessage();
+                Message heartbeat = Message.InstanciateHeartbeatMessage(Message.SERVER);
                 SendToAllDevices(heartbeat);
             }
 
             heartbeatEvent.Set();
+        }
+
+        protected void HandleHeartbeatMessage(Message heartbeatMessage)
+        {
+            if (!heartbeatMessage.FromDevice.Equals(Message.SERVER))
+            {
+                SendDirectlyToDevice(heartbeatMessage.SendingDevice, heartbeatMessage);
+            }
+            else
+            {
+                //Handle heartbeats initiated by the server
+            }
         }
 
         #endregion 
@@ -640,16 +657,16 @@ namespace CodeAbility.MonitorAndCommand.Server
             //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
             message.Timestamp = DateTime.Now;
             messagesToStore.Enqueue(message);
-            storeEvent.Set();
+            storeMessageEvent.Set();
         }
 
-        private void Storer()
+        private void MessageStorer()
         {
-            Trace.WriteLine("Starting Storer() thread");
+            Trace.WriteLine("Starting MessageStorer() thread");
 
             while (true)
             {
-                storeEvent.Reset();
+                storeMessageEvent.Reset();
 
                 while (messagesToStore.Count > 0)
                 {
@@ -658,7 +675,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         Store(message);
                 }
 
-                storeEvent.WaitOne();
+                storeMessageEvent.WaitOne();
             }
         }
 
@@ -678,5 +695,56 @@ namespace CodeAbility.MonitorAndCommand.Server
         }
 
         #endregion 
+
+        #region Event Service
+
+        private void StoreEvent(Event _event)
+        {
+            //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
+            eventsToStore.Enqueue(_event);
+            storeEventEvent.Set();
+        }
+
+        private void EventStorer()
+        {
+            Trace.WriteLine("Starting EventStorer() thread");
+
+            while (true)
+            {
+                storeEventEvent.Reset();
+
+                while (eventsToStore.Count > 0)
+                {
+                    Event _event = null;
+                    if (eventsToStore.TryDequeue(out _event))
+                        Store(_event);
+                }
+
+                storeEventEvent.WaitOne();
+            }
+        }
+
+        private void Store(Event _event)
+        {
+            try
+            {
+                if (eventServiceClient != null && eventServiceClient.State == System.ServiceModel.CommunicationState.Opened)
+                {
+                    eventServiceClient.StoreEvent(_event);
+                }
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine(exception);
+            }
+        }
+
+        #endregion 
+
+        private void LogEvent(string content)
+        {
+            Trace.WriteLine(content);
+            StoreEvent(new Event(Message.SERVER, content));
+        }
     }
 }

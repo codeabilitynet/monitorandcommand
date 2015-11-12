@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE SP_Message_Purge
+CREATE PROCEDURE [dbo].[SP_Message_Purge]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -14,5 +14,6 @@ BEGIN
 	DELETE  
 	  FROM [dbo].[TB_Message];
 
-	DBCC CHECKIDENT ('TB_Message', RESEED, 0);
+	--CHECKIDENT not supported on Windows Azure
+	--DBCC CHECKIDENT ('TB_Message', RESEED, 0);
 END

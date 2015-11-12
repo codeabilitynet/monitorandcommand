@@ -35,6 +35,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 {
     public class MessageClient : IMessageClient
     {
+        const int HEARTBEAT_START_DELAY = 5000;
+        const int HEARTBEAT_PERIOD = 60000;
+
+        const string SERVER = "Server";
+
         #region Event
 
         // A delegate type for hooking up change notifications.
@@ -61,16 +66,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 DataReceived(this, e);
         }
 
-        public delegate void HealthInfoReceivedEventHandler(object sender, MessageEventArgs e);
-
-        public event HealthInfoReceivedEventHandler HealthInfoReceived;
-
-        protected void OnHealthInfoReceived(MessageEventArgs e)
-        {
-            if (HealthInfoReceived != null)
-                HealthInfoReceived(this, e);
-        }
-
         #endregion 
 
         #region Properties
@@ -83,6 +78,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         bool IsLoggingEnabled { get; set; }
 
+        //int HeartbeatPeriod { get; set; }
+
         public bool IsConnected { get; set; }
 
         #endregion 
@@ -94,8 +91,14 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         private Thread sendThread = null; 
         private Thread receiveThread = null;
 
+        private Timer heartbeatTimer = null;
+
         // ManualResetEvent instances signal completion.
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
+
+        private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
+
+        private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
 
         public MessageClient(string deviceName, bool isLoggingEnabled)
         { 
@@ -137,6 +140,13 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     
                 Register(DeviceName);
 
+                //Start, if period is set, the Heartbeat Timer
+                if (HEARTBEAT_PERIOD > 0)
+                {
+                    TimerCallback heartbeatCallBack = Heartbeat;
+                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HEARTBEAT_PERIOD);
+                }
+
                 Log("MessageClient started.");
             }
             catch (Exception exception)
@@ -144,7 +154,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 Log("MessageClient Start() exception !");
                 Log(exception.ToString());
 
-                Stop(); 
+                Stop();
+                throw;
             }
         }
 
@@ -260,7 +271,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     Log(exception.ToString());
-                    //throw;
+                    throw;
                 }
             }
         }
@@ -283,7 +294,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             catch (Exception exception)
             {
                 Log("Send()    : " + exception.ToString());
-                //throw;
+                throw;
             }
         }
 
@@ -295,55 +306,100 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
             Log("Starting Receiver() thread.");
 
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            int offset = 0;
+
             while (true)
             {
                 try
                 {
-                    // Receive buffer.
-                    byte[] buffer = new byte[Constants.BUFFER_SIZE];
+                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
 
                     // Begin receiving the data from the remote device.
-                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, SocketFlags.None);
+                    int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
+                    
+                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
+                    {
 
-                    char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
-                    string paddedSerializedData = new string(dataChars);
+                        char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
+                        string paddedSerializedData = new string(dataChars);
 
-                    if (paddedSerializedData != null)
-                    { 
-                        string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
-                        object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
-                        Hashtable hashTable = deserializedObject as Hashtable;
-                        Message message = new Message()
-                        {
-                            SendingDevice = (string)hashTable["SendingDevice"],
-                            ReceivingDevice = (string)hashTable["ReceivingDevice"],
-                            FromDevice = (string)hashTable["FromDevice"],
-                            ToDevice = (string)hashTable["ToDevice"],
-                            ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
-                            Name = (string)hashTable["Name"],
-                            Parameter = (string)hashTable["Parameter"],
-                            Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
-                        };
+                        if (paddedSerializedData != null)
+                        { 
+                            string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                            object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
+                            Hashtable hashTable = deserializedObject as Hashtable;
+                            Message message = new Message()
+                            {
+                                SendingDevice = (string)hashTable["SendingDevice"],
+                                ReceivingDevice = (string)hashTable["ReceivingDevice"],
+                                FromDevice = (string)hashTable["FromDevice"],
+                                ToDevice = (string)hashTable["ToDevice"],
+                                ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
+                                Name = (string)hashTable["Name"],
+                                Parameter = (string)hashTable["Parameter"],
+                                Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
+                            };
     
-                        if (message != null)
-                        {
-                            Log("Received  :" + message.ToString());
+                            if (message != null)
+                            {
+                                Log("Received  :" + message.ToString());
 
-                            if (message.ContentType.Equals(ContentTypes.DATA))
-                                OnDataReceived(new MessageEventArgs(message));
-                            else if (message.ContentType == ContentTypes.COMMAND)
-                                OnCommandReceived(new MessageEventArgs(message));
-                            else if (message.ContentType.Equals(ContentTypes.HEALTH))
-                                OnHealthInfoReceived(new MessageEventArgs(message));
+                                if (message.ContentType == ContentTypes.DATA)
+                                    OnDataReceived(new MessageEventArgs(message));
+                                else if (message.ContentType == ContentTypes.COMMAND)
+                                    OnCommandReceived(new MessageEventArgs(message));
+                                else if (message.ContentType == ContentTypes.HEARTBEAT)
+                                    HandleHeartbeatMessage(message);
+                            }
                         }
 
+                        offset = 0;
                     }
+                    else
+                    {
+                        offset = receivedBytesLength;
+                    }
+
                 }
                 catch (Exception exception)
                 {
                     Log("Receiver() : " + exception.ToString());
-                    //throw;
+                    throw;
                 }
+            }
+        }
+
+        public void Heartbeat(Object stateInfo)
+        {
+            if (heartbeatStatus == HeartbeatStatus.NOK)
+            {
+                //AUTORECONNECT : if we do not get any answer from the server, we reboot
+                Microsoft.SPOT.Hardware.PowerState.RebootDevice(false, 10000);
+            }
+
+            if (heartbeatStatus == HeartbeatStatus.Waiting)
+                heartbeatStatus = HeartbeatStatus.NOK;
+
+            Message heartbeatMessage = Message.InstanciateHeartbeatMessage(DeviceName);
+            EnqueueMessage(heartbeatMessage);
+
+            if (heartbeatStatus == HeartbeatStatus.OK)
+                heartbeatStatus = HeartbeatStatus.Waiting;
+        }
+
+        private void HandleHeartbeatMessage(Message heartbeatMessage)
+        {
+            if (heartbeatMessage.FromDevice.Equals(SERVER))
+            {
+                //If the heartbeat is initiated by the server, we return it
+                EnqueueMessage(heartbeatMessage);
+            }
+            else if (heartbeatMessage.FromDevice.Equals(DeviceName))
+            {
+                //If the heartbeat was initiated by me, i am happy to have it returned, meaning that the server and the connection are working
+                heartbeatStatus = HeartbeatStatus.OK;
             }
         }
 

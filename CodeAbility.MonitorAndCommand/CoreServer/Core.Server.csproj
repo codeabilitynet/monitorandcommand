@@ -61,6 +61,11 @@
     <Compile Include="Device.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesManager.cs" />
+    <Compile Include="Service References\EventServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\MessageServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -71,6 +76,17 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\CodeAbility.MonitorAndCommand.Models.Event.datasource" />
+    <None Include="Service References\EventServiceReference\EventService.wsdl" />
+    <None Include="Service References\EventServiceReference\EventService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EventServiceReference\EventService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EventServiceReference\EventService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MessageServiceReference\MessageService.wsdl" />
     <None Include="Service References\MessageServiceReference\MessageService.xsd">
       <SubType>Designer</SubType>
@@ -96,6 +112,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\EventServiceReference\" />
     <WCFMetadataStorage Include="Service References\MessageServiceReference\" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +132,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EventServiceReference\EventService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EventServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EventServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EventServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

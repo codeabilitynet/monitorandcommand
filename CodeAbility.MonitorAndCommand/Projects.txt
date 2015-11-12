@@ -2,6 +2,7 @@ The solution is made of several project categories :
 - Core projects build the core libraries referenced by the Demo, Test and Netduino projects;
 - Test projects build Console applications to be used for testing/troubleshooting of the Core projects;
 - Netduino projects build libraries referenced by the Demo.Netduino* projects;
+- Raspberry Pi projects build libraries referenced by the Demo.RaspberryPi projects;
 - Demo projects build the demo applications used for the "showcase" video.
 
 Core projects
@@ -24,13 +25,18 @@ Demo projects
 - ServerConsole defines a Console application running the Core.Server library;
 - WpfServer defines a WPF application running the Core.Server library with extended functionalities;
 - WpfMonitor defines a WPF application running a Core.Client library to monitor the messages exchanged by the "demo" devices connected to the server;
-- Demo.Netduino3Wifi references the Netduino.DS18B20 library to be run on a Netduino 3 Wifi;
-- Demo.NetduinoPlus references the Netduino.LEDs library to be run on a Netduino Plus;
+- Netduino3Wifi references the Netduino.* libraries to be run on a Netduino 3 Wifi;
+- NetduinoPlus references the Netduino.* libraries to be run on a Netduino Plus;
+- RaspberryPi references the RaspberryPi.* libraires to be run on a Raspberry with Mono
 - Demo.MvcApplication defines an ASP.NET MVC application exposing the WcfServiceLibrary and presenting the received data on a Web UI.
 
 Netduino projects
-- DS18B20 defines a class providing temperature sensor reading on a DS1820 sensor using OneWire;
-- LEDs defines a class providing fake data generation and controlling the state of two LEDs.
+- Tools defines classes to address components like DS18B20 (Dallas 1-Wire temperature sensor), HIH4000 (Humidity sensor) or MCP4921 (12 bits Digital to Analog Converter);
+- Processes defines classes that uses the Tools's classes to provide some demo functionalities.
+
+Raspberry Pi projects 
+- Tools defines classes to address components like the Pibrella board;
+- Processes defines classes that uses the Tools's classes to provide demo functionalities.
 
 Test projects
 - DeviceConsole defines a Console application simulating the messages sent and received by Pibrella & Netduino projects;

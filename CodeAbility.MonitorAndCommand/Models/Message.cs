@@ -85,9 +85,9 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         #endregion 
         
-        const string SERVER = "SERVER";
-        const string HEARTBEAT = "HEARTBEAT";
-        const string ALL = "*";
+        public const string SERVER = "SERVER";
+        public const string HEARTBEAT = "HEARTBEAT";
+        public const string ALL = "*";
 
         #region Static Helpers
 
@@ -136,20 +136,15 @@ namespace CodeAbility.MonitorAndCommand.Models
             return new Message(sendingDevice, sendingDevice, toDevice, ContentTypes.DATA, dataSource, dataName, dataContent);
         }
 
-        public static Message InstanciateHealthInfoMessage(string ofDevice, string toDevice, string healthEventCategory, string healthEventName, object healthEventContent)
+        public static Message InstanciateHeartbeatMessage(string ofDevice)
         {
-            return new Message(SERVER, ofDevice, toDevice, ContentTypes.HEALTH, healthEventCategory, healthEventName, healthEventContent);
+            return new Message(ofDevice, ofDevice, SERVER, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, String.Empty);
         }
 
-        public static Message InstanciateHeartbeatMessage()
-        {
-            return new Message(SERVER, SERVER, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
-        }
-
-        public static Message InstanciateHeartbeatRequestMessage(string fromDevice)
-        {
-            return new Message(fromDevice, fromDevice, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
-        }
+        //public static Message InstanciateHeartbeatRequestMessage(string fromDevice)
+        //{
+        //    return new Message(fromDevice, fromDevice, ALL, ContentTypes.HEARTBEAT, HEARTBEAT, String.Empty, DateTime.Now);
+        //}
 
         #endregion 
 

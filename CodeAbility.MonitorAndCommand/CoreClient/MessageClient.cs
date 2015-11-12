@@ -36,6 +36,9 @@ namespace CodeAbility.MonitorAndCommand.Client
 {
     public class MessageClient : IMessageClient
     {
+        const int HEARTBEAT_START_DELAY = 5000;
+        const int HEARTBEAT_PERIOD = 10000;
+
         #region Events
 
         public delegate void CommandReceivedEventHandler(object sender, MessageEventArgs e);
@@ -56,16 +59,6 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             if (DataReceived != null)
                 DataReceived(this, e);
-        }
-
-        public delegate void HealthInfoReceivedEventHandler(object sender, MessageEventArgs e);
-
-        public event HealthInfoReceivedEventHandler HealthInfoReceived;
-
-        protected void OnHealthInfoReceived(MessageEventArgs e)
-        {
-            if (HealthInfoReceived != null)
-                HealthInfoReceived(this, e);
         }
 
         #endregion 
@@ -90,8 +83,14 @@ namespace CodeAbility.MonitorAndCommand.Client
         private Thread receiveThread = null;
         private Thread sendThread = null;
 
+        private Timer heartbeatTimer = null;
+
         // ManualResetEvent instances signal completion.
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
+
+        private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
+
+        private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
 
         public MessageClient(string deviceName)
         {
@@ -129,11 +128,19 @@ namespace CodeAbility.MonitorAndCommand.Client
                 
                 Register(DeviceName);
 
+                //Start, if period is set, the Heartbeat Timer
+                if (HEARTBEAT_PERIOD > 0)
+                {
+                    TimerCallback heartbeatCallBack = Heartbeat;
+                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HEARTBEAT_PERIOD);
+                }
+
                 Console.WriteLine(String.Format("Device {0} connected to server.", DeviceName));
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
+                throw;
             }
         }
 
@@ -243,7 +250,6 @@ namespace CodeAbility.MonitorAndCommand.Client
                 catch (Exception exception)
                 {
                     Trace.WriteLine(exception);
-                    throw;
                 }
             }
         }
@@ -282,31 +288,44 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             Trace.WriteLine("Starting Receiver() thread.");
 
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            int offset = 0;
+
             while (socket.Connected)
             {
                 try
                 {
-                    byte[] buffer = new byte[Constants.BUFFER_SIZE];
+                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
 
-                    socket.Receive(buffer, 0, Constants.BUFFER_SIZE, 0);
-                    string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
-                    string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                    int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
 
-                    Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
-
-                    Trace.WriteLine(String.Format("Received    : {0}", message));
-
-                    if (message != null)
+                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
                     {
-                        if (message.ContentType.Equals(ContentTypes.COMMAND))
-                            OnCommandReceived(new MessageEventArgs(message));
-                        else if (message.ContentType.Equals(ContentTypes.DATA))
-                            OnDataReceived(new MessageEventArgs(message));
-                        else if (message.ContentType.Equals(ContentTypes.HEALTH))
-                            OnHealthInfoReceived(new MessageEventArgs(message));
-                        else if (message.ContentType.Equals(ContentTypes.HEARTBEAT))
-                            Send(message);
+                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
+                        string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+
+                        Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
+
+                        Trace.WriteLine(String.Format("Received    : {0}", message));
+
+                        if (message != null)
+                        {
+                            if (message.ContentType.Equals(ContentTypes.COMMAND))
+                                OnCommandReceived(new MessageEventArgs(message));
+                            else if (message.ContentType.Equals(ContentTypes.DATA))
+                                OnDataReceived(new MessageEventArgs(message));
+                            else if (message.ContentType.Equals(ContentTypes.HEARTBEAT))
+                                HandleHeartbeatMessage(message);
+                        }
+
+                        offset = 0;
                     }
+                    else
+                    {
+                        offset = receivedBytesLength;
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -316,5 +335,30 @@ namespace CodeAbility.MonitorAndCommand.Client
         }
 
         #endregion 
+        public void Heartbeat(Object stateInfo)
+        {
+            if (heartbeatStatus == HeartbeatStatus.NOK)
+                throw new Exception();
+
+            if (heartbeatStatus == HeartbeatStatus.Waiting)
+                heartbeatStatus = HeartbeatStatus.NOK;
+
+            Message heartbeatMessage = Message.InstanciateHeartbeatMessage(DeviceName);
+            EnqueueMessage(heartbeatMessage);
+            heartbeatStatus = HeartbeatStatus.Waiting;
+        }
+
+        private void HandleHeartbeatMessage(Message heartbeatMessage)
+        {
+            if (heartbeatMessage.FromDevice.Equals(Message.SERVER))
+            {
+                //Send back to sender
+                EnqueueMessage(heartbeatMessage);
+            }
+            else if (heartbeatMessage.FromDevice.Equals(DeviceName))
+            {
+                heartbeatStatus = HeartbeatStatus.OK;
+            }
+        }
     }
 }
