@@ -18,12 +18,12 @@ To start the "Demo" environment presented in the showcase video(s), in "multiple
 - Test.DeviceConsole, using the "Data Generator" option; 
 - Demo.WindowsPhoneController;
 - Demo.WpfMonitor;
-- for Raspberry Pi users having a Pibrella board, Demo.Pibrella;
+- for Raspberry Pi users having a Pibrella board, Demo.RaspberryPi;
 - for Netduino users:
---- Demo.Netduino 3 Wifi referencing Process class from Netduino.DS18B20;
---- Demo.NetduinoPlus referencing Process class from Netduino.LEDs.
+-- Demo.Netduino3Wifi referencing processes from Netduino.Processes to address DS18B20, HIH4000 sensors and MCP4921 converter;
+-- Demo.NetduinoPlus referencing Process class from Netduino.Processes.
 
 Note for Netduino users :
-- Netduino.DS18B20 uses OneWire and will only work with NetMF 4.2 or higher;
-- Netduino.LEDs will run on NetMF 4.2/4.3 , provided that the project is targeting the appropriate framework version;
+- Netduino.Tools.DS18B20 uses OneWire and will only work with NetMF 4.2 or higher;
+- Netduino.Tools.LEDs will run on NetMF 4.2/4.3 , provided that the project is targeting the appropriate framework version;
 - Netduino.* may require .dll and 'using' adaptation based on your particular hardware and software configuration.

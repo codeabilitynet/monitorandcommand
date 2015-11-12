@@ -50,6 +50,9 @@
     <Compile Include="..\Models\ControlActions.cs">
       <Link>ControlActions.cs</Link>
     </Compile>
+    <Compile Include="..\Models\HeartbeatStatus.cs">
+      <Link>HeartbeatStatus.cs</Link>
+    </Compile>
     <Compile Include="..\Models\Message.cs">
       <Link>Message.cs</Link>
     </Compile>

@@ -62,11 +62,14 @@
                 @Html.DisplayFor(modelitem => item.Content)
             </td>
             <td>
-                @item.Timestamp.ToString("hh:mm:ss.fff tt")
-                @*@Html.DisplayFor(modelitem => item.Timestamp)*@
-            </td>
+                <a href="#" data-toggle="timestamp" data-placement="top" title="@item.Timestamp.ToString("hh:mm:ss.fff tt")">
+                    @item.Timestamp.ToString("hh:mm:ss.fff") <!-- "hh:mm:ss.fff tt" -->
+                    @*@Html.DisplayFor(modelitem => item.Timestamp)*@
+                </a>
+</td>
         </tr>
     }
 </table>
 
-@Html.ActionLink("Purge", "Purge", "Home")
+<br />
+@Html.ActionLink("Purge", "Purge", "Message")

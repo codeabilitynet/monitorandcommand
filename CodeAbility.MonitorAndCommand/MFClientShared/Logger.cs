@@ -52,11 +52,19 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         public void Write(string message)
         {
-            using (var filestream = new FileStream(BuildFilePath(), FileMode.OpenOrCreate))
+            try
+            { 
+                using (var filestream = new FileStream(BuildFilePath(), FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    StreamWriter streamWriter = new StreamWriter(filestream);
+                    streamWriter.WriteLine(message);
+                    streamWriter.Flush();
+                    streamWriter.Close(); 
+                }
+            }
+            catch(Exception exception)
             {
-                StreamWriter streamWriter = new StreamWriter(filestream);
-                streamWriter.WriteLine(message);
-                streamWriter.Close();
+                //There is not much we can do except preventing the whole process to crash if something goes wrong with logging
             }
         }
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1825e9fd-5cb6-4a5d-a7a8-d1a40cf6f24d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies>
+      <ReferencedAssembly AssemblyName="CodeAbility.MonitorAndCommand.PortableModels" />
+    </ReferencedAssemblies>
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://monitorandcommand.azurewebsites.net/MessageService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MessageService.disco" MetadataType="Disco" ID="a49e11fe-d12c-48df-95a6-b6aee22f0e43" SourceId="1" SourceUrl="http://monitorandcommand.azurewebsites.net/MessageService.svc?disco" />
+    <MetadataFile FileName="MessageService.xsd" MetadataType="Schema" ID="deec6628-a6d6-4464-accb-3658b2caa9bc" SourceId="1" SourceUrl="http://monitorandcommand.azurewebsites.net/MessageService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MessageService.wsdl" MetadataType="Wsdl" ID="a9612fd5-7e07-4ba0-a50a-1aabd9b2209c" SourceId="1" SourceUrl="http://monitorandcommand.azurewebsites.net/MessageService.svc?wsdl" />
+    <MetadataFile FileName="MessageService1.xsd" MetadataType="Schema" ID="459c7ce4-ee16-472a-8b38-b40fda04378e" SourceId="1" SourceUrl="http://monitorandcommand.azurewebsites.net/MessageService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MessageService2.xsd" MetadataType="Schema" ID="962d0702-fdbc-437d-b89c-a5649a9479ad" SourceId="1" SourceUrl="http://monitorandcommand.azurewebsites.net/MessageService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

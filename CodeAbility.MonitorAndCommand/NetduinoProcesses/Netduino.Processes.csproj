@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <AssemblyName>CodeAbility.MonitorAndCommand.Netduino.Processes</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CodeAbility.MonitorAndCommand.Netduino.Processes</RootNamespace>
+    <ProjectTypeGuids>{b69e3092-b931-443c-abe7-7e7b65f2a37f};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C879892C-64C2-468E-923C-96C017E151D6}</ProjectGuid>
+    <TargetFrameworkVersion>v4.3</TargetFrameworkVersion>
+    <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Environment\Devices.cs">
+      <Link>Devices.cs</Link>
+    </Compile>
+    <Compile Include="..\Environment\Objects\DS18B20.cs">
+      <Link>DS18B20.cs</Link>
+    </Compile>
+    <Compile Include="..\Environment\Objects\HIH4000.cs">
+      <Link>HIH4000.cs</Link>
+    </Compile>
+    <Compile Include="..\Environment\Objects\MCP4921.cs">
+      <Link>MCP4921.cs</Link>
+    </Compile>
+    <Compile Include="..\Environment\Objects\NetduinoBoard.cs">
+      <Link>NetduinoBoard.cs</Link>
+    </Compile>
+    <Compile Include="..\Environment\Objects\SimpleVoltageSensor.cs">
+      <Link>SimpleVoltageSensor.cs</Link>
+    </Compile>
+    <Compile Include="DS18B20Process.cs" />
+    <Compile Include="HIH4000Process.cs" />
+    <Compile Include="HomeMonitoringProcess.cs" />
+    <Compile Include="MCP4921Process.cs" />
+    <Compile Include="ProcessTemplate.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SPOT.Hardware" />
+    <Reference Include="Microsoft.SPOT.Native" />
+    <Reference Include="SecretLabs.NETMF.Hardware, Version=4.3.1.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="SecretLabs.NETMF.Hardware.AnalogInput, Version=4.3.1.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="SecretLabs.NETMF.Hardware.Netduino, Version=4.3.1.0, Culture=neutral, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MF43Client\Core.MF43Client.csproj">
+      <Project>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</Project>
+      <Name>Core.MF43Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetduinoTools\Netduino.Tools.csproj">
+      <Project>{CFC17A9B-49BB-43C8-BEB0-3D868C1FA25F}</Project>
+      <Name>Netduino.Tools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
+  <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
