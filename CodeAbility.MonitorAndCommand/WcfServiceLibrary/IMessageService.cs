@@ -33,5 +33,12 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
     {
         [OperationContract]
         void StoreMessage(Message message);
+
+        [OperationContract]
+        IEnumerable<Message> ListLastMessages(int numberOfMessages);
+
+        [OperationContract]
+        IEnumerable<Message> ListDeviceLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval);
+
     }
 }

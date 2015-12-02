@@ -17,53 +17,26 @@
 
 
 using System;
-using System.Runtime.Serialization;
-using System.ServiceModel;
 
-namespace CodeAbility.MonitorAndCommand.Server
+namespace CodeAbility.MonitorAndCommand.Environment.Objects
 {
-    public class Address
+    public static class NetduinoBoard
     {
-        public string Ip { get; set; }
+        //Object
+        public const string OBJECT_BOARD_LED = "LED";
+        public const string OBJECT_BUTTON = "Button";
 
-        public int Port { get; set; }
+        //Command
+        public const string COMMAND_BUTTON_PRESSED = "ButtonPressed";
+        public const string COMMAND_TOGGLE_LED = "ToggleLed";
 
-        public Address() { }
+        //Data 
+        public const string DATA_LED_STATUS = "LEDStatus";
+        public const string DATA_BUTTON_STATUS = "ButtonStatus";
 
-        public Address (string ip, int port)
-        {
-            Ip = ip;
-            Port = port;
-        }
-
-        public Address(string endpointString)
-        {
-            string[] tokens = endpointString.Split(':');
-            Ip = tokens[0];
-            Port = Int32.Parse(tokens[1]);
-        }
-
-        public override string ToString()
-        {
-            return Ip + ":" + Port.ToString();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            // If parameter is null return false.
-            if (obj == null)
-                return false;
-
-            Address address = obj as Address;
-            if ((System.Object)address == null)
-                return false;
-
-            return (this.Ip.Equals(address.Ip) && this.Port.Equals(address.Port));
-        }
-
-        public override int GetHashCode()
-        {
-            return Port;
-        }
+        //Content
+        public const string CONTENT_BUTTON_PRESSED = "Pressed";
+        public const string CONTENT_LED_STATUS_ON = "On";
+        public const string CONTENT_LED_STATUS_OFF = "Off";
     }
 }

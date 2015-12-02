@@ -93,12 +93,12 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
         #region Public methods
 
-        public bool Start(string ipAddress, int portNumber)
+        public async Task<bool> Start(string ipAddress, int portNumber)
         {
             IpAddress = ipAddress;
             PortNumber = portNumber;
 
-            client.Connect(IpAddress, PortNumber);
+            await client.Connect(IpAddress, PortNumber);
 
             Register(DeviceName);
 

@@ -17,53 +17,34 @@
 
 
 using System;
-using System.Runtime.Serialization;
-using System.ServiceModel;
 
-namespace CodeAbility.MonitorAndCommand.Server
+namespace CodeAbility.MonitorAndCommand.Environment.Objects
 {
-    public class Address
+    public static class LEDs
     {
-        public string Ip { get; set; }
+        //Object
+        public const string OBJECT_BOARD_LED = "LED";
+        public const string OBJECT_BUTTON = "Button";
+        public const string OBJECT_SENSOR = "Sensor";
 
-        public int Port { get; set; }
+        public const string OBJECT_RED_LED = "RedLED";
+        public const string OBJECT_GREEN_LED = "GreenLED";
 
-        public Address() { }
+        //Command
+        public const string COMMAND_BUTTON_PRESSED = "ButtonPressed";
+        public const string COMMAND_TOGGLE_LED = "ToggleLed";
 
-        public Address (string ip, int port)
-        {
-            Ip = ip;
-            Port = port;
-        }
+        //Data 
+        public const string DATA_LED_STATUS = "LEDStatus";
+        public const string DATA_BUTTON_STATUS = "ButtonStatus";
+        public const string DATA_SENSOR_RANDOM = "SensorRandom";
 
-        public Address(string endpointString)
-        {
-            string[] tokens = endpointString.Split(':');
-            Ip = tokens[0];
-            Port = Int32.Parse(tokens[1]);
-        }
+        //Content
+        //public const string CONTENT_BUTTON_ON = "On";
+        //public const string CONTENT_BUTTON_OFF = "Off";
+        public const string CONTENT_BUTTON_PRESSED = "Pressed";
 
-        public override string ToString()
-        {
-            return Ip + ":" + Port.ToString();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            // If parameter is null return false.
-            if (obj == null)
-                return false;
-
-            Address address = obj as Address;
-            if ((System.Object)address == null)
-                return false;
-
-            return (this.Ip.Equals(address.Ip) && this.Port.Equals(address.Port));
-        }
-
-        public override int GetHashCode()
-        {
-            return Port;
-        }
+        public const string CONTENT_LED_STATUS_ON = "On";
+        public const string CONTENT_LED_STATUS_OFF = "Off";
     }
 }

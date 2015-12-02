@@ -18,13 +18,16 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 using Microsoft.SPOT;
 using Microsoft.SPOT.Net;
+using Microsoft.SPOT.Net.NetworkInformation;
 
 //using CodeAbility.MonitorAndCommand.Netduino.DS18B20;
 //using CodeAbility.MonitorAndCommand.Netduino.LEDs;
-using CodeAbility.MonitorAndCommand.Netduino.MCP4921;
+//using CodeAbility.MonitorAndCommand.Netduino.MCP4921;
+using CodeAbility.MonitorAndCommand.Netduino.Processes;
 
 namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {
@@ -32,9 +35,10 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
     {
         const string IP_ADDRESS = "192.168.178.26";
         const int PORT = 11000;
+        const int HEARTBEAT_PERIOD = 10000;
 
-        static System.Threading.AutoResetEvent _networkAvailableEvent = new System.Threading.AutoResetEvent(false);
-        static System.Threading.AutoResetEvent _networkAddressChangedEvent = new System.Threading.AutoResetEvent(false);
+        static AutoResetEvent _networkAvailableEvent = new AutoResetEvent(false);
+        static AutoResetEvent _networkAddressChangedEvent = new AutoResetEvent(false);
 
         public static void Main()
         {
@@ -42,12 +46,12 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             //http://forums.netduino.com/index.php?/topic/11827-best-practices-how-to-wait-for-a-wi-fi-network-connection/
 
             // wire up events to wait for network link to connect and address to be acquired
-            Microsoft.SPOT.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-            Microsoft.SPOT.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
             // if the network is already up or dhcp address is already set, pre-set those flags.
             if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 _networkAvailableEvent.Set();
-            if (Microsoft.SPOT.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()[0].IsDhcpEnabled && Microsoft.SPOT.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()[0].IPAddress != "0.0.0.0")
+            if (NetworkInterface.GetAllNetworkInterfaces()[0].IsDhcpEnabled && NetworkInterface.GetAllNetworkInterfaces()[0].IPAddress != "0.0.0.0")
                 _networkAddressChangedEvent.Set();
 
             _networkAvailableEvent.WaitOne();
@@ -55,8 +59,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
             //Debug.Print(Resources.GetString(Resources.StringResources.String1));
 
-            Process process = new Process();
-            process.Start(IP_ADDRESS, PORT, false);
+            HomeMonitoringProcess process = new HomeMonitoringProcess(5000,10000);
+            process.Start(IP_ADDRESS, PORT, true);
         }
 
         static void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
@@ -64,7 +68,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
             _networkAddressChangedEvent.Set();
         }
 
-        static void NetworkChange_NetworkAvailabilityChanged(object sender, Microsoft.SPOT.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
+        static void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
             if (e.IsAvailable)
             {

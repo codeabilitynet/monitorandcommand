@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
+﻿@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
 
 <table id="DataTable" style="width: 100%;">
     <!-- Header -->
@@ -35,7 +34,7 @@
 
     <!-- Items -->
     @foreach (var item in Model)
-    {
+    {        
         <tr>
             <td>
                 @Html.DisplayFor(modelitem => item.SendingDevice)

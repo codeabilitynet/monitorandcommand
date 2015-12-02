@@ -54,11 +54,10 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         {
             try
             { 
-                using (var filestream = new FileStream(BuildFilePath(), FileMode.OpenOrCreate, FileAccess.Write))
+                using (var filestream = new FileStream(BuildFilePath(), FileMode.Append, FileAccess.Write))
                 {
                     StreamWriter streamWriter = new StreamWriter(filestream);
                     streamWriter.WriteLine(message);
-                    streamWriter.Flush();
                     streamWriter.Close(); 
                 }
             }

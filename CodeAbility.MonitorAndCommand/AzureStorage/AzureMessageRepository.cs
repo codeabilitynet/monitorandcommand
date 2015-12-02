@@ -43,9 +43,9 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             InsertOrMergeEntityAsync(table, new MessageEntity(PartitionKey, RowKey.ToString(), message)).Wait();
         }
 
-        public IEnumerable<Models.Message> ListMessages()
+        public IEnumerable<Models.Message> ListLastMessages(int numberOfMessages)
         {
-            int startRowKey = RowKey - ReturnedMessageNumber;
+            int startRowKey = RowKey - numberOfMessages;
 
             List<Models.Message> messages = new List<Models.Message>();
 
@@ -57,6 +57,11 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             }
 
             return messages;
+        }
+
+        public IEnumerable<Models.Message> ListLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval)
+        {
+            throw new NotImplementedException();
         }
 
         public void Purge()
@@ -78,19 +83,19 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             try
             {
                 //BUG : the following method hangs forever, even though it created the table...
-                //if (await table.CreateIfNotExistsAsync())
-                //{
-                //    Console.WriteLine("Created Table named: {0}", TableName);
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Table {0} already exists", TableName);
-                //}
+                if (await table.CreateIfNotExistsAsync())
+                {
+                    Console.WriteLine("Created Table named: {0}", TableName);
+                }
+                else
+                {
+                    Console.WriteLine("Table {0} already exists", TableName);
+                }
             }
             catch (StorageException)
             {
-                //Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
-                //Console.ReadLine();
+                Console.WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
+                Console.ReadLine();
                 throw;
             }
 
@@ -106,13 +111,13 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             }
             catch (FormatException)
             {
-                //Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the application.");
+                Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the application.");
                 throw;
             }
             catch (ArgumentException)
             {
-                //Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
-                //Console.ReadLine();
+                Console.WriteLine("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                Console.ReadLine();
                 throw;
             }
 

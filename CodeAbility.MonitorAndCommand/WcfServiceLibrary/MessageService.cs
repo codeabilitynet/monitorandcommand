@@ -22,7 +22,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 using System.Text;
+using System.Xml; 
 
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Repository;
@@ -36,11 +38,24 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
     {
         IMessageRepository messageRepository = new SqlMessageRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString);
         //IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
-
+        
+        //[WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "StoreMessage")]
         public void StoreMessage(Message message)
         {
             messageRepository.Insert(message);
             return;
+        }
+
+        //[WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ListLastMessages")]
+        public IEnumerable<Message> ListLastMessages(int numberOfMessages)
+        {
+            return messageRepository.ListLastMessages(numberOfMessages);
+        }
+
+        //[WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ListLastDevicesMessages")]
+        public IEnumerable<Message> ListDeviceLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval)
+        {
+            return messageRepository.ListLastMessages(numberOfMessages, deviceName, objectName, parameterName, rowInterval);
         }
     }
 }

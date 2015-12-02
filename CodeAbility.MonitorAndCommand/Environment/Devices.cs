@@ -26,9 +26,23 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string WINDOWS_PHONE = "WindowsPhone";
 
+        public const string WINDOWS_CONSOLE = "WindowsConsole";
+
         public const string WPF_MONITOR = "WpfMonitor";
 
-        public const string DATA_GENERATOR = "DataGenerator"; 
+        public const string NETDUINO_PLUS = "NetduinoPlus";
+
+        public const string NETDUINO_3_WIFI = "Netduino3Wifi";
+
+        public const string RASPBERRY_B = "RaspberryB";
+
+        public const string RASPBERRY_2 = "Raspberry2";
+
+        //To be abandoned
+
+        public const string DATA_GENERATOR = "DataGenerator";
+
+        public const string PIBRELLA = "Pibrella";
 
         public const string NETDUINO_LEDs = "LEDs";
 
@@ -36,6 +50,7 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string NETDUINO_MCP4921 = "MCP4921";
 
-        public const string PIBRELLA = "Pibrella";
+        public const string HOME_AUTOMATION = "HomeAutomation";
+
     }
 }

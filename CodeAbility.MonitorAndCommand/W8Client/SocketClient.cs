@@ -58,11 +58,9 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
         private Queue<Message> messagesToSend = new Queue<Message>();
 
-        //protected Thread receivingThread;
-
         public SocketClient()
         {
-            //receivingThread = new Thread(Receiver);
+
         }
 
         public void Cancel()

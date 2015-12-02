@@ -55,11 +55,9 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 
         public string LocalEndPoint { get { return socket.LocalEndPoint.ToString(); } }
 
-        //protected Thread receivingThread;
-
         public SocketClient()
         {
-            //receivingThread = new Thread(Receiver);
+
         }
 
         public void Cancel()
@@ -85,9 +83,6 @@ namespace CodeAbility.MonitorAndCommand.WPClient
                 result = e.SocketError.ToString();
 
                 IsConnected = result == "Success";
-
-                //if (IsConnected)
-                //    receivingThread.Start(); 
 
                 Receive();
 

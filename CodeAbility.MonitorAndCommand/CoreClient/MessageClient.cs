@@ -42,7 +42,6 @@ namespace CodeAbility.MonitorAndCommand.Client
         #region Events
 
         public delegate void CommandReceivedEventHandler(object sender, MessageEventArgs e);
-
         public event CommandReceivedEventHandler CommandReceived;
 
         protected void OnCommandReceived(MessageEventArgs e)
@@ -52,7 +51,6 @@ namespace CodeAbility.MonitorAndCommand.Client
         }
 
         public delegate void DataReceivedEventHandler(object sender, MessageEventArgs e);
-
         public event DataReceivedEventHandler DataReceived;
 
         protected void OnDataReceived(MessageEventArgs e)
@@ -66,11 +64,8 @@ namespace CodeAbility.MonitorAndCommand.Client
         #region Properties
 
         public bool IsConnected { get { return socket != null && socket.Connected; } }
-
         string DeviceName { get; set; }
-
         string ServerIpAddress { get; set; }
-
         int PortNumber { get; set; }
 
         #endregion 
@@ -85,9 +80,8 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private Timer heartbeatTimer = null;
 
-        // ManualResetEvent instances signal completion.
+        //Events
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
-
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
         private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
@@ -141,7 +135,7 @@ namespace CodeAbility.MonitorAndCommand.Client
             {
                 Console.WriteLine(exception);
                 throw;
-            }
+            }            
         }
 
         public void Stop()

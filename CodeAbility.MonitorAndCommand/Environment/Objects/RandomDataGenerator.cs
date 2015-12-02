@@ -17,53 +17,22 @@
 
 
 using System;
-using System.Runtime.Serialization;
-using System.ServiceModel;
 
-namespace CodeAbility.MonitorAndCommand.Server
+namespace CodeAbility.MonitorAndCommand.Environment.Objects
 {
-    public class Address
+    public static class RandomDataGenerator
     {
-        public string Ip { get; set; }
+        //Object
+        public const string OBJECT_GENERATOR = "Generator";
 
-        public int Port { get; set; }
+        //Command
+        public const string COMMAND_TOGGLE_GENERATION = "ToggleGeneration";
 
-        public Address() { }
+        //Data 
+        public const string DATA_GENERATOR_DATA = "GeneratorData";
 
-        public Address (string ip, int port)
-        {
-            Ip = ip;
-            Port = port;
-        }
-
-        public Address(string endpointString)
-        {
-            string[] tokens = endpointString.Split(':');
-            Ip = tokens[0];
-            Port = Int32.Parse(tokens[1]);
-        }
-
-        public override string ToString()
-        {
-            return Ip + ":" + Port.ToString();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            // If parameter is null return false.
-            if (obj == null)
-                return false;
-
-            Address address = obj as Address;
-            if ((System.Object)address == null)
-                return false;
-
-            return (this.Ip.Equals(address.Ip) && this.Port.Equals(address.Port));
-        }
-
-        public override int GetHashCode()
-        {
-            return Port;
-        }
+        //Content
+        public const string CONTENT_GENERATION_STATUS_ON = "On";
+        public const string CONTENT_GENERATION_STATUS_OFF = "Off";
     }
 }
