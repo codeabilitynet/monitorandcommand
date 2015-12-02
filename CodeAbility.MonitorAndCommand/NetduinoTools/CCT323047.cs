@@ -4,42 +4,48 @@ using SecretLabs.NETMF.Hardware;
 
 namespace Netduino
 {
-    public class Metrology
+    //Adapted from R. Ganesh Metrology.cs posted on Netduino's forum : http://forums.netduino.com/index.php?/topic/1767-energy-meter/
+
+    public class CCT323047
     {
-        private AnalogInput _currentInput, _voltageInput;
-        public Metrology(AnalogInput currentInput, AnalogInput voltageInput)
+        public double RMSVoltage {get; set; }
+        public double RMSCurrent { get; set; }
+        public double RealPower { get; set; }
+        public double ApparentPower { get; set; }
+        public double PowerFactor { get; set; }  
+
+        private AnalogInput currentInput;
+        private AnalogInput voltageInput;
+
+        private double calibrationVoltage;
+        private double calibrationCurrent;
+        private double calibrationPhase;
+
+        public CCT323047(AnalogInput _currentInput, AnalogInput _voltageInput)
         {
-            _currentInput = currentInput;
-            _voltageInput = voltageInput;
+            currentInput = _currentInput;
+            voltageInput = _voltageInput;
         }
 
-        double VCAL, ICAL, PHASECAL;
-
-        public void Calibration(double _VCAL, double _ICAL, double _PHASECAL)
+        public void Calibrate(double _calibrationVoltage, double _calibrationCurrent, double _calibrationPhase)
         {
-           VCAL = _VCAL;
-           ICAL = _ICAL;
-           PHASECAL = _PHASECAL;
+            calibrationVoltage = _calibrationVoltage;
+            calibrationCurrent = _calibrationCurrent;
+            calibrationPhase = _calibrationPhase;
         }
 
-        private int AnalogRead(AnalogInput inputPin)
-        {
-            return inputPin.Read();
-        }
-
-        private int startV, sampleV, lastSampleV, sampleI, lastSampleI;
-        private double filteredV, lastFilteredV, filteredI, lastFilteredI, sqV, sumV, sqI, sumI;
-        private double phaseShiftedV;
-        private double sumP;
-        private double instP;
-        private bool lastVCross, checkVCross;
-        public double Vrms, Irms, realPower, apparentPower, powerFactor;
+        private int startVoltage, sampleVoltage, lastSampleVoltage, sampleCurrent, lastSampleCurrent;
+        private double filteredVoltage, lastFilteredVoltage, filteredCurrent, lastFilteredCurrent;
+        private double phaseShiftedVoltage;
+        private double squaredVoltage, squaredCurrent; 
+        private double voltageSum, currentSum, powerSum;
+        private double instantaneousPower;
+        private bool lastVoltageCross, checkVoltageCross;
         private long lwhtime, whtime;
         private double whInc;
 
         public void Measure(int wavelengths, int timeout)
         {
-
             int crossCount = 0;                             //Used to measure number of times threshold is crossed.
             int numberOfSamples = 0;                        //This is now incremented  
 
@@ -49,14 +55,14 @@ namespace Netduino
             bool st = false;                                  //an indicator to exit the while loop
             while (st == false && crossCount < 1000)                                   //the while loop...
             {
-                startV = AnalogRead(_voltageInput);                    //using the voltage waveform
-                if ((startV < 550) && (startV > 440)) st = true;  //check its within range
+                startVoltage = AnalogRead(voltageInput);                    //using the voltage waveform
+                if ((startVoltage < 550) && (startVoltage > 440)) st = true;  //check its within range
                 crossCount++;
             }
 
             if (crossCount >= 1000)
             {
-                Debug.Print("ERROR:Could not detect zero signal level. Last value=" + startV.ToString());
+                Debug.Print("ERROR:Could not detect zero signal level. Last value=" + startVoltage.ToString());
                 return;
             }
 
@@ -68,94 +74,80 @@ namespace Netduino
 
             while ((crossCount < wavelengths) && ((DateTime.Now.Millisecond - start) < timeout))
             {
-                numberOfSamples++;                            //Count number of times looped.
+                numberOfSamples++; //Count number of times looped.
 
-                lastSampleV = sampleV;                          //Used for digital high pass filter
-                lastSampleI = sampleI;                          //Used for digital high pass filter
+                lastSampleVoltage = sampleVoltage; //Used for digital high pass filter
+                lastSampleCurrent = sampleCurrent; //Used for digital high pass filter
 
-                lastFilteredV = filteredV;                    //Used for offset removal
-                lastFilteredI = filteredI;                    //Used for offset removal   
+                lastFilteredVoltage = filteredVoltage; //Used for offset removal
+                lastFilteredCurrent = filteredCurrent; //Used for offset removal   
 
-                //-----------------------------------------------------------------------------
                 // A) Read in raw voltage and current samples
-                //-----------------------------------------------------------------------------
-                sampleV = AnalogRead(_voltageInput);                 //Read in raw voltage signal
-                sampleI = AnalogRead(_currentInput);                 //Read in raw current signal
+                sampleVoltage = AnalogRead(voltageInput); //Read in raw voltage signal
+                sampleCurrent = AnalogRead(currentInput); //Read in raw current signal
 
-                //-----------------------------------------------------------------------------
                 // B) Apply digital high pass filters to remove 2.5V DC offset (centered on 0V).
-                //-----------------------------------------------------------------------------
-                filteredV = 0.996 * (lastFilteredV + sampleV - lastSampleV);
-                filteredI = 0.996 * (lastFilteredI + sampleI - lastSampleI);
+                filteredVoltage = 0.996 * (lastFilteredVoltage + sampleVoltage - lastSampleVoltage);
+                filteredCurrent = 0.996 * (lastFilteredCurrent + sampleCurrent - lastSampleCurrent);
 
-                //-----------------------------------------------------------------------------
                 // C) Root-mean-square method voltage
-                //-----------------------------------------------------------------------------  
-                sqV = filteredV * filteredV;                 //1) square voltage values
-                sumV += sqV;                                //2) sum
+                squaredVoltage = filteredVoltage * filteredVoltage; //1) square voltage values
+                voltageSum += squaredVoltage; //2) sum
 
-                //-----------------------------------------------------------------------------
                 // D) Root-mean-square method current
-                //-----------------------------------------------------------------------------   
-                sqI = filteredI * filteredI;                //1) square current values
-                sumI += sqI;                                //2) sum 
+                squaredCurrent = filteredCurrent * filteredCurrent; //1) square current values
+                currentSum += squaredCurrent; //2) sum 
 
-                //-----------------------------------------------------------------------------
                 // E) Phase calibration
-                //-----------------------------------------------------------------------------
-                phaseShiftedV = lastFilteredV + PHASECAL * (filteredV - lastFilteredV);
+                phaseShiftedVoltage = lastFilteredVoltage + calibrationPhase * (filteredVoltage - lastFilteredVoltage);
 
-                //-----------------------------------------------------------------------------
                 // F) Instantaneous power calc
-                //-----------------------------------------------------------------------------   
-                instP = phaseShiftedV * filteredI;          //Instantaneous Power
-                sumP += instP;                               //Sum  
+                instantaneousPower = phaseShiftedVoltage * filteredCurrent; //Instantaneous Power
+                powerSum += instantaneousPower; //Sum  
 
-                //-----------------------------------------------------------------------------
                 // G) Find the number of times the voltage has crossed the initial voltage
                 //    - every 2 crosses we will have sampled 1 wavelength 
                 //    - so this method allows us to sample an integer number of wavelengths which increases accuracy
-                //-----------------------------------------------------------------------------       
-                lastVCross = checkVCross;
-                if (sampleV > startV) checkVCross = true;
-                else checkVCross = false;
-                if (numberOfSamples == 1) lastVCross = checkVCross;
+                lastVoltageCross = checkVoltageCross;
+                if (sampleVoltage > startVoltage) checkVoltageCross = true;
+                else checkVoltageCross = false;
+                if (numberOfSamples == 1) lastVoltageCross = checkVoltageCross;
 
-                if (lastVCross != checkVCross) crossCount++;
+                if (lastVoltageCross != checkVoltageCross) crossCount++;
             }
 
-
-            //-------------------------------------------------------------------------------------------------------------------------
             // 3) Post loop calculations
-            //------------------------------------------------------------------------------------------------------------------------- 
             //Calculation of the root of the mean of the voltage and current squared (rms)
             //Calibration coeficients applied. 
-            Vrms = VCAL * sqrt(sumV / numberOfSamples);
-            Irms = ICAL * sqrt(sumI / numberOfSamples);
+            RMSVoltage = calibrationVoltage * SquaredRoot(voltageSum / numberOfSamples);
+            RMSCurrent = calibrationCurrent * SquaredRoot(currentSum / numberOfSamples);
 
             //Calculation power values
-            realPower = VCAL * ICAL * sumP / numberOfSamples;
-            apparentPower = Vrms * Irms;
-            powerFactor = realPower / apparentPower;
+            RealPower = calibrationVoltage * calibrationCurrent * powerSum / numberOfSamples;
+            ApparentPower = RMSVoltage * RMSCurrent;
+            PowerFactor = RealPower / ApparentPower;
 
-            //--------------------------------------------------
             // kwh increment calculation
             // 1) find out how much time there has been since the last measurement of power
-            //--------------------------------------------------
             lwhtime = whtime;
             whtime = DateTime.Now.Ticks;
-            whInc = realPower * ((whtime - lwhtime) / 3600000.0);
+            whInc = RealPower * ((whtime - lwhtime) / 3600000.0);
 
             //Reset accumulators
-            sumV = 0;
-            sumI = 0;
-            sumP = 0;
+            voltageSum = 0;
+            currentSum = 0;
+            powerSum = 0;
             //--------------------------------------------------------------------------------------
 
-            Debug.Print("Vrms = " + Vrms.ToString() + " Irms = " + Irms.ToString() + " Pact = " + apparentPower.ToString() + " Pfct = " + powerFactor.ToString() + " Wh = " + whInc.ToString());
+            Debug.Print("rmsVoltage = " + RMSVoltage.ToString() + " rmsCurrent = " + RMSCurrent.ToString() + " apparentPower = " + ApparentPower.ToString() + " PowerFactor = " + PowerFactor.ToString() + " Wh = " + whInc.ToString());
         }
 
-        private double sqrt(double p)
+        private int AnalogRead(AnalogInput inputPin)
+        {
+            return inputPin.Read();
+        }
+
+        private double SquaredRoot(double p)
         {
             return System.Math.Pow(p, 0.5);
         }

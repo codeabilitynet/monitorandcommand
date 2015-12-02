@@ -54,21 +54,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DS18B20\Netduino.DS18B20.csproj">
-      <Project>{1404629A-CA55-46F6-B48C-2A1A3DA354F3}</Project>
-      <Name>Netduino.DS18B20</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LEDs\Netduino.LEDs.csproj">
-      <Project>{E329BD83-D409-468E-92D7-2C676B390D75}</Project>
-      <Name>Netduino.LEDs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MCP4921\Netduino.MCP4921.csproj">
-      <Project>{2417FBD4-4A97-4042-BA3C-D4551CD69E3B}</Project>
-      <Name>Netduino.MCP4921</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MF43Client\Core.MF43Client.csproj">
       <Project>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</Project>
       <Name>Core.MF43Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetduinoProcesses\Netduino.Processes.csproj">
+      <Project>{C879892C-64C2-468E-923C-96C017E151D6}</Project>
+      <Name>Netduino.Processes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetduinoTools\Netduino.Tools.csproj">
+      <Project>{CFC17A9B-49BB-43C8-BEB0-3D868C1FA25F}</Project>
+      <Name>Netduino.Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

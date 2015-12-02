@@ -7,7 +7,7 @@ using Microsoft.SPOT.Hardware;
 using SecretLabs.NETMF.Hardware;
 using SecretLabs.NETMF.Hardware.Netduino;
 
-using CodeAbility.MonitorAndCommand.MFClient;
+//using CodeAbility.MonitorAndCommand.MFClient;
 
 namespace CodeAbility.MonitorAndCommand.Netduino.DS18B20
 {
@@ -63,7 +63,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino.DS18B20
             }
             catch(Exception exception)
             {
-                Logger.Instance.Write(exception.ToString());
+                //Logger.Instance.Write(exception.ToString());
                 return 0f;    
             }
         }

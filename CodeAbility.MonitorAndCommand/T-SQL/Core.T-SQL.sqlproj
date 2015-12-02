@@ -70,8 +70,13 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\TB_Message.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Message_Purge.sql" />
+    <Build Include="dbo\Tables\TB_Event.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Event_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Event_List.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Event_Purge.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Message_FilteredList.sql" />
     <Build Include="dbo\Stored Procedures\SP_Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\SP_Message_List.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Message_Purge.sql" />
   </ItemGroup>
 </Project>

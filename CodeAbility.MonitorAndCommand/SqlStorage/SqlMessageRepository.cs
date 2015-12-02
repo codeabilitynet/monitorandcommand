@@ -76,12 +76,11 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
             }
         }
 
-
-        public IEnumerable<Message> ListMessages()
+        public IEnumerable<Message> ListLastMessages(int numberOfMessages)
         {
             const string CommandName = "SP_Message_List";
 
-            List<Message> lastMessages = new List<Message>();
+            List<Message> messages = new List<Message>();
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -91,6 +90,7 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                 {
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("intNumberOfMessages", numberOfMessages);
                     command.CommandText = CommandName;
 
                     try
@@ -98,20 +98,8 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                         SqlDataReader reader = command.ExecuteReader();
                         while (reader.Read())
                         {
-                            Message message = new Message()
-                            {
-                                SendingDevice = (string)reader["SendingDevice"],
-                                ReceivingDevice = (string)reader["ReceivingDevice"],
-                                FromDevice = (string)reader["FromDevice"],
-                                ToDevice = (string)reader["ToDevice"],
-                                ContentType = (ContentTypes)Enum.Parse(typeof(ContentTypes), reader["ContentType"].ToString()),
-                                Name = (string)reader["Name"],
-                                Parameter = (string)reader["Parameter"],
-                                Content = (string)reader["Content"],
-                                Timestamp = (DateTime)reader["Timestamp"]
-                            };
-
-                            lastMessages.Add(message);
+                            Message message = InstanciateMessage(reader);
+                            messages.Add(message);
                         }
                     }
                     catch (Exception)
@@ -124,7 +112,50 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                     connection.Close();
             }
 
-            return lastMessages;
+            return messages;
+        }
+
+        public IEnumerable<Message> ListLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval)
+        {
+            const string CommandName = "SP_Message_FilteredList";
+
+            List<Message> messages = new List<Message>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("intNumberOfMessages", numberOfMessages);
+                    command.Parameters.AddWithValue("strDeviceName", deviceName);
+                    command.Parameters.AddWithValue("strObjectName", objectName);
+                    command.Parameters.AddWithValue("strParameterName", parameterName);
+                    command.Parameters.AddWithValue("intRowInterval", rowInterval);
+                    command.CommandText = CommandName;
+
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Message message = InstanciateMessage(reader);
+                            messages.Add(message);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return messages;
         }
 
         public void Purge()
@@ -154,6 +185,24 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                 if (connection.State == ConnectionState.Open)
                     connection.Close();
             }
+        }
+
+        private Message InstanciateMessage(SqlDataReader reader)
+        {
+            Message message = new Message()
+            {
+                SendingDevice = (string)reader["SendingDevice"],
+                ReceivingDevice = (string)reader["ReceivingDevice"],
+                FromDevice = (string)reader["FromDevice"],
+                ToDevice = (string)reader["ToDevice"],
+                ContentType = (ContentTypes)Enum.Parse(typeof(ContentTypes), reader["ContentType"].ToString()),
+                Name = (string)reader["Name"],
+                Parameter = (string)reader["Parameter"],
+                Content = (string)reader["Content"],
+                Timestamp = (DateTime)reader["Timestamp"]
+            };
+
+            return message;
         }
     }
 }
