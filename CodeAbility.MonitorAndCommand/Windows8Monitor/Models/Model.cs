@@ -11,7 +11,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
     public class Model
     {
         const int NUMBER_OF_MESSAGES = 100;
-        const int ROW_INTERVAL = 60;
+        const int ROW_INTERVAL = 10;
 
         MessageServiceReference.MessageServiceClient client;
 

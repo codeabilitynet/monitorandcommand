@@ -10,6 +10,9 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 
 using CodeAbility.MonitorAndCommand.Windows8Monitor.Models;
+using CodeAbility.MonitorAndCommand.W8Client;
+using CodeAbility.MonitorAndCommand.Environment;
+using System.Collections.ObjectModel;
 
 namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
@@ -86,7 +89,17 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             }
         }
 
+        string receivedData;
+        public string ReceivedData
+        {
+            get { return receivedData; }
+            set
+            {
+                receivedData = value;
 
+                OnPropertyChanged("ReceivedData");
+            }
+        }
 
         Model model;
 
@@ -98,7 +111,21 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
         MainPage mainPage;
 
-        DispatcherTimer dispatcherTimer; 
+        DispatcherTimer dispatcherTimer;
+
+        const string DEFAULT_IP_ADDRESS = "192.168.178.26"; 
+
+        public string IpAddress { get; set; }
+        //{
+        //    get { return ApplicationSettings.IpAddress; }
+        //    set { ApplicationSettings.IpAddress = value; }
+        //}
+
+        public int PortNumber { get; set; }
+        //{
+        //    get { return ApplicationSettings.PortNumber.Value; }
+        //    set { ApplicationSettings.PortNumber = value; }
+        //}
 
         public MainPageViewModel(MainPage page)
         {
@@ -110,7 +137,35 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             dispatcherTimer.Tick += dispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, LOAD_DATA_PERIOD_IN_SECONDS);
 
-            dispatcherTimer.Start(); 
+            dispatcherTimer.Start();
+
+            IpAddress = DEFAULT_IP_ADDRESS;
+            PortNumber = 11000;
+        }
+
+        public async void Start()
+        {        
+            MessageClient messageClient = App.Current.Resources["MessageClient"] as MessageClient;
+
+            messageClient.DataReceived += messageClient_DataReceived;
+
+            if (await messageClient.Start(IpAddress, PortNumber))
+            {
+                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+
+                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            }
+        }
+
+        void messageClient_DataReceived(object sender, MonitorAndCommand.Models.MessageEventArgs e)
+        {
+            ReceivedData = e.Parameter.ToString(); 
         }
 
         void dispatcherTimer_Tick(object sender, object e)

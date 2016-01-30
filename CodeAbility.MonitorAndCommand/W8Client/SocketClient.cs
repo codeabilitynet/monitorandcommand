@@ -48,6 +48,11 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
         StreamSocket socket = null;
 
+        DataWriter writer = null;
+        DataReader reader = null;
+
+        byte[] payload = new Byte[Constants.BUFFER_SIZE];
+
         static ManualResetEvent clientDone = new ManualResetEvent(false);
 
         // Define a timeout in milliseconds for each asynchronous call. If a response is not received within this 
@@ -69,35 +74,39 @@ namespace CodeAbility.MonitorAndCommand.W8Client
             socket = null;
         }
 
-        public async Task<string> Connect(string hostName, int portNumber)
+        public async Task Connect(string hostName, int portNumber)
         {
-            string result = string.Empty;
-
             socket = new StreamSocket();
 
             clientDone.Reset();
 
             await socket.ConnectAsync(new HostName(hostName), portNumber.ToString());
 
-            clientDone.WaitOne(TIMEOUT_MILLISECONDS);
+            writer = new DataWriter(socket.OutputStream);
+            reader = new DataReader(socket.InputStream);
 
-            return result;
+            IsConnected = true;
+
+            Receive();
+
+            clientDone.WaitOne(TIMEOUT_MILLISECONDS);
         }
 
-        public string Send(string data)
+        public async Task Send(string data)
         {
             string response = "Operation Timeout";
 
             if (socket != null)
             {
-                DataWriter writer = new DataWriter(socket.OutputStream);
-
                 string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Constants.BUFFER_SIZE);
                 byte[] payload = Encoding.UTF8.GetBytes(paddedData);
 
-                writer.WriteBytes(payload);
-
                 clientDone.Reset();
+
+                writer.WriteBytes(payload);
+                await writer.StoreAsync();
+
+                clientDone.Set();
 
                 clientDone.WaitOne(TIMEOUT_MILLISECONDS);
             }
@@ -106,20 +115,21 @@ namespace CodeAbility.MonitorAndCommand.W8Client
                 response = "Socket is not initialized";
             }
 
-            return response;
+            //return response;
         }
 
-        public void Receive()
+        public async void Receive()
         {
             while (IsConnected)
             {
                 if (socket != null)
                 {
-                    DataReader reader = new DataReader(socket.InputStream);
+                    clientDone.Reset();
 
-                    byte[] payload = new Byte[Constants.BUFFER_SIZE];
-
+                    await reader.LoadAsync(Constants.BUFFER_SIZE);
                     reader.ReadBytes(payload);
+
+                    clientDone.Set();
 
                     string receivedData = Encoding.UTF8.GetString(payload, 0, Constants.BUFFER_SIZE);
                     OnDataStringReceived(new DataStringEventArgs(receivedData));

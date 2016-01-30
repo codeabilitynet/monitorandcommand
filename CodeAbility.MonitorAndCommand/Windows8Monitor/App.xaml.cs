@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.ApplicationInsights;
+using CodeAbility.MonitorAndCommand.W8Client;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -86,6 +87,10 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
                 // parameter
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+
+            MessageClient messageClient = new MessageClient(Environment.Devices.WINDOWS_SURFACE);
+            App.Current.Resources.Add("MessageClient", messageClient);
+
             // Ensure the current window is active
             Window.Current.Activate();
         }

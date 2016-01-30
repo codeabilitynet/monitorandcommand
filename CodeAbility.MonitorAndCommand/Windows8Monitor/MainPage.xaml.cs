@@ -49,7 +49,8 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.LoadData(); 
+            ViewModel.LoadData();
+            ViewModel.Start();
         }
 
         public void SetChartsAxes()
