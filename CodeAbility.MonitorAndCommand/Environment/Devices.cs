@@ -26,6 +26,8 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string WINDOWS_PHONE = "WindowsPhone";
 
+        public const string WINDOWS_SURFACE = "WindowsSurface";
+
         public const string WINDOWS_CONSOLE = "WindowsConsole";
 
         public const string WPF_MONITOR = "WpfMonitor";

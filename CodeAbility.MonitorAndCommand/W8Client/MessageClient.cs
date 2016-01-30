@@ -168,10 +168,10 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
         #endregion 
 
-        protected void Send(Message message)
+        protected async void Send(Message message)
         {
             string serializedData = JsonConvert.SerializeObject(message);
-            client.Send(serializedData);
+            await client.Send(serializedData);
         }
 
     }

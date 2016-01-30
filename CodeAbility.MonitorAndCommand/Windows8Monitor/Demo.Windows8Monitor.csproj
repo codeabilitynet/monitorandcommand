@@ -202,9 +202,17 @@
     <WCFMetadataStorage Include="Service References\MessageServiceReference\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Environment\Demo.Environment.csproj">
+      <Project>{9a68efd0-24a4-4df3-86de-ee35f9e2f778}</Project>
+      <Name>Demo.Environment</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PortableModels\Core.PortableModels.csproj">
       <Project>{4537023c-8102-4a8d-9de6-a5636936e6b1}</Project>
       <Name>Core.PortableModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\W8Client\Core.W8Client.csproj">
+      <Project>{38a91eb5-063f-4175-b548-bec972a14cc1}</Project>
+      <Name>Core.W8Client</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
