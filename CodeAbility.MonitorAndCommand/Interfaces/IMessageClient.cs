@@ -16,6 +16,8 @@ namespace CodeAbility.MonitorAndCommand.Interfaces
 
         void SubscribeToCommand(string fromDevice, string commandName, string commandTarget);
 
+        void SubscribeToServerState(string stateName);
+
         void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue);
 
         void SendData(string toDevice, string dataSource, string dataName, object dataValue);

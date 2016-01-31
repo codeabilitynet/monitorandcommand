@@ -41,7 +41,7 @@
         <TextBlock Grid.Row="0" Grid.Column="1" 
                    VerticalAlignment="Center" HorizontalAlignment="Center"
                    FontSize="36"
-                   Text="{Binding ReceivedData}"></TextBlock>
+                   Text="{Binding FirstTemperatureData}"></TextBlock>
 
         <charting:Chart Grid.Row="1" Grid.Column="0" 
                         x:Name="HumidityChart" 

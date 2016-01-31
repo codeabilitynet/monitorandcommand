@@ -126,8 +126,15 @@ namespace CodeAbility.MonitorAndCommand.W8Client
                 {
                     clientDone.Reset();
 
-                    await reader.LoadAsync(Constants.BUFFER_SIZE);
-                    reader.ReadBytes(payload);
+                    try
+                    { 
+                        await reader.LoadAsync(Constants.BUFFER_SIZE);
+                        reader.ReadBytes(payload);
+                    }
+                    catch(Exception exception)
+                    {
+                        //TODO : implement log
+                    }
 
                     clientDone.Set();
 

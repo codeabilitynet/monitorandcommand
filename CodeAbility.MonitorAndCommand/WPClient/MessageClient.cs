@@ -148,6 +148,12 @@ namespace CodeAbility.MonitorAndCommand.WPClient
             Send(message);
         }
 
+        public void SubscribeToServerState(string stateName)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);
+            Send(message);
+        }
+
         public void Unsubscribe(string fromDevice, string element, string publicationName)
         {
             Message message = Message.InstanciateUnsubscribeMessage(DeviceName, fromDevice, DeviceName, element, publicationName);

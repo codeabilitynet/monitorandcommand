@@ -411,7 +411,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         break;
                     case ContentTypes.DATA:
                     case ContentTypes.COMMAND:
-                        SendToAuthorizedDevices(message);
+                        SendToRegisteredDevices(message);
                         break;
                     case ContentTypes.HEARTBEAT:
                         HandleHeartbeatMessage(message);
@@ -436,6 +436,19 @@ namespace CodeAbility.MonitorAndCommand.Server
         protected virtual void PostProcess(Message message)
         {
 
+        }
+
+        protected void PublishServerState(string stateName)
+        {
+            Message fakeMessage = Message.InstanciatePublishMessage(Message.SERVER, Message.ALL, Message.SERVER, stateName);
+
+            Publish(fakeMessage);
+        }
+
+        protected Message InstantiateServerStateDataMessage(string stateName, object content)
+        {
+            Message message = Message.InstanciateDataMessage(Message.SERVER, Message.ALL, Message.SERVER, stateName, content);
+            return message;
         }
 
         #region Server actions
@@ -469,7 +482,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
         }
 
-        protected void Register(Address origin, string deviceName)
+        private void Register(Address origin, string deviceName)
         {
             devicesManager.AddDevice(deviceName, origin);
 
@@ -480,7 +493,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Registered)); 
         }
 
-        protected void Unregister(string deviceName)
+        private void Unregister(string deviceName)
         {
             rulesManager.RemoveAllRules(deviceName);
             devicesManager.RemoveDevice(deviceName);
@@ -492,22 +505,22 @@ namespace CodeAbility.MonitorAndCommand.Server
             OnRegistrationChanged(new RegistrationEventArgs(deviceName, RegistrationEventArgs.RegistrationEvents.Unregistered)); 
         }
 
-        protected void Publish(Message message)
+        private void Publish(Message message)
         {
             rulesManager.AddRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
         }
 
-        protected void Unpublish(Message message)
+        private void Unpublish(Message message)
         {
             rulesManager.RemoveRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
         }
 
-        protected void Subscribe(Message message) 
+        private void Subscribe(Message message) 
         {
             rulesManager.AddRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
         }
 
-        protected void Unsubscribe(Message message)
+        private void Unsubscribe(Message message)
         {
             rulesManager.RemoveRule(message.SendingDevice, message.FromDevice, message.ToDevice, message.Parameter.ToString(), message.Content.ToString());
         }
@@ -518,7 +531,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         #region Sending messages
 
-        private void SendToAuthorizedDevices(Message message)
+        protected void SendToRegisteredDevices(Message message)
         {
             IEnumerable<string> authorizedDeviceNames = rulesManager.GetAuthorizedDeviceNames(message.ContentType, message.FromDevice, message.ToDevice, message.Name, message.Parameter.ToString());
             foreach (string deviceName in authorizedDeviceNames)
@@ -531,7 +544,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             sendEvent.Set();
         }
 
-        private void SendToAllDevices(Message message)
+        protected void SendToAllDevices(Message message)
         {
             IEnumerable<string> deviceNames = devicesManager.GetAllDeviceNames();
             foreach (string deviceName in deviceNames)
@@ -544,7 +557,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             sendEvent.Set();
         }
 
-        private void SendDirectlyToDevice(string deviceName, Message message)
+        protected void SendDirectlyToDevice(string deviceName, Message message)
         {
             Message sendToMessage = new Message(message);
             sendToMessage.ReceivingDevice = deviceName;
@@ -636,7 +649,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             heartbeatEvent.Set();
         }
 
-        protected void HandleHeartbeatMessage(Message heartbeatMessage)
+        private void HandleHeartbeatMessage(Message heartbeatMessage)
         {
             if (!heartbeatMessage.FromDevice.Equals(Message.SERVER))
             {
