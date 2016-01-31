@@ -106,6 +106,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspberryPi.Processes", "Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.RaspberryPi", "RaspberryPi\Demo.RaspberryPi.csproj", "{610B5CFC-91DE-47C4-8C79-073F097FBACE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.StateMachineServerConsole", "StateMachineServerConsole\Demo.StateMachineServerConsole.csproj", "{23017AF9-5553-4D4B-8EBE-79897C22D229}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 20
@@ -737,6 +739,20 @@ Global
 		{610B5CFC-91DE-47C4-8C79-073F097FBACE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{610B5CFC-91DE-47C4-8C79-073F097FBACE}.Release|x64.ActiveCfg = Release|Any CPU
 		{610B5CFC-91DE-47C4-8C79-073F097FBACE}.Release|x86.ActiveCfg = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|ARM.ActiveCfg = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|x64.ActiveCfg = Release|Any CPU
+		{23017AF9-5553-4D4B-8EBE-79897C22D229}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

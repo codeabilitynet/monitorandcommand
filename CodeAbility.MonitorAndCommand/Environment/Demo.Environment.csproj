@@ -57,6 +57,7 @@
     <Compile Include="Objects\MCP4921.cs" />
     <Compile Include="Pibrella.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerStates.cs" />
     <Compile Include="WindowsPhone.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

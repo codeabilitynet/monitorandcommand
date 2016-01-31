@@ -58,6 +58,7 @@
     <Compile Include="..\Environment\Objects\PibrellaBoard.cs">
       <Link>PibrellaBoard.cs</Link>
     </Compile>
+    <Compile Include="PibrellaBoardLEDsMonitor.cs" />
     <Compile Include="PibrellaBoardLEDsBlinkingProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

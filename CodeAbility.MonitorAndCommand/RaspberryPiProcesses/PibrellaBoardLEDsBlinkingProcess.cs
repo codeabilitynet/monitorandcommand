@@ -160,6 +160,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 		{
 			pibrella.Connection.Toggle (pibrella.LedPinGreen);
             greenLedStatus = !greenLedStatus;
+
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED,
                                     Environment.Objects.PibrellaBoard.DATA_LED_STATUS,
@@ -173,6 +174,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 		{
             pibrella.Connection.Toggle (pibrella.LedPinYellow);
             yellowLedStatus = !yellowLedStatus;
+
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED,
                                     Environment.Objects.PibrellaBoard.DATA_LED_STATUS,
@@ -186,6 +188,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 		{
             pibrella.Connection.Toggle (pibrella.LedPinRed);            
             redLedStatus = !redLedStatus;
+
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_RED_LED,
                                     Environment.Objects.PibrellaBoard.DATA_LED_STATUS,

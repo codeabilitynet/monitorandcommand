@@ -176,6 +176,13 @@ namespace CodeAbility.MonitorAndCommand.Client
             EnqueueMessage(message);
         }
 
+        public void SubscribeToServerState(string stateName)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);
+            EnqueueMessage(message);
+        }
+
+
         public void SubscribeToTraffic(string fromDevice, string toDevice)
         {
             Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, toDevice);

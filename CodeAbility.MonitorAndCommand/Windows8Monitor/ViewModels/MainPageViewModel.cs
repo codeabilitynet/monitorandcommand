@@ -156,6 +156,12 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
+                //messageClient.SubscribeToServerState(ServerStates.STATE_NETDUINO_ISCONNECTED);
+                //messageClient.SubscribeToServerState(ServerStates.STATE_RASPBERRYPIB_ISCONNECTED);
+                //messageClient.SubscribeToServerState(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED);
+                //messageClient.SubscribeToServerState(ServerStates.STATE_SURFACE_ISCONNECTED);
+                //messageClient.SubscribeToServerState(ServerStates.STATE_VOLTAGE_CONTROL);
+
                 messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
                 messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
                 messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);

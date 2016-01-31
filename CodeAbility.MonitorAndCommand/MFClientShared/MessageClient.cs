@@ -38,8 +38,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         const int HEARTBEAT_START_DELAY = 5000;
         const int HEARTBEAT_PERIOD = 60000;
 
-        const string SERVER = "Server";
-
         #region Event
 
         // A delegate type for hooking up change notifications.
@@ -219,6 +217,12 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             EnqueueMessage(message);
         }
 
+        public void SubscribeToServerState(string stateName)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);
+            EnqueueMessage(message);
+        }
+
         public void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue)
         {
             Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandName, commandTarget, commandValue);
@@ -391,7 +395,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         private void HandleHeartbeatMessage(Message heartbeatMessage)
         {
-            if (heartbeatMessage.FromDevice.Equals(SERVER))
+            if (heartbeatMessage.FromDevice.Equals(Message.SERVER))
             {
                 //If the heartbeat is initiated by the server, we return it
                 EnqueueMessage(heartbeatMessage);
