@@ -6,96 +6,95 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting" 
-    
+    xmlns:converters="using:CodeAbility.MonitorAndCommand.Windows8Monitor.Converters"
+    xmlns:usercontrols="using:CodeAbility.MonitorAndCommand.Windows8Monitor.UserControls"
     mc:Ignorable="d">
 
     <!-- http://eren.ws/2013/10/15/using-graphs-and-charts-in-windows-store-apps-boredom-challenge-day-11/ -->
 
+    <Page.Resources>
+        <converters:ConnectedToStringConverter x:Key="ConnectedToString"/>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrush"/>
+        <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"/>
+        <converters:VoltageToOpacityConverter x:Key="VoltageToOpacity"/>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <charting:Chart Grid.Row="0" Grid.Column="0" 
-                        x:Name="TemperatureChart" 
+                        x:Name="VoltageChart" 
                         HorizontalAlignment="Stretch" 
-                        Margin="20, 5"
-                        Width="Auto" Height="Auto">
-            <charting:Chart.Axes>
-                <charting:DateTimeAxis Orientation="X" ShowGridLines="false"/>
-                <charting:LinearAxis x:Name="TemperatureAxis" Orientation="Y" ShowGridLines="false"/>
-            </charting:Chart.Axes>            
-            <charting:LineSeries Margin="0" 
-                                 Title="Temperature"
-                                 ItemsSource="{Binding TemperatureSerie}" 
-                                 IndependentValuePath="Timestamp" 
-                                 DependentValuePath="Value"/>            
-        </charting:Chart>
-
-        <TextBlock Grid.Row="0" Grid.Column="1" 
-                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                   FontSize="36"
-                   Text="{Binding FirstTemperatureData}"></TextBlock>
-
-        <charting:Chart Grid.Row="1" Grid.Column="0" 
-                        x:Name="HumidityChart" 
-                        HorizontalAlignment="Stretch" 
-                        Margin="20, 5"
-                        Width="Auto" Height="Auto">
-            <charting:Chart.Axes>
-                <charting:DateTimeAxis Orientation="X" ShowGridLines="false"/>
-                <charting:LinearAxis x:Name="HumidityAxis" Orientation="Y" ShowGridLines="false"/>
-            </charting:Chart.Axes>
-            <charting:LineSeries  Margin="0" 
-                                 Title="Humidity"                                 
-                                 ItemsSource="{Binding HumiditySerie}" 
-                                 IndependentValuePath="Timestamp" 
-                                 DependentValuePath="Value" />             
-        </charting:Chart>
-
-        <TextBlock Grid.Row="1" Grid.Column="1"
-                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                   Text="{Binding FirstHumidityData}" FontSize="36"></TextBlock>
-
-        <charting:Chart Grid.Row="2" Grid.Column="0" 
-                        x:Name="PhotoVoltageChart" 
-                        HorizontalAlignment="Stretch" 
-                        Margin="20, 5"
+                        Margin="10"
                         Width="Auto" Height="Auto">
             <charting:Chart.Axes>
                 <charting:DateTimeAxis Orientation="X" ShowGridLines="false"/>
                 <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="false"/>
-            </charting:Chart.Axes>
-            <charting:LineSeries Margin="0"      
+            </charting:Chart.Axes>            
+            <charting:LineSeries Margin="0" 
                                  Title="Voltage"
                                  ItemsSource="{Binding VoltageSerie}" 
                                  IndependentValuePath="Timestamp" 
-                                 DependentValuePath="Value">                
-                <!--<charting:LineSeries.DataPointStyle>
-                    <Style TargetType="charting:LineDataPoint">
-                        <Setter Property="Width" Value="17" />
-                        <Setter Property="Height" Value="17" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="charting:LineDataPoint">
-                                    <Ellipse Fill="Green" Stroke="Green" StrokeThickness="1" />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </charting:LineSeries.DataPointStyle>-->
-            </charting:LineSeries>
+                                 DependentValuePath="Value"/>            
         </charting:Chart>
 
-        <TextBlock Grid.Row="2" Grid.Column="1"
-                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                   Text="{Binding FirstVoltageData}" FontSize="36"></TextBlock>
+        <Grid Grid.Row="0" Grid.Column="1" Margin="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Ellipse Grid.Column="0" Fill="Red" 
+                     Height="120" Width="120" 
+                     Stroke="White" StrokeThickness="3"
+                     Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding Voltage}" FontSize="42"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="10" HorizontalAlignment="Stretch">
+            <ListView Grid.Row="1" ItemsSource="{Binding DeviceModels}" Background="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <usercontrols:DeviceDataUserControl />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Ellipse Grid.Column="0" Fill="Red" 
+                    Height="100" Width="100" 
+                    Stroke="White" StrokeThickness="3"
+                    Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Ellipse Grid.Column="1" Fill="Yellow" 
+                    Height="100" Width="100" 
+                    Stroke="White" StrokeThickness="3"
+                    Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Ellipse Grid.Column="2" Fill="Green" 
+                    Height="100" Width="100" 
+                    Stroke="White" StrokeThickness="3"
+                    Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        </Grid>
 
     </Grid>
 </Page>

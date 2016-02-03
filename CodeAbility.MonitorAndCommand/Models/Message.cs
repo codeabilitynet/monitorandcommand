@@ -89,6 +89,8 @@ namespace CodeAbility.MonitorAndCommand.Models
         public const string HEARTBEAT = "HEARTBEAT";
         public const string ALL = "*";
 
+        public const int BUFFER_SIZE = 256;
+
         #region Static Helpers
 
         public static Message InstanciateRegisterMessage(string sendingDevice)

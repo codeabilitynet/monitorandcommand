@@ -111,8 +111,6 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Console.WriteLine(String.Format("Device {0} connecting to server {1}.", DeviceName, remoteEP.ToString()));
 
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, Constants.BUFFER_SIZE * 8);
-                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, Constants.BUFFER_SIZE * 8);
 
                 // Connect to the remote endpoint.
                 socket.Connect(remoteEP);
@@ -267,7 +265,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Trace.WriteLine(String.Format("JSON        : {0}", serializedMessage));
 #endif
 
-                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Message.BUFFER_SIZE);
 
 #if DEBUG
                 Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
@@ -275,7 +273,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
                 byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-                socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
+                socket.Send(byteData, 0, Message.BUFFER_SIZE, 0);
 
                 Trace.WriteLine(String.Format("Sent        : {0}", message));
             }
@@ -289,21 +287,21 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             Trace.WriteLine("Starting Receiver() thread.");
 
-            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            byte[] buffer = new byte[Message.BUFFER_SIZE];
             int offset = 0;
 
             while (socket.Connected)
             {
                 try
                 {
-                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
-                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
+                    int missingBytesLength = Message.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
 
                     int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
 
-                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
+                    if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
-                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
+                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
                         string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 
                         Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);

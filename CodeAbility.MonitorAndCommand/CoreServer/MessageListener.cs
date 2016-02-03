@@ -209,8 +209,6 @@ namespace CodeAbility.MonitorAndCommand.Server
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
                     Socket socket = listener.Accept();
-                    //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, 8192);
-                    //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, 8192);
 
                     Address address = new Address(socket.RemoteEndPoint.ToString());
 
@@ -258,21 +256,21 @@ namespace CodeAbility.MonitorAndCommand.Server
             Trace.WriteLine(String.Format("Starting Receiver thread for socket {0}", socket.RemoteEndPoint.ToString()));
 
             // Receive buffer.
-            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            byte[] buffer = new byte[Message.BUFFER_SIZE];
             int offset = 0;
 
             while (socket.Connected)
             {
                 try
                 {
-                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
-                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
+                    int missingBytesLength = Message.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
                     
                     int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
 
-                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
+                    if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     { 
-                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Constants.BUFFER_SIZE);
+                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
 
                         string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
 
@@ -296,7 +294,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     //While there are bytes in the socket's buffer, we get them, read the messages and add them to the queue
                     //This usually only happens during the registration/subscription phase
-                    if (socket.Available < Constants.BUFFER_SIZE)
+                    if (socket.Available < Message.BUFFER_SIZE)
                         processEvent.Set();
                 }
                 catch(Exception exception)
@@ -596,7 +594,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             try
             {
                 string serializedMessage = JsonConvert.SerializeObject(message);
-                serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+                serializedMessage = JsonHelpers.PadSerializedMessage(serializedMessage, Message.BUFFER_SIZE);
 
                 // Convert the string data to byte data using UTF8 encoding.
                 byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
@@ -607,7 +605,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                     Socket socket = clientsSockets.FirstOrDefault(x => x.Key.Equals(destinationAddress)).Value as Socket;
                     if (socket != null && socket.Connected)
                     {
-                        socket.Send(byteData, 0, Constants.BUFFER_SIZE, 0);
+                        socket.Send(byteData, 0, Message.BUFFER_SIZE, 0);
 
                         PostSend(message);
 

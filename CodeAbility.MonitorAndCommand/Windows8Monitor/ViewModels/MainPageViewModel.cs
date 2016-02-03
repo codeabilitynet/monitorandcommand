@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2015, Paul Gaunard (www.codeability.net)
+ * All rights reserved.
+
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the 
+ *  documentation and/or other materials provided with the distribution.
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED 
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,52 +37,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
     {
         const int LOAD_DATA_PERIOD_IN_SECONDS = 60;
 
-        IEnumerable<SerieItem> temperatureSerie; 
-        public IEnumerable<SerieItem> TemperatureSerie
-        {
-            get { return temperatureSerie; }
-            set 
-            { 
-                temperatureSerie = value;
-                OnPropertyChanged("TemperatureSerie");
-            }
-        }
-
-        string firstTemperatureData;
-        public string FirstTemperatureData
-        {
-            get { return firstTemperatureData; }
-            set
-            {
-                firstTemperatureData = value;
-
-                OnPropertyChanged("FirstTemperatureData");
-            }
-        }
-
-        IEnumerable<SerieItem> humiditySerie;
-        public IEnumerable<SerieItem> HumiditySerie
-        {
-            get { return humiditySerie; }
-            set
-            {
-                humiditySerie = value;
-                OnPropertyChanged("HumiditySerie");
-            }
-        }
-
-        string firstHumidityData;
-        public string FirstHumidityData
-        {
-            get { return firstHumidityData; }
-            set
-            {
-                firstHumidityData = value;
-                
-                OnPropertyChanged("FirstHumidityData");
-            }
-        }
-
         IEnumerable<SerieItem> voltageSerie;
         public IEnumerable<SerieItem> VoltageSerie
         {
@@ -77,15 +48,15 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             }
         }
 
-        string firstVoltageData;
-        public string FirstVoltageData
+        string realTimeVoltage;
+        public string RealTimeVoltage
         {
-            get { return firstVoltageData; }
+            get { return realTimeVoltage; }
             set
             {
-                firstVoltageData = value;
+                realTimeVoltage = value;
 
-                OnPropertyChanged("FirstVoltageData");
+                OnPropertyChanged("RealTimeVoltage");
             }
         }
 
@@ -101,13 +72,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             }
         }
 
-        Model model;
-
-        public double MinTemperature { get; set; }
-        public double MaxTemperature { get; set;}
-
-        public double MinHumidity { get; set; }
-        public double MaxHumidity { get; set;}
+        VoltageModel voltageModel;
 
         MainPage mainPage;
 
@@ -116,22 +81,20 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
         const string DEFAULT_IP_ADDRESS = "192.168.178.26"; 
 
         public string IpAddress { get; set; }
-        //{
-        //    get { return ApplicationSettings.IpAddress; }
-        //    set { ApplicationSettings.IpAddress = value; }
-        //}
 
         public int PortNumber { get; set; }
-        //{
-        //    get { return ApplicationSettings.PortNumber.Value; }
-        //    set { ApplicationSettings.PortNumber = value; }
-        //}
+
+        List<DeviceModel> deviceModels = new List<DeviceModel>();
+        public ObservableCollection<DeviceModel> DeviceModels
+        {
+            get { return new ObservableCollection<DeviceModel>(deviceModels); }
+        }
 
         public MainPageViewModel(MainPage page)
         {
             mainPage = page;
 
-            model = new Model();
+            voltageModel = new VoltageModel();
 
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
@@ -141,6 +104,11 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
             IpAddress = DEFAULT_IP_ADDRESS;
             PortNumber = 11000;
+
+            deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_MCP4921));
+            deviceModels.Add(new DeviceModel(Environment.Devices.PIBRELLA));
+            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_PHONE));
+            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
         }
 
         public async void Start()
@@ -156,11 +124,11 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                //messageClient.SubscribeToServerState(ServerStates.STATE_NETDUINO_ISCONNECTED);
-                //messageClient.SubscribeToServerState(ServerStates.STATE_RASPBERRYPIB_ISCONNECTED);
-                //messageClient.SubscribeToServerState(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED);
-                //messageClient.SubscribeToServerState(ServerStates.STATE_SURFACE_ISCONNECTED);
-                //messageClient.SubscribeToServerState(ServerStates.STATE_VOLTAGE_CONTROL);
+                messageClient.SubscribeToServerState(ServerStates.STATE_NETDUINO_ISCONNECTED);
+                messageClient.SubscribeToServerState(ServerStates.STATE_PIBRELLA_ISCONNECTED);
+                messageClient.SubscribeToServerState(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED);
+                messageClient.SubscribeToServerState(ServerStates.STATE_SURFACE_ISCONNECTED);
+                messageClient.SubscribeToServerState(ServerStates.STATE_VOLTAGE_CONTROL);
 
                 messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
                 messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
@@ -186,46 +154,14 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
         public void LoadData()
         {
-            temperatureSerie = model.LoadTemperatureSerie();
-            humiditySerie = model.LoadHumiditySerie();
-            voltageSerie = model.LoadVoltageSerie();
+            //voltageSerie = model.LoadVoltageSerie();
+    
+            //mainPage.SetChartsAxes();
 
-            if (TemperatureSerie.Count() > 0)
-            {
-                MinTemperature = temperatureSerie.Min(x => x.Value);
-                MaxTemperature = temperatureSerie.Max(x => x.Value);
-            }
-            else
-            {
-                MinTemperature = 15;
-                MaxTemperature = 25;
-            }
+            //VoltageSerie = voltageSerie;
 
-            if (HumiditySerie.Count() > 0)
-            {
-                MinHumidity = HumiditySerie.Min(x => x.Value);
-                MaxHumidity = HumiditySerie.Max(x => x.Value);
-            }
-            else
-            {
-                MinHumidity = 40;
-                MaxHumidity = 60;
-            }
-
-            mainPage.SetChartsAxes();
-
-            TemperatureSerie = temperatureSerie;
-            HumiditySerie = humiditySerie;
-            VoltageSerie = voltageSerie;
-
-            if (TemperatureSerie.Count() > 0)
-                FirstTemperatureData = String.Format("{0}c°", Math.Round(TemperatureSerie.First().Value, 1).ToString());
-
-            if (HumiditySerie.Count() > 0)
-                FirstHumidityData = String.Format("{0}%", Math.Round(HumiditySerie.First().Value, 1).ToString());
-
-            if (VoltageSerie.Count() > 0)
-                FirstVoltageData = String.Format("{0}V", Math.Round(VoltageSerie.First().Value, 2).ToString());
+            //if (VoltageSerie.Count() > 0)
+            //    FirstVoltageData = String.Format("{0}V", Math.Round(VoltageSerie.First().Value, 2).ToString());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

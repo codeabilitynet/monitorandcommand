@@ -119,8 +119,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 IPAddress ipAddress = IPAddress.Parse(ServerIpAddress);
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, PortNumber);
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, Constants.BUFFER_SIZE * 8);
-                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, Constants.BUFFER_SIZE * 8);
 
                 Log("Connecting to " + ipAddress + ".");
 
@@ -217,6 +215,12 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             EnqueueMessage(message);
         }
 
+        public void SubscribeToTraffic(string fromDevice, string toDevice)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, toDevice);
+            EnqueueMessage(message);
+        }
+
         public void SubscribeToServerState(string stateName)
         {
             Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);
@@ -287,11 +291,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 Log("Sending   : " + message.ToString());
 
                 string serializedMessage = JsonSerializer.SerializeObject(message);
-                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Constants.BUFFER_SIZE);
+                string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Message.BUFFER_SIZE);
 
                 byte[] buffer = Encoding.UTF8.GetBytes(paddedSerializedData);
 
-                this.socket.Send(buffer, 0, Constants.BUFFER_SIZE, 0);
+                this.socket.Send(buffer, 0, Message.BUFFER_SIZE, 0);
 
                 Log("Sent      : " + message.ToString());
             } 
@@ -310,23 +314,23 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
             Log("Starting Receiver() thread.");
 
-            byte[] buffer = new byte[Constants.BUFFER_SIZE];
+            byte[] buffer = new byte[Message.BUFFER_SIZE];
             int offset = 0;
 
             while (true)
             {
                 try
                 {
-                    int missingBytesLength = Constants.BUFFER_SIZE - offset;
-                    int length = offset > 0 ? missingBytesLength : Constants.BUFFER_SIZE;
+                    int missingBytesLength = Message.BUFFER_SIZE - offset;
+                    int length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
 
                     // Begin receiving the data from the remote device.
                     int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
                     
-                    if (receivedBytesLength == Constants.BUFFER_SIZE || receivedBytesLength + offset == Constants.BUFFER_SIZE)
+                    if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
 
-                        char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Constants.BUFFER_SIZE);
+                        char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
                         string paddedSerializedData = new string(dataChars);
 
                         if (paddedSerializedData != null)
