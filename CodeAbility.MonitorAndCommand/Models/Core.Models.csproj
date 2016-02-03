@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="ControlActions.cs" />
     <Compile Include="ContentTypes.cs" />
     <Compile Include="HeartbeatStatus.cs" />

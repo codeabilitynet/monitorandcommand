@@ -51,7 +51,7 @@ namespace CodeAbility.MonitorAndCommand.W8Client
         DataWriter writer = null;
         DataReader reader = null;
 
-        byte[] payload = new Byte[Constants.BUFFER_SIZE];
+        byte[] payload = new Byte[Message.BUFFER_SIZE];
 
         static ManualResetEvent clientDone = new ManualResetEvent(false);
 
@@ -98,7 +98,7 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
             if (socket != null)
             {
-                string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Constants.BUFFER_SIZE);
+                string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Message.BUFFER_SIZE);
                 byte[] payload = Encoding.UTF8.GetBytes(paddedData);
 
                 clientDone.Reset();
@@ -128,7 +128,7 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
                     try
                     { 
-                        await reader.LoadAsync(Constants.BUFFER_SIZE);
+                        await reader.LoadAsync(Message.BUFFER_SIZE);
                         reader.ReadBytes(payload);
                     }
                     catch(Exception exception)
@@ -138,7 +138,7 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
                     clientDone.Set();
 
-                    string receivedData = Encoding.UTF8.GetString(payload, 0, Constants.BUFFER_SIZE);
+                    string receivedData = Encoding.UTF8.GetString(payload, 0, Message.BUFFER_SIZE);
                     OnDataStringReceived(new DataStringEventArgs(receivedData));
 
                     clientDone.WaitOne();

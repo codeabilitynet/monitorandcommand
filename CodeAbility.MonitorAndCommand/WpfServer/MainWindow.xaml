@@ -56,8 +56,8 @@
             <TextBlock Grid.Row="1" Grid.Column="2" Text="received/min" Style="{StaticResource SubLegendStyle}"></TextBlock>
             <TextBlock Grid.Row="1" Grid.Column="3" Text="sent/min" Style="{StaticResource SubLegendStyle}"></TextBlock>                        
         </Grid>
-                
-        <ListView Grid.Row="1" ItemsSource="{Binding DevicesData}" Background="Transparent">           
+
+        <ListView Grid.Row="1" ItemsSource="{Binding DeviceModels}" Background="Transparent">           
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

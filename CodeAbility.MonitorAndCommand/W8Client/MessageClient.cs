@@ -148,6 +148,12 @@ namespace CodeAbility.MonitorAndCommand.W8Client
             Send(message);
         }
 
+        public void SubscribeToTraffic(string fromDevice, string toDevice)
+        {
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, toDevice);
+            Send(message);
+        }
+
         public void SubscribeToServerState(string stateName)
         {
             Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);

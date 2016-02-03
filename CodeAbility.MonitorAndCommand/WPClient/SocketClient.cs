@@ -116,9 +116,9 @@ namespace CodeAbility.MonitorAndCommand.WPClient
                     clientDone.Set();
                 });
 
-                string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Constants.BUFFER_SIZE);
+                string paddedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.PadSerializedMessage(data, Message.BUFFER_SIZE);
                 byte[] payload = Encoding.UTF8.GetBytes(paddedData);
-                socketEventArg.SetBuffer(payload, 0, Constants.BUFFER_SIZE);
+                socketEventArg.SetBuffer(payload, 0, Message.BUFFER_SIZE);
 
                 clientDone.Reset();
 
@@ -143,7 +143,7 @@ namespace CodeAbility.MonitorAndCommand.WPClient
                     SocketAsyncEventArgs socketEventArg = new SocketAsyncEventArgs();
                     socketEventArg.RemoteEndPoint = socket.RemoteEndPoint;
 
-                    socketEventArg.SetBuffer(new Byte[Constants.BUFFER_SIZE], 0, Constants.BUFFER_SIZE);
+                    socketEventArg.SetBuffer(new Byte[Message.BUFFER_SIZE], 0, Message.BUFFER_SIZE);
 
                     socketEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(delegate(object s, SocketAsyncEventArgs e)
                     {

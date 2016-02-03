@@ -21,6 +21,6 @@ namespace CodeAbility.MonitorAndCommand.Models
 {
     public class Constants
     {
-        public const int BUFFER_SIZE = 256;
+        //public const int BUFFER_SIZE = 256;
     }
 }
