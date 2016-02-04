@@ -45,9 +45,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        const float TEMPERATURE_MARGIN = 1.5f;
-        const float HUMIDITY_MARGIN = 3f; 
-
         public MainPageViewModel ViewModel
         {
             get;
@@ -80,7 +77,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
         {
             DateTimeAxis axis = new DateTimeAxis();
             axis.Orientation = orientation;
-            //axis.Interval = 
             axis.ShowGridLines = showGridLines;
 
             return axis;

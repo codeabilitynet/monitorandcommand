@@ -35,10 +35,10 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        const int LOAD_DATA_PERIOD_IN_SECONDS = 60;
+        const int LOAD_DATA_PERIOD_IN_MILLISECONDS = 200;
 
-        IEnumerable<SerieItem> voltageSerie;
-        public IEnumerable<SerieItem> VoltageSerie
+        ObservableCollection<SerieItem> voltageSerie;
+        public ObservableCollection<SerieItem> VoltageSerie
         {
             get { return voltageSerie; }
             set
@@ -48,15 +48,15 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             }
         }
 
-        string realTimeVoltage;
-        public string RealTimeVoltage
+        string voltage;
+        public string Voltage
         {
-            get { return realTimeVoltage; }
+            get { return voltage; }
             set
             {
-                realTimeVoltage = value;
+                voltage = value;
 
-                OnPropertyChanged("RealTimeVoltage");
+                OnPropertyChanged("Voltage");
             }
         }
 
@@ -69,6 +69,39 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 receivedData = value;
 
                 OnPropertyChanged("ReceivedData");
+            }
+        }
+
+        private bool redLED = false;
+        public bool RedLED
+        {
+            get { return redLED; }
+            set
+            {
+                redLED = value;
+                OnPropertyChanged("RedLED");
+            }
+        }
+
+        private bool yellowLED = false;
+        public bool YellowLED
+        {
+            get { return yellowLED; }
+            set
+            {
+                yellowLED = value;
+                OnPropertyChanged("YellowLED");
+            }
+        }
+
+        private bool greenLED = false;
+        public bool GreenLED
+        {
+            get { return greenLED; }
+            set
+            {
+                greenLED = value;
+                OnPropertyChanged("GreenLED");
             }
         }
 
@@ -98,7 +131,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, LOAD_DATA_PERIOD_IN_SECONDS);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, LOAD_DATA_PERIOD_IN_MILLISECONDS);
 
             dispatcherTimer.Start();
 
@@ -124,27 +157,80 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
+                messageClient.SubscribeToData(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+
+                //messageClient.SubscribeToData(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                //messageClient.PublishCommand(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
+
+                //messageClient.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+                //messageClient.SubscribeToTraffic(Devices.NETDUINO_DS18B20, Environment.Devices.ALL);
+
                 messageClient.SubscribeToServerState(ServerStates.STATE_NETDUINO_ISCONNECTED);
                 messageClient.SubscribeToServerState(ServerStates.STATE_PIBRELLA_ISCONNECTED);
                 messageClient.SubscribeToServerState(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED);
                 messageClient.SubscribeToServerState(ServerStates.STATE_SURFACE_ISCONNECTED);
                 messageClient.SubscribeToServerState(ServerStates.STATE_VOLTAGE_CONTROL);
 
-                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-                messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
         }
 
         void messageClient_DataReceived(object sender, MonitorAndCommand.Models.MessageEventArgs e)
-        {
-            ReceivedData = e.Parameter.ToString(); 
+        { 
+            string fromDevice = e.FromDevice;
+            string dataName = e.Name;
+
+            DeviceModel sendingDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.SendingDevice);
+            if (sendingDeviceModel != null)
+                sendingDeviceModel.HandleSentMessageEvent();
+
+            DeviceModel receivingDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.ReceivingDevice);
+            if (receivingDeviceModel != null)
+                receivingDeviceModel.HandleReceivedMessageEvent();
+
+            if (fromDevice.Equals(Environment.Devices.PIBRELLA))
+            {
+                if (dataName.Equals(Pibrella.OBJECT_RED_LED))
+                {
+                    RedLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                }
+                else if (dataName.Equals(Pibrella.OBJECT_YELLOW_LED))
+                {
+                    YellowLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                }
+                else if (dataName.Equals(Pibrella.OBJECT_GREEN_LED))
+                {
+                    GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
+                }
+            }
+            else if (e.FromDevice.Equals(Environment.Devices.NETDUINO_MCP4921))
+            {
+                if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
+                {
+                    Voltage = e.Content.ToString(); //.Substring(0, 4);
+
+                    lastReceivedVoltage = Double.Parse(e.Content.ToString());
+                }   
+            } 
         }
+
+        double lastReceivedVoltage = 0;
+        int counter = 0;
 
         void dispatcherTimer_Tick(object sender, object e)
         {
-            LoadData(); 
+            voltageModel.EnqueueVoltage(lastReceivedVoltage);
+
+            counter++;
+            if (counter == 5)
+            { 
+                LoadData();
+                counter = 0;
+            }
         }
 
         public void StartDispatcherTimer()
@@ -154,14 +240,8 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
         public void LoadData()
         {
-            //voltageSerie = model.LoadVoltageSerie();
-    
-            //mainPage.SetChartsAxes();
-
-            //VoltageSerie = voltageSerie;
-
-            //if (VoltageSerie.Count() > 0)
-            //    FirstVoltageData = String.Format("{0}V", Math.Round(VoltageSerie.First().Value, 2).ToString());
+            mainPage.SetChartsAxes();
+            VoltageSerie = new ObservableCollection<SerieItem>(voltageModel.LoadVoltageSerie());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

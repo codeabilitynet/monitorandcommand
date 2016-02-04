@@ -24,43 +24,45 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
 
-        <charting:Chart Grid.Row="0" Grid.Column="0" 
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <charting:Chart Grid.Column="0" 
                         x:Name="VoltageChart" 
                         HorizontalAlignment="Stretch" 
-                        Margin="10"
+                        Margin="30,10"                        
                         Width="Auto" Height="Auto">
-            <charting:Chart.Axes>
-                <charting:DateTimeAxis Orientation="X" ShowGridLines="false"/>
-                <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="false"/>
-            </charting:Chart.Axes>            
-            <charting:LineSeries Margin="0" 
+                <charting:Chart.Axes>
+                    <charting:DateTimeAxis Orientation="X" ShowGridLines="true"/>
+                    <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="true"/>
+                </charting:Chart.Axes>
+                <charting:LineSeries Margin="0" 
                                  Title="Voltage"
                                  ItemsSource="{Binding VoltageSerie}" 
                                  IndependentValuePath="Timestamp" 
-                                 DependentValuePath="Value"/>            
-        </charting:Chart>
+                                 DependentValuePath="Value"/>
+            </charting:Chart>
+            <TextBlock Grid.Column="1" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Text="{Binding Voltage}" FontSize="60"/>
+        </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="1" Margin="30">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-
-            <Ellipse Grid.Column="0" Fill="Red" 
-                     Height="120" Width="120" 
-                     Stroke="White" StrokeThickness="3"
-                     Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
-                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding Voltage}" FontSize="42"/>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="0" Margin="10" HorizontalAlignment="Stretch">
-            <ListView Grid.Row="1" ItemsSource="{Binding DeviceModels}" Background="Transparent">
+            
+            <ListView Grid.Column="0" 
+                      ItemsSource="{Binding DeviceModels}" 
+                      Margin="30,10"
+                      HorizontalAlignment="Center" 
+                      Background="Transparent">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -69,32 +71,38 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Grid>
+            
+            <Ellipse Grid.Column="1" Fill="Red" 
+                     Height="150" Width="150" 
+                     Stroke="White" StrokeThickness="3"
+                     Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Grid Grid.Row="1" Grid.Column="1" Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="2" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-            <Ellipse Grid.Column="0" Fill="Red" 
+                <Ellipse Grid.Row="0" Fill="Red" 
                     Height="100" Width="100" 
                     Stroke="White" StrokeThickness="3"
                     Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Ellipse Grid.Column="1" Fill="Yellow" 
+                <Ellipse Grid.Row="1" Fill="Yellow" 
                     Height="100" Width="100" 
                     Stroke="White" StrokeThickness="3"
                     Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Ellipse Grid.Column="2" Fill="Green" 
+                <Ellipse Grid.Row="2" Fill="Green" 
                     Height="100" Width="100" 
                     Stroke="White" StrokeThickness="3"
                     Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        </Grid>
+            </Grid>
+        </Grid>        
 
     </Grid>
 </Page>
