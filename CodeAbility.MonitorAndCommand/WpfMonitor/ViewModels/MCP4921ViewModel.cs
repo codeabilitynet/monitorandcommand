@@ -65,11 +65,10 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
         {
             if (MessageClient != null)
             {
-                //Pibrella
                 MessageClient.SubscribeToData(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
 
                 MessageClient.PublishCommand(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
-
+        
                 Connected = true; 
             }
         }
@@ -78,7 +77,6 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
         {
             if (MessageClient != null)
             {
-                //Pibrella
                 MessageClient.Unsubscribe(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
 
                 MessageClient.Unsubscribe(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);

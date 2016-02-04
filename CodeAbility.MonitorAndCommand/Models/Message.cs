@@ -89,7 +89,7 @@ namespace CodeAbility.MonitorAndCommand.Models
         public const string HEARTBEAT = "HEARTBEAT";
         public const string ALL = "*";
 
-        public const int BUFFER_SIZE = 256;
+        public const int BUFFER_SIZE = 512;
 
         #region Static Helpers
 

@@ -27,5 +27,10 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
     {
         public DateTime Timestamp { get; set; }
         public double Value { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("{0} {1}", Timestamp, Value);
+        }
     }
 }
