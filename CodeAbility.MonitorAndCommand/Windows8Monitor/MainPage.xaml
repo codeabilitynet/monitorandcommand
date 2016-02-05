@@ -17,6 +17,13 @@
         <converters:BooleanToBrushConverter x:Key="BooleanToBrush"/>
         <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"/>
         <converters:VoltageToOpacityConverter x:Key="VoltageToOpacity"/>
+        <Style x:Key="LegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -37,8 +44,8 @@
                         Margin="30,10"                        
                         Width="Auto" Height="Auto">
                 <charting:Chart.Axes>
-                    <charting:DateTimeAxis Orientation="X" ShowGridLines="true"/>
-                    <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="true"/>
+                    <charting:DateTimeAxis Orientation="X" ShowGridLines="False"/>
+                    <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="False"/>
                 </charting:Chart.Axes>
                 <charting:LineSeries Margin="0" 
                                  Title="Voltage"
@@ -57,21 +64,53 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            
-            <ListView Grid.Column="0" 
+                
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="30,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" 
+                       Text="Status" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+                    <TextBlock Grid.Column="1" 
+                       Text="In" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+                    <TextBlock Grid.Column="2"                      
+                       Text="Out" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+                    <TextBlock Grid.Column="3"                       
+                       Text="Device" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+                </Grid>
+
+                <ListView Grid.Row="1" 
                       ItemsSource="{Binding DeviceModels}" 
-                      Margin="30,10"
+                      Margin="30,0"
                       HorizontalAlignment="Center" 
                       Background="Transparent">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <usercontrols:DeviceDataUserControl />
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <usercontrols:DeviceDataUserControl />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+               
             <Ellipse Grid.Column="1" Fill="Red" 
                      Height="150" Width="150" 
                      Stroke="White" StrokeThickness="3"
