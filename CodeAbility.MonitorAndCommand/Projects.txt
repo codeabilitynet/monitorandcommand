@@ -25,6 +25,7 @@ Demo projects
 - ServerConsole defines a Console application running the Core.Server library;
 - WpfServer defines a WPF application running the Core.Server library with extended functionalities;
 - WpfMonitor defines a WPF application running a Core.Client library to monitor the messages exchanged by the "demo" devices connected to the server;
+- Windows8Monitor defined a Windows 8 application running a Core.W8Client to monitor the messages exchanged by the "demo" devices connected to a server running Mono;
 - Netduino3Wifi references the Netduino.* libraries to be run on a Netduino 3 Wifi;
 - NetduinoPlus references the Netduino.* libraries to be run on a Netduino Plus;
 - RaspberryPi references the RaspberryPi.* libraires to be run on a Raspberry with Mono

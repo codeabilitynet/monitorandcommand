@@ -62,6 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		bsd.txt = bsd.txt
 		Projects.txt = Projects.txt
 		Read Me.txt = Read Me.txt
+		solution.png = solution.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Repository", "Repository\Core.Repository.csproj", "{497D9949-4F94-4806-9182-63D516CFB79C}"
