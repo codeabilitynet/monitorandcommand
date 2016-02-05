@@ -55,7 +55,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 
             Blinking = false;
 
-            messageClient = new MessageClient(Environment.Devices.RASPBERRY_B);
+            messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
             pibrella.Connection.Open();            
@@ -64,7 +64,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
         void client_CommandReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages addressed to me
-            if (!e.ToDevice.Equals(Environment.Devices.RASPBERRY_B))
+            if (!e.ToDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
                 return;
 
             string commandName = e.Name; 
