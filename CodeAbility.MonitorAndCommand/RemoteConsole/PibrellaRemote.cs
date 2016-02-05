@@ -43,15 +43,15 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Running.");
 
-            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+            messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-            messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+            messageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
 
             bool running = true;
             while (running)
@@ -60,19 +60,19 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, null);
                 }
                 if (keyInfo.KeyChar.Equals('1'))
                 {
-                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED, null);
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
-                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
                 }
                 else if (keyInfo.KeyChar.Equals('3'))
                 {
-                    messageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {

@@ -39,7 +39,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             bool greenLedStatus = false;
             bool yellowLedStatus = false;
 
-            messageClient = new MessageClient(Devices.PIBRELLA);
+            messageClient = new MessageClient(Devices.RASPBERRY_PI_B);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;

@@ -91,15 +91,15 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             if (MessageClient != null)
             {
                 //Pibrella
-                MessageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+                MessageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                MessageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+                MessageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.PublishCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
         }
 
@@ -108,28 +108,28 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
             if (MessageClient != null)
             {
                 //Pibrella
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-                MessageClient.Unsubscribe(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
+                MessageClient.Unsubscribe(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
         }
 
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.PIBRELLA, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.OBJECT_BUTTON, Pibrella.CONTENT_BUTTON_PRESSED);
+                MessageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.OBJECT_BUTTON, Pibrella.CONTENT_BUTTON_PRESSED);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the PIBRELLA
-            if (!e.FromDevice.Equals(Environment.Devices.PIBRELLA))
+            if (!e.FromDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
                 return;
 
             string dataName = e.Name;

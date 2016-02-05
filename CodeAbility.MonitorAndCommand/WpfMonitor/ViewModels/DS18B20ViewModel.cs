@@ -53,14 +53,14 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             messageClient.DataReceived += client_MessageReceived;
             messageClient.CommandReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.NETDUINO_DS18B20, Environment.Devices.ALL);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO_3_WIFI, Environment.Devices.ALL);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.NETDUINO_DS18B20))
+            if (!fromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
                 return;
 
             if (e.Name.Equals(DS18B20.OBJECT_TEMPERATURE_SENSOR))

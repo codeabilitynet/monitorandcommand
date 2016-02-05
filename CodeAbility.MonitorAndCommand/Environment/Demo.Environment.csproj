@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="DataGenerator.cs" />
     <Compile Include="Devices.cs" />
-    <Compile Include="HomeAutomation.cs" />
     <Compile Include="MCP4921.cs" />
     <Compile Include="DS18B20.cs" />
     <Compile Include="LEDs.cs" />

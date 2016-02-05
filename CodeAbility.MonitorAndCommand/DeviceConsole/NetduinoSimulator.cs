@@ -38,7 +38,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             bool RedLedStatus = false;
             bool GreenLedStatus = false;
 
-            messageClient = new MessageClient(Devices.NETDUINO_LEDs);
+            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;

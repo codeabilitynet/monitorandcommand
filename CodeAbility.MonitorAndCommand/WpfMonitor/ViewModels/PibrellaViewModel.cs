@@ -86,15 +86,15 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             messageClient.DataReceived += client_MessageReceived;
             //messageClient.CommandReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
+            messageClient.SubscribeToTraffic(Devices.RASPBERRY_PI_B, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.RASPBERRY_PI_B);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the PIBRELLA
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.PIBRELLA))
+            if (!fromDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
                 return;
 
             string dataName = e.Name;

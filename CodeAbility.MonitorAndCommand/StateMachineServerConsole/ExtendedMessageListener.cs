@@ -51,19 +51,19 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             {
                 case Environment.Devices.NETDUINO_3_WIFI:
                     netduinoConnection.ChangeState(e.RegistrationEvent == RegistrationEventArgs.RegistrationEvents.Registered);
-                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_NETDUINO_ISCONNECTED, netduinoConnection.State.ToString()));
+                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_CONNECTION_NETDUINO_3_WIFI, netduinoConnection.State.ToString()));
                     break;
-                case Environment.Devices.PIBRELLA:
+                case Environment.Devices.RASPBERRY_PI_B:
                     pibrellaConnection.ChangeState(e.RegistrationEvent == RegistrationEventArgs.RegistrationEvents.Registered);
-                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_PIBRELLA_ISCONNECTED, netduinoConnection.State.ToString()));
+                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_CONNECTION_RASPBERRY_B, pibrellaConnection.State.ToString()));
                     break;
                 case Environment.Devices.WINDOWS_PHONE:
                     windowsPhoneConnection.ChangeState(e.RegistrationEvent == RegistrationEventArgs.RegistrationEvents.Registered);
-                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED, netduinoConnection.State.ToString()));
+                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_CONNECTION_WINDOWS_PHONE, windowsPhoneConnection.State.ToString()));
                     break;
                 case Environment.Devices.WINDOWS_SURFACE:
                     surfaceConnection.ChangeState(e.RegistrationEvent == RegistrationEventArgs.RegistrationEvents.Registered);
-                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_SURFACE_ISCONNECTED, netduinoConnection.State.ToString()));
+                    SendToRegisteredDevices(InstantiateServerStateDataMessage(ServerStates.STATE_CONNECTION_WINDOWS_SURFACE, surfaceConnection.State.ToString()));
                     break;
             }
         }
@@ -101,7 +101,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             base.PostSend(message);
 
             if (voltageControlStateMachine.HasChangedSinceLastGet)
-                SendToRegisteredDevices(InstantiateServerStateDataMessage(Environment.ServerStates.STATE_VOLTAGE_CONTROL, voltageControlStateMachine.State.ToString()));   
+                SendToRegisteredDevices(InstantiateServerStateDataMessage(Environment.ServerStates.STATE_MCP4921_VOLTAGE, voltageControlStateMachine.State.ToString()));   
         }
 
         private void ProcessPayloadMessage(Message message)

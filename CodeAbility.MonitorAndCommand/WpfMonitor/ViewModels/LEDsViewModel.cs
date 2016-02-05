@@ -96,15 +96,15 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
             messageClient.DataReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.NETDUINO_LEDs, Devices.WINDOWS_PHONE);
-            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
+            messageClient.SubscribeToTraffic(Devices.NETDUINO_3_WIFI, Devices.WINDOWS_PHONE);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.NETDUINO_LEDs))
+            if (!fromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
                 return;
 
             if (e.Name.Equals(LEDs.OBJECT_BOARD_LED))

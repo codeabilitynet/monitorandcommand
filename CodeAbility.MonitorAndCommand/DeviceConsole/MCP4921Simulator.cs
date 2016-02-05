@@ -35,7 +35,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
         public static void Start(string ipAddress, int portNumber)
         {
-            messageClient = new MessageClient(Devices.NETDUINO_MCP4921);
+            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;

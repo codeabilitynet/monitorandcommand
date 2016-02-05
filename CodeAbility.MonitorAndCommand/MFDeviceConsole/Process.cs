@@ -58,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                 {
                     reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_LEDs, false);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_3_WIFI, false);
 
                     if (messageClient != null)
                     { 
@@ -104,7 +104,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
             try
             {
                 //Only consider the messages addressed to me
-                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_LEDs))
+                if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
                     return;
 
                 string objectName = e.Parameter.ToString();

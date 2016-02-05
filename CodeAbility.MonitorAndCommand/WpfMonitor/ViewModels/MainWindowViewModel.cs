@@ -87,11 +87,11 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             {
                 messageClient.Start(ipAddress, portNumber);
 
-                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_LEDs);
-                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_DS18B20);
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_MCP4921);
-                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.DATA_GENERATOR);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.RASPBERRY_B);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
+                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.WINDOWS_CONSOLE);
 
                 //PibrellaViewModel.Subscribe();
                 //LEDsViewModel.Subscribe();
