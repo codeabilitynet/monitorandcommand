@@ -101,12 +101,12 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
+                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
 
-                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
-                MessageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
 
                 MessageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
@@ -116,12 +116,12 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
+                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
 
-                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
-                MessageClient.Unsubscribe(Devices.NETDUINO_LEDs, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
+                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
 
                 MessageClient.Unsubscribe(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             }
@@ -130,37 +130,37 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
         }
 
         public void TurnRedLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnRedLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         public void TurnGreenLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnGreenLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
-            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_LEDs))
+            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
                 return;
 
             if (e.Name.Equals(LEDs.OBJECT_BOARD_LED))

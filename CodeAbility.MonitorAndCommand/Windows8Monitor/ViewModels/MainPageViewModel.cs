@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using Windows.UI.Core; 
 using Windows.UI.Xaml;
 
+using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Windows8Monitor.Models;
 using CodeAbility.MonitorAndCommand.W8Client;
 using CodeAbility.MonitorAndCommand.Environment;
@@ -138,8 +139,8 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             IpAddress = DEFAULT_IP_ADDRESS;
             PortNumber = 11000;
 
-            deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_MCP4921));
-            deviceModels.Add(new DeviceModel(Environment.Devices.PIBRELLA));
+            deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_3_WIFI));
+            deviceModels.Add(new DeviceModel(Environment.Devices.RASPBERRY_PI_B));
             deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_PHONE));
             deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
         }
@@ -152,30 +153,18 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
             if (await messageClient.Start(IpAddress, PortNumber))
             {
-                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
-                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
-                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-                messageClient.SubscribeToData(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
+                messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
+                messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                messageClient.SubscribeToData(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
 
-                //messageClient.SubscribeToData(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
-                //messageClient.PublishCommand(Devices.NETDUINO_MCP4921, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
-
-                //messageClient.SubscribeToTraffic(Devices.PIBRELLA, Devices.WINDOWS_PHONE);
-                //messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.PIBRELLA);
-                //messageClient.SubscribeToTraffic(Devices.NETDUINO_DS18B20, Environment.Devices.ALL);
-
-                messageClient.SubscribeToServerState(ServerStates.STATE_NETDUINO_ISCONNECTED);
-                messageClient.SubscribeToServerState(ServerStates.STATE_PIBRELLA_ISCONNECTED);
-                messageClient.SubscribeToServerState(ServerStates.STATE_WINDOWSPHONE_ISCONNECTED);
-                messageClient.SubscribeToServerState(ServerStates.STATE_SURFACE_ISCONNECTED);
-                messageClient.SubscribeToServerState(ServerStates.STATE_VOLTAGE_CONTROL);
-
-                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED);
-                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED);
-                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
-                //messageClient.PublishCommand(Devices.PIBRELLA, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
+                messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_NETDUINO_3_WIFI);
+                messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_RASPBERRY_B);
+                messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_WINDOWS_PHONE);
+                messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_WINDOWS_SURFACE);
+                messageClient.SubscribeToServerState(ServerStates.STATE_MCP4921_VOLTAGE);
             }
         }
 
@@ -184,6 +173,20 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             string fromDevice = e.FromDevice;
             string dataName = e.Name;
 
+            if (e.SendingDevice.Equals(Message.SERVER))
+            {
+                const string CONNECTION = "Connection";
+
+                if (e.Parameter.ToString().StartsWith(CONNECTION))
+                {
+                    string stateName = e.Parameter.ToString();
+                    string deviceName = stateName.Split('.')[1];
+
+                    DeviceModel deviceModel = deviceModels.FirstOrDefault(x => x.Name == deviceName);
+                    deviceModel.IsConnected = e.Content.Equals(ServerStates.ConnectionStates.Connected.ToString());
+                }
+            }
+            
             DeviceModel sendingDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.SendingDevice);
             if (sendingDeviceModel != null)
                 sendingDeviceModel.HandleSentMessageEvent();
@@ -192,7 +195,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             if (receivingDeviceModel != null)
                 receivingDeviceModel.HandleReceivedMessageEvent();
 
-            if (fromDevice.Equals(Environment.Devices.PIBRELLA))
+            if (fromDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
             {
                 if (dataName.Equals(Pibrella.OBJECT_RED_LED))
                 {
@@ -207,7 +210,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                     GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
                 }
             }
-            else if (e.FromDevice.Equals(Environment.Devices.NETDUINO_MCP4921))
+            else if (e.FromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
             {
                 if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
                 {

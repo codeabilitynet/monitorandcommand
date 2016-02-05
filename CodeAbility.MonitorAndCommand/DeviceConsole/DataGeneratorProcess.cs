@@ -38,7 +38,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
         public static void Start(string ipAddress, int portNumber)
         {
-            messageClient = new MessageClient(Devices.DATA_GENERATOR);
+            messageClient = new MessageClient(Devices.WINDOWS_CONSOLE);
 
             messageClient.CommandReceived += client_CommandReceived;
             messageClient.Start(ipAddress, portNumber);

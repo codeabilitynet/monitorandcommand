@@ -36,23 +36,9 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string NETDUINO_3_WIFI = "Netduino3Wifi";
 
-        public const string RASPBERRY_B = "RaspberryB";
+        public const string RASPBERRY_PI_B = "RaspberryPiB";
 
-        public const string RASPBERRY_2 = "Raspberry2";
-
-        //To be abandoned
-
-        public const string DATA_GENERATOR = "DataGenerator";
-
-        public const string PIBRELLA = "Pibrella";
-
-        public const string NETDUINO_LEDs = "LEDs";
-
-        public const string NETDUINO_DS18B20 = "DS18B20";
-
-        public const string NETDUINO_MCP4921 = "MCP4921";
-
-        public const string HOME_AUTOMATION = "HomeAutomation";
+        public const string RASPBERRY_PI_2 = "RaspberryPi2";
 
     }
 }

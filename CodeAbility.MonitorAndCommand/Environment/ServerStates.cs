@@ -8,11 +8,13 @@ namespace CodeAbility.MonitorAndCommand.Environment
 {
     public class ServerStates
     {
-        public const string STATE_NETDUINO_ISCONNECTED = "NetduinoIsConnected";
-        public const string STATE_PIBRELLA_ISCONNECTED = "RaspberryPiBIsConnected";
-        public const string STATE_WINDOWSPHONE_ISCONNECTED = "WindowsPhoneIsConnected";
-        public const string STATE_SURFACE_ISCONNECTED = "SurfaceIsConnected";
+        public enum ConnectionStates { Connected, Disconnected };
 
-        public const string STATE_VOLTAGE_CONTROL = "VoltageControl";
+        public const string STATE_CONNECTION_NETDUINO_3_WIFI = "Connection.Netduino3Wifi";
+        public const string STATE_CONNECTION_RASPBERRY_B = "Connection.RaspberryPiB";
+        public const string STATE_CONNECTION_WINDOWS_PHONE = "Connection.WindowsPhone";
+        public const string STATE_CONNECTION_WINDOWS_SURFACE = "Connection.WindowsSurface";
+
+        public const string STATE_MCP4921_VOLTAGE = "VoltageControl";
     }
 }

@@ -29,12 +29,12 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Running.");
 
-            messageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
+            messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BOARD_LED, LEDs.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BUTTON, LEDs.DATA_BUTTON_STATUS);
+            messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_SENSOR, LEDs.DATA_SENSOR_RANDOM);
 
-            messageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.NETDUINO_LEDs, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_RED_LED, LEDs.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_GREEN_LED, LEDs.DATA_LED_STATUS);
 
             messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED);
             messageClient.PublishCommand(Devices.ALL, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED);
@@ -48,17 +48,17 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
                 if (keyInfo.KeyChar.Equals('0'))
                 {
                     redLedStatus = !redLedStatus;
-                    messageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
                 }
                 if (keyInfo.KeyChar.Equals('1'))
                 {
                     redLedStatus = !redLedStatus;
-                    messageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, redLedStatus ? LEDs.CONTENT_LED_STATUS_ON : LEDs.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, redLedStatus ? LEDs.CONTENT_LED_STATUS_ON : LEDs.CONTENT_LED_STATUS_OFF);
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
                     greenLedStatus = !greenLedStatus;
-                    messageClient.SendCommand(Devices.NETDUINO_LEDs, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, greenLedStatus ? LEDs.CONTENT_LED_STATUS_ON : LEDs.CONTENT_LED_STATUS_OFF);
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, greenLedStatus ? LEDs.CONTENT_LED_STATUS_ON : LEDs.CONTENT_LED_STATUS_OFF);
                 }
                 if (keyInfo.Key == ConsoleKey.Escape)
                 {

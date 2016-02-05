@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CodeAbility.MonitorAndCommand.Environment;
+
 namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 {
     public class DeviceConnection : BaseStateMachine
     {
-        public enum States { Connected, Disconnected }
 
-        private States state = States.Disconnected;
-        public States State
+        private ServerStates.ConnectionStates state = ServerStates.ConnectionStates.Disconnected;
+        public ServerStates.ConnectionStates State
         {
             get 
             {
@@ -30,7 +31,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 
         public void ChangeState(bool isConnected)
         {
-            State = isConnected ? States.Connected : States.Disconnected;
+            State = isConnected ? ServerStates.ConnectionStates.Connected : ServerStates.ConnectionStates.Disconnected;
         }
     }
 }

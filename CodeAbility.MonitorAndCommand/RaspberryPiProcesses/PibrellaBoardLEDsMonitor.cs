@@ -45,7 +45,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 
         public PibrellaBoardLEDsMonitor(int period) 
         {
-            messageClient = new MessageClient(Environment.Devices.PIBRELLA);
+            messageClient = new MessageClient(Environment.Devices.RASPBERRY_B);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
             pibrella.Connection.Open();            
@@ -54,7 +54,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
         void client_CommandReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages addressed to me
-            if (!e.ToDevice.Equals(Environment.Devices.PIBRELLA))
+            if (!e.ToDevice.Equals(Environment.Devices.RASPBERRY_B))
                 return;
 
             string commandName = e.Name; 

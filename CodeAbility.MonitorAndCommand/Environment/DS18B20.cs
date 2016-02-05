@@ -37,8 +37,6 @@ namespace CodeAbility.MonitorAndCommand.Environment
         public const string DATA_SENSOR_TEMPERATURE = "SensorTemperature";
 
         //Content
-        //public const string CONTENT_BUTTON_ON = "On";
-        //public const string CONTENT_BUTTON_OFF = "Off";
         public const string CONTENT_BUTTON_PRESSED = "Pressed";
 
         public const string CONTENT_LED_STATUS_ON = "On";

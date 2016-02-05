@@ -53,14 +53,14 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             messageClient.DataReceived += client_MessageReceived;
             //messageClient.CommandReceived += client_MessageReceived;
 
-            messageClient.SubscribeToTraffic(Devices.DATA_GENERATOR, Devices.ALL);
+            messageClient.SubscribeToTraffic(Devices.WINDOWS_CONSOLE, Devices.ALL);
         }
 
         void client_MessageReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from the NETDUINO
             string fromDevice = e.FromDevice;
-            if (!fromDevice.Equals(Environment.Devices.DATA_GENERATOR))
+            if (!fromDevice.Equals(Environment.Devices.WINDOWS_CONSOLE))
                 return;
 
             if (e.Name.Equals(Environment.DataGenerator.OBJECT_GENERATOR))
