@@ -92,6 +92,7 @@
 
                     <TextBlock Grid.Column="3"                       
                        Text="Device" 
+                       HorizontalAlignment="Left" Margin="10,0"
                        Style="{StaticResource LegendStyle}"></TextBlock>
                 </Grid>
 
