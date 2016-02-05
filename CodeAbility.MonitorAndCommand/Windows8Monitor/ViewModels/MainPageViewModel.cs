@@ -35,7 +35,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        const int LOAD_DATA_PERIOD_IN_MILLISECONDS = 200;
+        const int LOAD_DATA_PERIOD_IN_SECONDS = 3;
 
         ObservableCollection<SerieItem> voltageSerie;
         public ObservableCollection<SerieItem> VoltageSerie
@@ -131,7 +131,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, LOAD_DATA_PERIOD_IN_MILLISECONDS);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, LOAD_DATA_PERIOD_IN_SECONDS);
 
             dispatcherTimer.Start();
 
@@ -213,7 +213,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 {
                     Voltage = e.Content.ToString(); //.Substring(0, 4);
 
-                    lastReceivedVoltage = Double.Parse(e.Content.ToString());
+                    voltageModel.EnqueueVoltage(Double.Parse(e.Content.ToString()), e.Timestamp);
                 }   
             } 
         }
@@ -223,14 +223,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
         void dispatcherTimer_Tick(object sender, object e)
         {
-            voltageModel.EnqueueVoltage(lastReceivedVoltage);
-
-            counter++;
-            if (counter == 5)
-            { 
-                LoadData();
-                counter = 0;
-            }
+            LoadData();
         }
 
         public void StartDispatcherTimer()

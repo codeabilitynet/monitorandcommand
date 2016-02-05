@@ -26,7 +26,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
     public class SerieItem
     {
         public DateTime Timestamp { get; set; }
-        public double Value { get; set; }
+        public double? Value { get; set; }
 
         public override string ToString()
         {
