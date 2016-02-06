@@ -55,7 +55,7 @@
             </charting:Chart>
             <TextBlock Grid.Column="1" 
                        HorizontalAlignment="Center" VerticalAlignment="Center" 
-                       Text="{Binding Voltage}" FontSize="60"/>
+                       Text="{Binding Voltage}" FontSize="80"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -100,6 +100,7 @@
                       ItemsSource="{Binding DeviceModels}" 
                       Margin="30,0"
                       HorizontalAlignment="Center" 
+                      VerticalAlignment="Center" 
                       Background="Transparent">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -113,7 +114,7 @@
             </Grid>
                
             <Ellipse Grid.Column="1" Fill="Red" 
-                     Height="150" Width="150" 
+                     Height="180" Width="180" 
                      Stroke="White" StrokeThickness="3"
                      Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>

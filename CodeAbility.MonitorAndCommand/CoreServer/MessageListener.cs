@@ -79,9 +79,6 @@ namespace CodeAbility.MonitorAndCommand.Server
         private Thread messageStoringThread = null;
         private Thread eventStoringThread = null;
 
-        private Timer processTimer = null;
-        private Timer heartbeatTimer = null;
-
         //ManualResetEvent instances signal completion.
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
         private ManualResetEvent processEvent = new ManualResetEvent(false);

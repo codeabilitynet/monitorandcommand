@@ -35,7 +35,6 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
     {
         const string IP_ADDRESS = "192.168.178.26";
         const int PORT = 11000;
-        const int HEARTBEAT_PERIOD = 10000;
 
         static AutoResetEvent _networkAvailableEvent = new AutoResetEvent(false);
         static AutoResetEvent _networkAddressChangedEvent = new AutoResetEvent(false);
@@ -59,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
             //Debug.Print(Resources.GetString(Resources.StringResources.String1));
 
-            HomeMonitoringProcess process = new HomeMonitoringProcess(5000,10000);
+            MCP4921Process process = new MCP4921Process();
             process.Start(IP_ADDRESS, PORT, true);
         }
 
