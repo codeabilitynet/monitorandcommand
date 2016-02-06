@@ -4,22 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CodeAbility.MonitorAndCommand.Environment;
+
 namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 {
     public class VoltageControl : BaseStateMachine
     {
-        public enum States { Low, Standard, High, Danger }
+        const int NOTIFY_STATE_TIMER_PERIOD = 10000;
 
         const double lowLimitVoltage = 0.01d;
         const double highLimitVoltage = 2.5d;
         const double dangerLimitVoltage = 3d;
 
-        private States state = States.Low;
-        public States State
+        private ServerStates.VoltageStates state = ServerStates.VoltageStates.Low;
+        public ServerStates.VoltageStates State
         {
             get
             {
-                HasChangedSinceLastGet = false;
+                ShallNotifyState = false;
                 return state;
             }
             protected set
@@ -27,9 +29,15 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
                 if (value != state)
                 {
                     state = value;
-                    HasChangedSinceLastGet = true;
+                    ShallNotifyState = true;
                 }
             }
+        }
+
+        public VoltageControl()
+            : base(NOTIFY_STATE_TIMER_PERIOD)
+        {
+
         }
 
         public void ComputeState(string voltageString)
@@ -39,14 +47,15 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
            if (Double.TryParse(voltageString, out voltage))
            {
                if (voltage < lowLimitVoltage)
-                   State = States.Low;
+                   State = ServerStates.VoltageStates.Low;
                else if (voltage > dangerLimitVoltage)
-                   State = States.Danger;
+                   State = ServerStates.VoltageStates.Danger;
                else if (voltage > highLimitVoltage)
-                   State = States.High;
+                   State = ServerStates.VoltageStates.High;
                else
-                   State = States.Standard;
+                   State = ServerStates.VoltageStates.Standard;
            }
         }
+
     }
 }

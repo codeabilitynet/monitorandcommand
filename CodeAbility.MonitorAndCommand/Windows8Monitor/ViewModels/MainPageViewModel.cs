@@ -142,7 +142,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_3_WIFI));
             deviceModels.Add(new DeviceModel(Environment.Devices.RASPBERRY_PI_B));
             deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_PHONE));
-            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
+            //deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
         }
 
         public async void Start()
@@ -158,7 +158,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                messageClient.SubscribeToData(Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
 
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_NETDUINO_3_WIFI);
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_RASPBERRY_B);
@@ -210,7 +210,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                     GreenLED = e.Content.Equals(Pibrella.CONTENT_LED_STATUS_ON);
                 }
             }
-            else if (e.FromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
+            else if (e.FromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI) || e.FromDevice.Equals(Message.SERVER))
             {
                 if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
                 {
@@ -221,8 +221,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             } 
         }
 
-        double lastReceivedVoltage = 0;
-        int counter = 0;
 
         void dispatcherTimer_Tick(object sender, object e)
         {

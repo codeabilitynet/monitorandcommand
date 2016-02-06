@@ -15,6 +15,8 @@ namespace CodeAbility.MonitorAndCommand.Environment
         public const string STATE_CONNECTION_WINDOWS_PHONE = "Connection.WindowsPhone";
         public const string STATE_CONNECTION_WINDOWS_SURFACE = "Connection.WindowsSurface";
 
+        public enum VoltageStates { Low, Standard, High, Danger }
+
         public const string STATE_MCP4921_VOLTAGE = "VoltageControl";
     }
 }

@@ -43,24 +43,13 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
         public VoltageModel() 
         {
             //client = new MessageServiceReference.MessageServiceClient();
-
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, TIME_INTERVAL_IN_MILLISECONDS);
-
-            dispatcherTimer.Start();
-
-            InitializeQueue();
-        }
-
-        void dispatcherTimer_Tick(object sender, object e)
-        {
-            lastReceivedTimestamp = lastReceivedTimestamp.AddMilliseconds(TIME_INTERVAL_IN_MILLISECONDS);
-            serieItems.Enqueue(new SerieItem() { Timestamp = lastReceivedTimestamp, Value = lastReceivedVoltage });
         }
 
         public void EnqueueVoltage(double value, DateTime timestamp)
         {
+            if (serieItems.Count == 0)
+                InitializeQueue();
+
             serieItems.Enqueue(new SerieItem() { Timestamp = timestamp, Value = value });
             
             lastReceivedVoltage = value;

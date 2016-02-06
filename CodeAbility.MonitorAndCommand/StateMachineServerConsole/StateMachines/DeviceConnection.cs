@@ -10,13 +10,14 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 {
     public class DeviceConnection : BaseStateMachine
     {
+        const int NOTIFY_STATE_TIMER_PERIOD = 5000;
 
         private ServerStates.ConnectionStates state = ServerStates.ConnectionStates.Disconnected;
         public ServerStates.ConnectionStates State
         {
             get 
             {
-                HasChangedSinceLastGet = false;
+                ShallNotifyState = false;
                 return state; 
             }
             protected set 
@@ -24,9 +25,14 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
                 if (value != state)
                 {
                     state = value;
-                    HasChangedSinceLastGet = true; 
+                    ShallNotifyState = true; 
                 }
             }
+        }
+
+        public DeviceConnection() : base(NOTIFY_STATE_TIMER_PERIOD)
+        {
+
         }
 
         public void ChangeState(bool isConnected)

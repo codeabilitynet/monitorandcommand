@@ -43,7 +43,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
         PibrellaBoard pibrella = new PibrellaBoard();
         MessageClient messageClient = null;
 
-        public PibrellaBoardLEDsMonitor(int period) 
+        public PibrellaBoardLEDsMonitor() 
         {
             messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B);
 
@@ -64,11 +64,11 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
             if (commandName.Equals(Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED))
             {
                 if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED))
-	                ToggleGreenLed();
+	                ToggleGreenLed(content);
                 else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED))
-	                ToggleYellowLed();
+	                ToggleYellowLed(content);
                 else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_RED_LED))
-	                ToggleRedLed();
+	                ToggleRedLed(content);
             }
         }
 
@@ -95,11 +95,25 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
             }
         }
 
+        bool IsOn(string content)
+        {
+            if (content == Environment.Objects.PibrellaBoard.CONTENT_LED_STATUS_ON)
+                return true;
+            else if (content == Environment.Objects.PibrellaBoard.CONTENT_LED_STATUS_ON)
+                return false;
+            else
+                return false;
+        }
+
         bool greenLedStatus = false;
-		protected void ToggleGreenLed()
+		protected void ToggleGreenLed(string content)
 		{
-			pibrella.Connection.Toggle (pibrella.LedPinGreen);
-            greenLedStatus = !greenLedStatus;
+            greenLedStatus = IsOn(content);
+
+            if (greenLedStatus)
+                pibrella.Connection.Add(pibrella.LedPinGreen);
+            else
+                pibrella.Connection.Remove(pibrella.LedPinGreen);
 
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED,
@@ -110,10 +124,14 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 		}
 
         bool yellowLedStatus = false;
-		protected void ToggleYellowLed()
+        protected void ToggleYellowLed(string content)
 		{
-            pibrella.Connection.Toggle (pibrella.LedPinYellow);
-            yellowLedStatus = !yellowLedStatus;
+            yellowLedStatus = IsOn(content);
+
+            if (yellowLedStatus)
+                pibrella.Connection.Add(pibrella.LedPinYellow);
+            else
+                pibrella.Connection.Remove(pibrella.LedPinYellow);
 
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED,
@@ -124,10 +142,14 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 		}
 
         bool redLedStatus = false;
-		protected void ToggleRedLed()
+        protected void ToggleRedLed(string content)
 		{
-            pibrella.Connection.Toggle (pibrella.LedPinRed);            
-            redLedStatus = !redLedStatus;
+            redLedStatus = IsOn(content);
+
+            if (redLedStatus)
+                pibrella.Connection.Add(pibrella.LedPinRed);
+            else
+                pibrella.Connection.Remove(pibrella.LedPinRed);
 
             messageClient.SendData(Environment.Devices.ALL,
                                     Environment.Objects.PibrellaBoard.OBJECT_RED_LED,

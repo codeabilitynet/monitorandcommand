@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using CodeAbility.MonitorAndCommand.Server;
@@ -32,17 +33,25 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 {
     internal class ExtendedMessageListener : MessageListener
     {
-        VoltageControl voltageControlStateMachine = new VoltageControl();
+        const int CHECK_STATE_TIMER_PERIOD = 1000;
+
+        VoltageControl voltageControl = new VoltageControl();
+        VoltageKeeper voltageKeeper = new VoltageKeeper();
 
         DeviceConnection netduinoConnection = new DeviceConnection();
         DeviceConnection pibrellaConnection = new DeviceConnection();
         DeviceConnection windowsPhoneConnection = new DeviceConnection();
         DeviceConnection surfaceConnection = new DeviceConnection();
 
+        Timer checkStatesTimer; 
+
         public ExtendedMessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated) :
             base(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated)
         {
             this.RegistrationChanged += ExtendedMessageListener_RegistrationChanged;
+
+            TimerCallback checkStatesTimerCallBack = CheckStates;
+            checkStatesTimer = new Timer(checkStatesTimerCallBack, null, 0, CHECK_STATE_TIMER_PERIOD); 
         }
 
         void ExtendedMessageListener_RegistrationChanged(object sender, RegistrationEventArgs e)
@@ -68,10 +77,6 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             }
         }
 
-        protected override void PreProcess(CodeAbility.MonitorAndCommand.Models.Message message)
-        {
-            base.PreProcess(message);
-        }
 
         protected override void PostProcess(CodeAbility.MonitorAndCommand.Models.Message message)
         {
@@ -96,23 +101,44 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             }
         }
 
-        protected override void PostSend(Message message)
-        {
-            base.PostSend(message);
-
-            if (voltageControlStateMachine.HasChangedSinceLastGet)
-                SendToRegisteredDevices(InstantiateServerStateDataMessage(Environment.ServerStates.STATE_MCP4921_VOLTAGE, voltageControlStateMachine.State.ToString()));   
-        }
-
         private void ProcessPayloadMessage(Message message)
         {
             switch (message.Parameter.ToString())
             {
-                case Environment.MCP4921.OBJECT_ANALOG_DATA :
-                    voltageControlStateMachine.ComputeState(message.Content.ToString());
+                case Environment.MCP4921.DATA_ANALOG_VALUE :
+                    voltageControl.ComputeState(message.Content.ToString());
+                    voltageKeeper.StoreVoltage(message.Content.ToString());
                     break;
                 default:
                     break;
+            }
+        }
+
+        protected virtual void CheckStates(object state)
+        {
+
+            if (voltageControl.ShallNotifyState)
+            {
+                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
+                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,
+                                                                       voltageControl.State == ServerStates.VoltageStates.Standard ?
+                                                                            Pibrella.CONTENT_LED_STATUS_ON :
+                                                                            Pibrella.CONTENT_LED_STATUS_OFF));
+                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
+                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED,
+                                                                       voltageControl.State == ServerStates.VoltageStates.High ?
+                                                                            Pibrella.CONTENT_LED_STATUS_ON :
+                                                                            Pibrella.CONTENT_LED_STATUS_OFF));
+                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
+                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED,
+                                                                       voltageControl.State == ServerStates.VoltageStates.Danger ?
+                                                                            Pibrella.CONTENT_LED_STATUS_ON :
+                                                                            Pibrella.CONTENT_LED_STATUS_OFF));
+            }
+
+            if (voltageKeeper.ShallNotifyState)
+            {
+                SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
             }
         }
     }
