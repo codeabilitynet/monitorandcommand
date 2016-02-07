@@ -33,17 +33,17 @@ namespace CodeAbility.MonitorAndCommand.WPClient
         #region Event
 
         // A delegate type for hooking up change notifications.
-        public delegate void DataReceivedEventHandler(object sender, MessageEventArgs e);
+        public delegate void MessageStringReceivedEventHandler(object sender, MessageEventArgs e);
 
         // An event that clients can use to be notified whenever the
         // elements of the list change.
-        public event DataReceivedEventHandler DataReceived;
+        public event MessageStringReceivedEventHandler MessageStringReceived;
 
         // Invoke the Changed event; called whenever list changes
         protected void OnDataReceived(MessageEventArgs e)
         {
-            if (DataReceived != null)
-                DataReceived(this, e);
+            if (MessageStringReceived != null)
+                MessageStringReceived(this, e);
         }
 
         #endregion 
@@ -64,7 +64,7 @@ namespace CodeAbility.MonitorAndCommand.WPClient
         {
             DeviceName = deviceName;
 
-            client.DataStringReceived += client_DataStringReceived;
+            client.MessageStringReceived += client_MessageStringReceived;
         }
 
         //public MessageClient(string deviceName, string ipAddress, int portNumber) : this(deviceName)
@@ -73,17 +73,17 @@ namespace CodeAbility.MonitorAndCommand.WPClient
         //    PortNumber = portNumber;
         //}
 
-        void client_DataStringReceived(object sender, DataStringEventArgs e)
+        void client_MessageStringReceived(object sender, MessageStringEventArgs e)
         {
             try
             { 
-                string paddedSerializedData = e.Data;
+                string paddedSerializedMessage = e.MessageString;
 
-                string cleanedUpSerializedData = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
-                Message message = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
+                string cleanedUpSerializedMessage = CodeAbility.MonitorAndCommand.Helpers.JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
+                Message message = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedMessage);
 
-                if (DataReceived != null)
-                    DataReceived(this, new MessageEventArgs(message));        
+                if (MessageStringReceived != null)
+                    MessageStringReceived(this, new MessageEventArgs(message));        
             }
             catch(Exception exception)
             {

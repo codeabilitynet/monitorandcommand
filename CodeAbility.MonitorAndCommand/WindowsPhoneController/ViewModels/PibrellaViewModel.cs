@@ -83,7 +83,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             MessageClient = App.Current.Resources["MessageClient"] as MessageClient;
 
-            MessageClient.DataReceived += messageClient_DataReceived;
+            MessageClient.MessageStringReceived += messageClient_DataReceived;
         }
 
         public void Subscribe()
