@@ -38,12 +38,12 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 {
     internal class SocketClient
     {
-        public delegate void DataStringReceivedEventHandler(object sender, DataStringEventArgs e);
-        public event DataStringReceivedEventHandler DataStringReceived;
-        protected void OnDataStringReceived(DataStringEventArgs e)
+        public delegate void MessageStringReceivedEventHandler(object sender, MessageStringEventArgs e);
+        public event MessageStringReceivedEventHandler MessageStringReceived;
+        protected void OnMessageStringReceived(MessageStringEventArgs e)
         {
-            if (DataStringReceived != null)
-                DataStringReceived(this, e);
+            if (MessageStringReceived != null)
+                MessageStringReceived(this, e);
         }
 
         StreamSocket socket = null;
@@ -138,8 +138,8 @@ namespace CodeAbility.MonitorAndCommand.W8Client
 
                     clientDone.Set();
 
-                    string receivedData = Encoding.UTF8.GetString(payload, 0, Message.BUFFER_SIZE);
-                    OnDataStringReceived(new DataStringEventArgs(receivedData));
+                    string receivedMessage = Encoding.UTF8.GetString(payload, 0, Message.BUFFER_SIZE);
+                    OnMessageStringReceived(new MessageStringEventArgs(receivedMessage));
 
                     clientDone.WaitOne();
                 }

@@ -331,8 +331,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             int missingBytesLength;
             int length;
             int receivedBytesLength;
-            char[] dataChars;
-            string paddedSerializedData;
+            char[] messageChars;
+            string paddedSerializedMessage;
             string serializedMessage;
             object deserializedObject;
             Hashtable hashTable;
@@ -351,14 +351,14 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
 
-                        dataChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
-                        paddedSerializedData = new string(dataChars);
+                        messageChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
+                        paddedSerializedMessage = new string(messageChars);
 
                         //Log("Padded    : " + paddedSerializedData);
 
-                        if (paddedSerializedData != null)
+                        if (paddedSerializedMessage != null)
                         { 
-                            serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                            serializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
                             deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
                             hashTable = deserializedObject as Hashtable;
                             message = new Message()

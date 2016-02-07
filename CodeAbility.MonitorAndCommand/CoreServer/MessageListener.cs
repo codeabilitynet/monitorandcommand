@@ -263,11 +263,11 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     { 
-                        string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
+                        string paddedSerializedMessage = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
 
-                        string cleanedUpSerializedData = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                        string cleanedUpSerializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
 
-                        Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedData);
+                        Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedMessage);
 
                     //HACK : we pass the ip:port address in the Property argument
                         if (receivedMessage.Name.Equals(ControlActions.REGISTER))

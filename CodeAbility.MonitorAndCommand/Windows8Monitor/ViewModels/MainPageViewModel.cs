@@ -142,23 +142,25 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_3_WIFI));
             deviceModels.Add(new DeviceModel(Environment.Devices.RASPBERRY_PI_B));
             deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_PHONE));
-            //deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
+            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
         }
 
         public async void Start()
         {        
             MessageClient messageClient = App.Current.Resources["MessageClient"] as MessageClient;
 
-            messageClient.DataReceived += messageClient_DataReceived;
+            messageClient.MessageStringReceived += messageClient_MessageStringReceived;
 
             if (await messageClient.Start(IpAddress, PortNumber))
             {
                 messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.DATA_LED_STATUS);
-                messageClient.SubscribeToData(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.DATA_BUTTON_STATUS);
 
-                messageClient.SubscribeToData(Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+
+                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
+                messageClient.SubscribeToTraffic(Devices.NETDUINO_3_WIFI, Devices.WINDOWS_PHONE);
 
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_NETDUINO_3_WIFI);
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_RASPBERRY_B);
@@ -166,9 +168,12 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_WINDOWS_SURFACE);
                 messageClient.SubscribeToServerState(ServerStates.STATE_MCP4921_VOLTAGE);
             }
+
+            DeviceModel surfaceModel = deviceModels.FirstOrDefault(x => x.Name == Devices.WINDOWS_SURFACE);
+            surfaceModel.IsConnected = true;
         }
 
-        void messageClient_DataReceived(object sender, MonitorAndCommand.Models.MessageEventArgs e)
+        void messageClient_MessageStringReceived(object sender, MonitorAndCommand.Models.MessageEventArgs e)
         { 
             string fromDevice = e.FromDevice;
             string dataName = e.Name;
@@ -191,9 +196,9 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             if (sendingDeviceModel != null)
                 sendingDeviceModel.HandleSentMessageEvent();
 
-            DeviceModel receivingDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.ReceivingDevice);
-            if (receivingDeviceModel != null)
-                receivingDeviceModel.HandleReceivedMessageEvent();
+            DeviceModel toDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.ToDevice);
+            if (toDeviceModel != null)
+                toDeviceModel.HandleReceivedMessageEvent();
 
             if (fromDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
             {

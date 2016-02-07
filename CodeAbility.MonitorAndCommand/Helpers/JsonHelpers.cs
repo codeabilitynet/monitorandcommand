@@ -48,16 +48,16 @@ namespace CodeAbility.MonitorAndCommand.Helpers
         /// <summary>
         /// Removes '.' from a "padded" serialized message
         /// </summary>
-        /// <param name="paddedSerializedData"></param>
+        /// <param name="paddedSerializedMessage"></param>
         /// <returns></returns>
-        public static string CleanUpPaddedSerializedData(string paddedSerializedData)
+        public static string CleanUpPaddedSerializedMessage(string paddedSerializedMessage)
         {
-            int firstBraceIndex = paddedSerializedData.IndexOf('{');
-            int lastBraceIndex = paddedSerializedData.LastIndexOf('}');
+            int firstBraceIndex = paddedSerializedMessage.IndexOf('{');
+            int lastBraceIndex = paddedSerializedMessage.LastIndexOf('}');
             string serializedMessage = String.Empty;
 
             if (firstBraceIndex >= 0 && lastBraceIndex > firstBraceIndex)
-                serializedMessage = paddedSerializedData.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
+                serializedMessage = paddedSerializedMessage.Substring(firstBraceIndex, lastBraceIndex - firstBraceIndex + 1);
             else
                 throw new Exception("Invalid content : not a JSON formatted string.");
 

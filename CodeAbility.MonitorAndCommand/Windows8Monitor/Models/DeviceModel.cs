@@ -110,12 +110,14 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
 
         public void HandleReceivedMessageEvent()
         {
-            MessageReceivedHandler();
+            if (IsConnected)
+                MessageReceivedHandler();
         }
 
         public void HandleSentMessageEvent()
         {
-            MessageSentHandler();
+            if (IsConnected)
+                MessageSentHandler();
         }
 
         async void MessageSentHandler()

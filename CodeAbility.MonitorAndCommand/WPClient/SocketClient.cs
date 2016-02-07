@@ -33,12 +33,12 @@ namespace CodeAbility.MonitorAndCommand.WPClient
 {
     internal class SocketClient
     {
-        public delegate void DataStringReceivedEventHandler(object sender, DataStringEventArgs e);
-        public event DataStringReceivedEventHandler DataStringReceived;
-        protected void OnDataStringReceived(DataStringEventArgs e)
+        public delegate void MessageStringReceivedEventHandler(object sender, MessageStringEventArgs e);
+        public event MessageStringReceivedEventHandler MessageStringReceived;
+        protected void OnMessageStringReceived(MessageStringEventArgs e)
         {
-            if (DataStringReceived != null)
-                DataStringReceived(this, e);
+            if (MessageStringReceived != null)
+                MessageStringReceived(this, e);
         }
 
         Socket socket = null;
@@ -150,8 +150,8 @@ namespace CodeAbility.MonitorAndCommand.WPClient
                         string response = string.Empty;
                         if (e.SocketError == SocketError.Success)
                         {
-                            string receivedData = Encoding.UTF8.GetString(e.Buffer, e.Offset, e.BytesTransferred);
-                            OnDataStringReceived(new DataStringEventArgs(receivedData));
+                            string receivedMessageString = Encoding.UTF8.GetString(e.Buffer, e.Offset, e.BytesTransferred);
+                            OnMessageStringReceived(new MessageStringEventArgs(receivedMessageString));
                         }
                         else
                         {

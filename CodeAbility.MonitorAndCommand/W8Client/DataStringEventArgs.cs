@@ -26,14 +26,14 @@ using CodeAbility.MonitorAndCommand.Models;
 
 namespace CodeAbility.MonitorAndCommand.W8Client
 {
-    public class DataStringEventArgs : EventArgs
+    public class MessageStringEventArgs : EventArgs
     {
-        public string Data { get; set; }
+        public string MessageString { get; set; }
 
-        public DataStringEventArgs(string data)
+        public MessageStringEventArgs(string messageString)
             : base()
         {
-            Data = data;
+            MessageString = messageString;
         }
     }
 }

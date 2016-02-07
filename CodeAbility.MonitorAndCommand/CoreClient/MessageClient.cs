@@ -302,7 +302,7 @@ namespace CodeAbility.MonitorAndCommand.Client
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
                         string paddedSerializedData = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
-                        string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                        string serializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedData);
 
                         Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
 
