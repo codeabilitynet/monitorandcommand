@@ -34,7 +34,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.Pages
 {
     public partial class MCP4921 : PhoneApplicationPage
     {
-        public const int TIMESPAN_IN_MILLISECONDS = 200; 
+        public const int TIMESPAN_IN_MILLISECONDS = 250; 
 
         MCP4921ViewModel ViewModel { get; set; }
 

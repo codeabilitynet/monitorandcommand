@@ -116,6 +116,10 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         protected virtual void CheckStates(object state)
         {
+            if (voltageKeeper.ShallNotifyState)
+            {
+                SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
+            }
 
             if (voltageControl.ShallNotifyState)
             {
@@ -131,11 +135,6 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
                                                                        voltageControl.State == ServerStates.VoltageStates.Danger ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));
-            }
-
-            if (voltageKeeper.ShallNotifyState)
-            {
-                SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
             }
         }
     }

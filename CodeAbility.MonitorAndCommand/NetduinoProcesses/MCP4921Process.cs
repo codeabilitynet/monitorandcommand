@@ -46,8 +46,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
         protected override void SendServerMessages()
         {
             messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE);
-            messageClient.SubscribeToData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.DATA_DIGITAL_VALUE);
-            messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.COMMAND_CONVERT);
+            messageClient.SubscribeToData(Environment.Devices.WINDOWS_PHONE, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.DATA_DIGITAL_VALUE);
+            messageClient.SubscribeToCommand(Environment.Devices.WINDOWS_PHONE, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.COMMAND_CONVERT);
         }
 
         protected override void HandleReceivedData(Models.MessageEventArgs e)
@@ -60,7 +60,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
             string objectName = e.Parameter.ToString();
             string dataValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
-            if (objectName.Equals(Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA))
+            if (e.FromDevice.Equals(Environment.Devices.WINDOWS_PHONE) && 
+                objectName.Equals(Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA))
             {
                 int inputData = Int32.Parse(dataValue);
                 Convert(inputData);

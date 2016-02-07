@@ -36,7 +36,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        const int LOAD_DATA_PERIOD_IN_SECONDS = 3;
+        const int LOAD_DATA_PERIOD_IN_SECONDS = 1;
 
         ObservableCollection<SerieItem> voltageSerie;
         public ObservableCollection<SerieItem> VoltageSerie
