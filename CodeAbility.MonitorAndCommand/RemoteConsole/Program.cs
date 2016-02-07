@@ -36,6 +36,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             Console.WriteLine("Hit [1] to start a Data Generator receptor.");
             Console.WriteLine("Hit [2] to start a Pibrella remote.");
             Console.WriteLine("Hit [3] to start a LEDs remote.");
+            Console.WriteLine("Hit [4] to start a MCP4921 remote.");
 
             ConsoleKeyInfo keyInfo;
 
@@ -43,7 +44,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             {
                 keyInfo = Console.ReadKey();
             }
-            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3')));
+            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3') || keyInfo.KeyChar.Equals('4')));
 
             if (keyInfo.KeyChar.Equals('1'))
                 DataGeneratorRemote.Start(ipAddress, portNumber);
@@ -51,6 +52,8 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
                 PibrellaRemote.Start(ipAddress, portNumber);
             else if (keyInfo.KeyChar.Equals('3'))
                 NetduinoRemote.Start(ipAddress, portNumber);
+            else if (keyInfo.KeyChar.Equals('4'))
+                MCP4921Remote.Start(ipAddress, portNumber);
         }
 
 

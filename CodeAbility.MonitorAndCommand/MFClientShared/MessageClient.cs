@@ -36,7 +36,6 @@ namespace CodeAbility.MonitorAndCommand.MFClient
     public class MessageClient : IMessageClient
     {
         const int HEARTBEAT_START_DELAY = 5000;
-        const int HEARTBEAT_PERIOD = 60000;
 
         #region Event
 
@@ -73,6 +72,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         string ServerIpAddress { get; set; }
 
         int PortNumber { get; set; }
+        int HeartbeatPeriod { get; set; }
 
         bool IsLoggingEnabled { get; set; }
 
@@ -98,10 +98,16 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
 
-        public MessageClient(string deviceName, bool isLoggingEnabled)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <param name="heartbeatPeriod"></param>
+        /// <param name="isLoggingEnabled"></param>
+        public MessageClient(string deviceName, int heartbeatPeriod, bool isLoggingEnabled)
         { 
             DeviceName = deviceName;
-
+            HeartbeatPeriod = heartbeatPeriod;
             IsLoggingEnabled = isLoggingEnabled;
 
             IsConnected = false;
@@ -109,6 +115,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         #region Public Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serverIpAddress"></param>
+        /// <param name="port"></param>
         public void Start(string serverIpAddress, int port)
         {
             ServerIpAddress = serverIpAddress;
@@ -137,10 +148,10 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 Register(DeviceName);
 
                 //Start, if period is set, the Heartbeat Timer
-                if (HEARTBEAT_PERIOD > 0)
+                if (HeartbeatPeriod > 0)
                 {
                     TimerCallback heartbeatCallBack = Heartbeat;
-                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HEARTBEAT_PERIOD);
+                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HeartbeatPeriod);
                 }
 
                 Log("MessageClient started.");
@@ -317,30 +328,40 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             byte[] buffer = new byte[Message.BUFFER_SIZE];
             int offset = 0;
 
+            int missingBytesLength;
+            int length;
+            int receivedBytesLength;
+            char[] dataChars;
+            string paddedSerializedData;
+            string serializedMessage;
+            object deserializedObject;
+            Hashtable hashTable;
+            Message message;
+
             while (true)
             {
                 try
                 {
-                    int missingBytesLength = Message.BUFFER_SIZE - offset;
-                    int length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
+                    missingBytesLength = Message.BUFFER_SIZE - offset;
+                    length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
 
                     // Begin receiving the data from the remote device.
-                    int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
+                    receivedBytesLength = socket.Receive(buffer, offset, length, 0);
                     
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
 
-                        char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
-                        string paddedSerializedData = new string(dataChars);
+                        dataChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
+                        paddedSerializedData = new string(dataChars);
 
                         //Log("Padded    : " + paddedSerializedData);
 
                         if (paddedSerializedData != null)
                         { 
-                            string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
-                            object deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
-                            Hashtable hashTable = deserializedObject as Hashtable;
-                            Message message = new Message()
+                            serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
+                            deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
+                            hashTable = deserializedObject as Hashtable;
+                            message = new Message()
                             {
                                 SendingDevice = (string)hashTable["SendingDevice"],
                                 ReceivingDevice = (string)hashTable["ReceivingDevice"],

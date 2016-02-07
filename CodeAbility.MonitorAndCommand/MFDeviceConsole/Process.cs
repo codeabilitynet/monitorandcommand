@@ -50,7 +50,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
 
         public bool ledState = false;
 
-        public void Start(string ipAddress, int port)
+        public void Start(string ipAddress, int port, int heartbeatPeriod)
         {
             while (true)
             {
@@ -58,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                 {
                     reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(Environment.Devices.NETDUINO_3_WIFI, false);
+                    messageClient = new MessageClient(Environment.Devices.NETDUINO_3_WIFI, heartbeatPeriod, false);
 
                     if (messageClient != null)
                     { 

@@ -53,16 +53,15 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
             DoWorkPeriod = doWorkPeriod;
         }
 
-        public void Start(string ipAddress, int port, bool isLoggingEnabled)
+        public void Start(string ipAddress, int port, int heartbeatPeriod, bool isLoggingEnabled)
         {
-
             while (true)
             {
                 try
                 {
                     reconnectEvent.Reset();
 
-                    messageClient = new MessageClient(DeviceName, isLoggingEnabled);
+                    messageClient = new MessageClient(DeviceName, heartbeatPeriod, isLoggingEnabled);
 
                     if (messageClient != null)
                     {
