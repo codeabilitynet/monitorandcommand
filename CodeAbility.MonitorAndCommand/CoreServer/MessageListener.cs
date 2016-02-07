@@ -57,15 +57,12 @@ namespace CodeAbility.MonitorAndCommand.Server
         const int PROCESS_PERIOD = 50; 
         const int PROCESS_START_DELAY = 0; 
 
-        const int HEARTBEAT_START_DELAY = 1000;
-
         #endregion 
 
         #region Properties 
 
         private string IpAddressString { get; set; }
         private int PortNumber { get; set; }
-        private int HeartbeatPeriod { get; set; }
 
         private bool IsMessageServiceActivated { get; set; }
 
@@ -121,12 +118,11 @@ namespace CodeAbility.MonitorAndCommand.Server
         MessageServiceReference.MessageServiceClient messageServiceClient = null;
         EventServiceReference.EventServiceClient eventServiceClient = null;
 
-        public MessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
+        public MessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated)
         {           
             //Parameters
             IpAddressString = ipAddress;
             PortNumber = portNumber;
-            HeartbeatPeriod = heartbeatPeriod;
             IsMessageServiceActivated = isMessageServiceActivated;
 
             if (IsMessageServiceActivated)
@@ -632,17 +628,6 @@ namespace CodeAbility.MonitorAndCommand.Server
         #endregion 
         
         #region Heartbeat messages
-
-        public void Heartbeat(Object stateInfo)
-        {
-            foreach (Device device in devicesManager.Devices)
-            {
-                Message heartbeat = Message.InstanciateHeartbeatMessage(Message.SERVER);
-                SendToAllDevices(heartbeat);
-            }
-
-            heartbeatEvent.Set();
-        }
 
         private void HandleHeartbeatMessage(Message heartbeatMessage)
         {

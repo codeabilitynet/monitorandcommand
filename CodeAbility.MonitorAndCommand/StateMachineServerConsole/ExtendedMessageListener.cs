@@ -45,8 +45,8 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         Timer checkStatesTimer; 
 
-        public ExtendedMessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated) :
-            base(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated)
+        public ExtendedMessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated) :
+            base(ipAddress, portNumber, isMessageServiceActivated)
         {
             this.RegistrationChanged += ExtendedMessageListener_RegistrationChanged;
 
@@ -119,18 +119,15 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
             if (voltageControl.ShallNotifyState)
             {
-                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
-                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,
                                                                        voltageControl.State == ServerStates.VoltageStates.Standard ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));
-                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
-                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED,
                                                                        voltageControl.State == ServerStates.VoltageStates.High ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));
-                SendDirectlyToDevice(Devices.RASPBERRY_PI_B,
-                                     Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Message.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED,
                                                                        voltageControl.State == ServerStates.VoltageStates.Danger ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));

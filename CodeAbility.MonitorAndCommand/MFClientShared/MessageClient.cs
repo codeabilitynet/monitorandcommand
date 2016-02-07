@@ -333,6 +333,8 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                         char[] dataChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
                         string paddedSerializedData = new string(dataChars);
 
+                        //Log("Padded    : " + paddedSerializedData);
+
                         if (paddedSerializedData != null)
                         { 
                             string serializedMessage = JsonHelpers.CleanUpPaddedSerializedData(paddedSerializedData);
@@ -352,7 +354,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
     
                             if (message != null)
                             {
-                                Log("Received  :" + message.ToString());
+                                Log("Received  : " + message.ToString());
 
                                 if (message.ContentType == ContentTypes.DATA)
                                     OnDataReceived(new MessageEventArgs(message));
