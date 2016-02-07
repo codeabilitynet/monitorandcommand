@@ -214,7 +214,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             {
                 if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
                 {
-                    Voltage = e.Content.ToString(); //.Substring(0, 4);
+                    Voltage = e.Content.ToString().Substring(0, 4);
 
                     voltageModel.EnqueueVoltage(Double.Parse(e.Content.ToString()), e.Timestamp);
                 }   

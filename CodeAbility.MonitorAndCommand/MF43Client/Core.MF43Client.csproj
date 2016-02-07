@@ -56,9 +56,6 @@
     <Compile Include="..\Models\Address.cs">
       <Link>Address.cs</Link>
     </Compile>
-    <Compile Include="..\Models\Constants.cs">
-      <Link>Constants.cs</Link>
-    </Compile>
     <Compile Include="..\Models\ContentTypes.cs">
       <Link>ContentTypes.cs</Link>
     </Compile>

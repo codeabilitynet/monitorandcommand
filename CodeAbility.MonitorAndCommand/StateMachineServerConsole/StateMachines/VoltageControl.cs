@@ -10,7 +10,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 {
     public class VoltageControl : BaseStateMachine
     {
-        const int NOTIFY_STATE_TIMER_PERIOD = 10000;
+        const int NOTIFY_STATE_TIMER_PERIOD = 1000;
 
         const double lowLimitVoltage = 0.01d;
         const double highLimitVoltage = 2.5d;

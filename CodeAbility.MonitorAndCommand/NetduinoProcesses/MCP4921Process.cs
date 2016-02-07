@@ -35,12 +35,12 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
         const double LED_MINIMUM_FORWARD_VOLTAGE = 1.5;
         const double LED_MAXIMUM_FORWARD_VOLTAGE = 3.5;
 
-        MCP49231DAC converter = null;
+        MCP49231DAC converter = new MCP49231DAC(BOARD_REFERENCE_VOLTAGE);
 
         public MCP4921Process()
             : base(Environment.Devices.NETDUINO_3_WIFI, 0, 0)
         {
-
+            
         }
 
         protected override void SendServerMessages()
@@ -90,13 +90,23 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
 
         private int ComputeConverterData(int inputData)
         {
-            int converterData = 0;
+            try
+            { 
+                int converterData = 0;
 
-            double expectedVoltage = LED_MINIMUM_FORWARD_VOLTAGE + ((double)inputData / 100) * (BOARD_REFERENCE_VOLTAGE - LED_MINIMUM_FORWARD_VOLTAGE);
+                double expectedVoltage = LED_MINIMUM_FORWARD_VOLTAGE + ((double)inputData / 100) * (BOARD_REFERENCE_VOLTAGE - LED_MINIMUM_FORWARD_VOLTAGE);
 
-            converterData = (int)((expectedVoltage / BOARD_REFERENCE_VOLTAGE) * MCP49231DAC.STEPS);
+                converterData = (int)((expectedVoltage / BOARD_REFERENCE_VOLTAGE) * MCP49231DAC.STEPS);
 
-            return converterData;
+                return converterData;
+
+            }
+            catch(Exception exception)
+            {
+                messageClient.Log(exception.ToString());
+            }
+
+            return 0;
         }
     }
 }

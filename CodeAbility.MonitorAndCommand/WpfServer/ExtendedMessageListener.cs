@@ -49,8 +49,8 @@ namespace CodeAbility.MonitorAndCommand.WpfServer
                 MessageSent(this, e);
         }
 
-        public ExtendedMessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated) :
-            base(ipAddress, portNumber, heartbeatPeriod, isMessageServiceActivated)
+        public ExtendedMessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated) :
+            base(ipAddress, portNumber, isMessageServiceActivated)
         {
 
         }
