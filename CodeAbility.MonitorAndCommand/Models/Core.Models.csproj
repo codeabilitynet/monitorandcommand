@@ -56,7 +56,6 @@
     <Compile Include="Event.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageEventArgs.cs" />
-    <Compile Include="MonitoringEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationEventArgs.cs" />
   </ItemGroup>
