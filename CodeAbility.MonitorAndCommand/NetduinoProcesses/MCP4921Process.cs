@@ -52,7 +52,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
 
         protected override void HandleReceivedData(Models.MessageEventArgs e)
         {
-            throw new NotImplementedException();
+            messageClient.Log("Unhandled  : " + e.ToString());             
         }
 
         protected override void HandleReceivedCommand(Models.MessageEventArgs e)

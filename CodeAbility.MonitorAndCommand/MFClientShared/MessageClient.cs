@@ -15,7 +15,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -30,6 +29,7 @@ using Json.NETMF;
 using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Helpers;
+using Microsoft.SPOT;
 
 namespace CodeAbility.MonitorAndCommand.MFClient
 {
@@ -85,14 +85,17 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         Socket socket = null;
 
         private Queue messagesToSend = new Queue();
+        private Queue messagesReceived = new Queue();
 
         private Thread sendThread = null; 
         private Thread receiveThread = null;
+        private Thread processingThread = null; 
 
         private Timer heartbeatTimer = null;
 
         // ManualResetEvent instances signal completion.
         private ManualResetEvent sendEvent = new ManualResetEvent(false);
+        private ManualResetEvent receivedEvent = new ManualResetEvent(false); 
 
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
@@ -141,9 +144,11 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 sendThread = new Thread(new ThreadStart(Sender));
                 receiveThread = new Thread(new ThreadStart(Receiver));
+                processingThread = new Thread(new ThreadStart(SynchronizedProcessor)); 
 
                 sendThread.Start();
                 receiveThread.Start();
+                processingThread.Start(); 
                     
                 Register(DeviceName);
 
@@ -319,24 +324,24 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
         #region Threads
 
+        byte[] buffer = new byte[Message.BUFFER_SIZE];
+        int offset = 0;
+
+        int missingBytesLength;
+        int length;
+        int receivedBytesLength;
+        char[] messageChars;
+        string paddedSerializedMessage;
+        string serializedMessage;
+        object deserializedObject;
+        Hashtable hashTable;
+        Message message = new Message();
+
         private void Receiver()
         {
             Thread.Sleep(1000);
 
             Log("Starting Receiver() thread.");
-
-            byte[] buffer = new byte[Message.BUFFER_SIZE];
-            int offset = 0;
-
-            int missingBytesLength;
-            int length;
-            int receivedBytesLength;
-            char[] messageChars;
-            string paddedSerializedMessage;
-            string serializedMessage;
-            object deserializedObject;
-            Hashtable hashTable;
-            Message message;
 
             while (true)
             {
@@ -350,39 +355,37 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                     
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
-
                         messageChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
-                        paddedSerializedMessage = new string(messageChars);
+                        paddedSerializedMessage = new string(messageChars); 
 
-                        //Log("Padded    : " + paddedSerializedData);
+                        //Log("Padded:" + paddedSerializedMessage);
 
                         if (paddedSerializedMessage != null)
                         { 
                             serializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
                             deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
                             hashTable = deserializedObject as Hashtable;
-                            message = new Message()
-                            {
-                                SendingDevice = (string)hashTable["SendingDevice"],
-                                ReceivingDevice = (string)hashTable["ReceivingDevice"],
-                                FromDevice = (string)hashTable["FromDevice"],
-                                ToDevice = (string)hashTable["ToDevice"],
-                                ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
-                                Name = (string)hashTable["Name"],
-                                Parameter = (string)hashTable["Parameter"],
-                                Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty
-                            };
+
+                            //This way of doing things seems to be better than message = new Message() { ... }
+                            message.SendingDevice = (string)hashTable["SendingDevice"];
+                            message.ReceivingDevice = (string)hashTable["ReceivingDevice"];
+                            message.FromDevice = (string)hashTable["FromDevice"];
+                            message.ToDevice = (string)hashTable["ToDevice"];
+                            message.ContentType = Convert.ToInt32(hashTable["ContentType"].ToString());
+                            message.Name = (string)hashTable["Name"];
+                            message.Parameter = (string)hashTable["Parameter"];
+                            message.Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty;
     
                             if (message != null)
                             {
                                 Log("Received  : " + message.ToString());
 
-                                if (message.ContentType == ContentTypes.DATA)
-                                    OnDataReceived(new MessageEventArgs(message));
-                                else if (message.ContentType == ContentTypes.COMMAND)
-                                    OnCommandReceived(new MessageEventArgs(message));
-                                else if (message.ContentType == ContentTypes.HEARTBEAT)
-                                    HandleHeartbeatMessage(message);
+                                lock (messagesReceived)
+                                {
+                                    messagesReceived.Enqueue(new Message(message));
+                                }
+
+                                receivedEvent.Set();
                             }
                         }
 
@@ -402,7 +405,47 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             }
         }
 
-        public void Heartbeat(Object stateInfo)
+        Message dequeuedMessage = null; 
+
+        private void SynchronizedProcessor()
+        {
+            while (true)
+            {
+                try
+                {
+                    receivedEvent.Reset();
+
+                    while (messagesReceived.Count > 0)
+                    {
+                        lock (messagesToSend)
+                        {
+                            dequeuedMessage = messagesReceived.Dequeue() as Message;
+                        }
+
+                        if (message != null)
+                        {
+                            if (message.ContentType == ContentTypes.DATA)
+                                OnDataReceived(new MessageEventArgs(dequeuedMessage));
+                            else if (message.ContentType == ContentTypes.COMMAND)
+                                OnCommandReceived(new MessageEventArgs(dequeuedMessage));
+                            else if (message.ContentType == ContentTypes.HEARTBEAT)
+                                HandleHeartbeatMessage(dequeuedMessage);
+
+                            dequeuedMessage = null;
+                        }
+                    }
+
+                    receivedEvent.WaitOne();
+                }
+                catch (Exception exception)
+                {
+                    Log("Processor() : " + exception.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private void Heartbeat(Object stateInfo)
         {
             if (heartbeatStatus == HeartbeatStatus.NOK)
             {
@@ -429,7 +472,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             }
             else if (heartbeatMessage.FromDevice.Equals(DeviceName))
             {
-                //If the heartbeat was initiated by me, i am happy to have it returned, meaning that the server and the connection are working
+                //If the heartbeat was initiated by "me", the device, it means that the server and the connection are working
                 heartbeatStatus = HeartbeatStatus.OK;
             }
         }

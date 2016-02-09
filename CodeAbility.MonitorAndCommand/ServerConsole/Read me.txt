@@ -8,3 +8,4 @@ When trying to access the MVC Web Application deployed on a IIS server (instead 
         binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMessageService"
         contract="MessageServiceReference.IMessageService" name="BasicHttpBinding_IMessageService" behaviorConfiguration="debug" />
 
+To start the server as a unattended background task on a Raspberry Pi with Mono : nohup sudo mono CodeAbility.MonitorAndCommand.ServerConsole.exe &
