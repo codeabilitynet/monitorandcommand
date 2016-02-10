@@ -29,13 +29,14 @@ using Json.NETMF;
 using CodeAbility.MonitorAndCommand.Interfaces;
 using CodeAbility.MonitorAndCommand.Models;
 using CodeAbility.MonitorAndCommand.Helpers;
-using Microsoft.SPOT;
 
 namespace CodeAbility.MonitorAndCommand.MFClient
 {
     public class MessageClient : IMessageClient
     {
         const int HEARTBEAT_START_DELAY = 5000;
+
+        const int RECEIVER_WAITING_TIME = 100; 
 
         #region Event
 
@@ -179,6 +180,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                 Thread.Sleep(1000);
 
+                this.processingThread.Abort();
                 this.receiveThread.Abort();
                 this.sendThread.Abort();
 
@@ -352,30 +354,33 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 
                     // Begin receiving the data from the remote device.
                     receivedBytesLength = socket.Receive(buffer, offset, length, 0);
+
+                    //HACK : for some unexplained reason, receiving "messages bursts" behaves in a better way when the thread gets some sleeping time
+                    Thread.Sleep(RECEIVER_WAITING_TIME); 
                     
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     {
                         messageChars = Encoding.UTF8.GetChars(buffer, 0, Message.BUFFER_SIZE);
-                        paddedSerializedMessage = new string(messageChars); 
-
-                        //Log("Padded:" + paddedSerializedMessage);
-
+                        paddedSerializedMessage = new string(messageChars);
+                        
                         if (paddedSerializedMessage != null)
                         { 
                             serializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
+   
                             deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
                             hashTable = deserializedObject as Hashtable;
 
-                            //This way of doing things seems to be better than message = new Message() { ... }
-                            message.SendingDevice = (string)hashTable["SendingDevice"];
-                            message.ReceivingDevice = (string)hashTable["ReceivingDevice"];
-                            message.FromDevice = (string)hashTable["FromDevice"];
-                            message.ToDevice = (string)hashTable["ToDevice"];
-                            message.ContentType = Convert.ToInt32(hashTable["ContentType"].ToString());
-                            message.Name = (string)hashTable["Name"];
-                            message.Parameter = (string)hashTable["Parameter"];
-                            message.Content = hashTable.Contains("Content") ? (string)hashTable["Content"] : String.Empty;
-    
+                            message = new Message() { 
+                                SendingDevice = hashTable["SendingDevice"].ToString(),
+                                ReceivingDevice = hashTable["ReceivingDevice"].ToString(),
+                                FromDevice = hashTable["FromDevice"].ToString(),
+                                ToDevice = hashTable["ToDevice"].ToString(),
+                                ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
+                                Name = hashTable["Name"].ToString(),
+                                Parameter = hashTable["Parameter"].ToString(),
+                                Content = hashTable.Contains("Content") ? hashTable["Content"].ToString() : String.Empty
+                            };
+
                             if (message != null)
                             {
                                 Log("Received  : " + message.ToString());
@@ -400,7 +405,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                 catch (Exception exception)
                 {
                     Log("Receiver() : " + exception.ToString());
-                    throw;
+                    //throw;
                 }
             }
         }

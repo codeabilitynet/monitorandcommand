@@ -24,6 +24,21 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
+        <Style x:Key="EllipseStyle" TargetType="Ellipse">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="3"/>
+        </Style>
+        <Style x:Key="EllipseLegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -99,8 +114,8 @@
                 <ListView Grid.Row="1" 
                       ItemsSource="{Binding DeviceModels}" 
                       Margin="30,0"
-                      HorizontalAlignment="Center" 
-                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Center"  
+                      VerticalAlignment="Center"
                       Background="Transparent">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -112,35 +127,52 @@
                 </ListView>
 
             </Grid>
-               
-            <Ellipse Grid.Column="1" Fill="Red" 
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="180"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Ellipse Grid.Row="1" Fill="Red" 
                      Height="180" Width="180" 
                      Stroke="White" StrokeThickness="3"
                      Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" 
+                       Style="{StaticResource EllipseLegendStyle}"
+                       Text="Intensity" />
+            </Grid>
 
-            <Grid Grid.Column="2" Margin="20">
+            <Grid Grid.Column="2" Margin="20,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Ellipse Grid.Row="0" Fill="Red" 
-                    Height="100" Width="100" 
-                    Stroke="White" StrokeThickness="3"
-                    Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Ellipse Grid.Row="1" Fill="Yellow" 
-                    Height="100" Width="100" 
-                    Stroke="White" StrokeThickness="3"
-                    Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Ellipse Grid.Row="2" Fill="Green" 
-                    Height="100" Width="100" 
-                    Stroke="White" StrokeThickness="3"
-                    Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                         Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                <TextBlock Grid.Row="1" 
+                       Style="{StaticResource EllipseLegendStyle}"
+                       Text="Overload"/>
+                <Ellipse Grid.Row="2" Fill="Yellow" 
+                        Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                <TextBlock Grid.Row="3" 
+                           Style="{StaticResource EllipseLegendStyle}"
+                           Text="High"/>
+                <Ellipse Grid.Row="4" Fill="Green" 
+                         Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                <TextBlock Grid.Row="5" 
+                           Style="{StaticResource EllipseLegendStyle}"
+                           Text="Normal"/>
 
             </Grid>
         </Grid>        
