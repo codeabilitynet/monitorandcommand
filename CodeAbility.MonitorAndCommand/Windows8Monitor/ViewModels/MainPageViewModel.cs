@@ -159,9 +159,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
                 messageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
 
-                messageClient.SubscribeToTraffic(Devices.WINDOWS_PHONE, Devices.NETDUINO_3_WIFI);
-                messageClient.SubscribeToTraffic(Devices.NETDUINO_3_WIFI, Devices.WINDOWS_PHONE);
-
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_NETDUINO_3_WIFI);
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_RASPBERRY_B);
                 messageClient.SubscribeToServerState(ServerStates.STATE_CONNECTION_WINDOWS_PHONE);
@@ -192,9 +189,9 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 }
             }
             
-            DeviceModel sendingDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.SendingDevice);
-            if (sendingDeviceModel != null)
-                sendingDeviceModel.HandleSentMessageEvent();
+            DeviceModel fromDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.FromDevice);
+            if (fromDeviceModel != null)
+                fromDeviceModel.HandleSentMessageEvent();
 
             DeviceModel toDeviceModel = deviceModels.FirstOrDefault(x => x.Name == e.ToDevice);
             if (toDeviceModel != null)

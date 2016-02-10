@@ -45,8 +45,8 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
 
         protected override void SendServerMessages()
         {
-            messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE);
-            messageClient.SubscribeToData(Environment.Devices.WINDOWS_PHONE, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.DATA_DIGITAL_VALUE);
+            messageClient.PublishData(Environment.Devices.WINDOWS_PHONE, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE);
+            messageClient.PublishData(Environment.Devices.WINDOWS_SURFACE, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE);
             messageClient.SubscribeToCommand(Environment.Devices.WINDOWS_PHONE, Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA, Environment.Objects.MCP4921.COMMAND_CONVERT);
         }
 
