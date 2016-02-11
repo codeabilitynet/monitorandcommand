@@ -29,7 +29,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
     public class VoltageModel
     {
         const int NUMBER_OF_MESSAGES = 50;
-        const int TIME_INTERVAL_IN_MILLISECONDS = 3000;
+        const int TIME_INTERVAL_IN_MILLISECONDS = 1000;
 
         //MessageServiceReference.MessageServiceClient client;
 
@@ -49,8 +49,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
             dispatcherTimer.Tick += dispatcherTimer_Tick;   
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, TIME_INTERVAL_IN_MILLISECONDS);
 
-            InitializeQueue();
-
             GenerateNullValue = true;
 
             dispatcherTimer.Start();  
@@ -58,29 +56,30 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
 
         void  dispatcherTimer_Tick( object  sender,   object  e) 
         {   
-            if (GenerateNullValue)
-            { 
-                lastReceivedTimestamp  =  lastReceivedTimestamp. AddMilliseconds( TIME_INTERVAL_IN_MILLISECONDS) ; 
-                serieItems. Enqueue( new  SerieItem( )   {   Timestamp  =  lastReceivedTimestamp,   Value  =  null  } ) ;
-            }
+            lock (serieItems)
+            {
+                if (GenerateNullValue)
+                {
+                    EnqueueVoltage(lastReceivedVoltage, DateTime.Now);
+                }
             
-            GenerateNullValue = true;
+                GenerateNullValue = true;
+            }
         }  
  
         public void EnqueueVoltage(double value, DateTime timestamp)
         {
-            GenerateNullValue = false;
+            lock (serieItems)
+            {
+                GenerateNullValue = false;
 
-            if (serieItems.Count == 0)
-                InitializeQueue();
-
-            serieItems.Enqueue(new SerieItem() { Timestamp = timestamp, Value = value });
+                serieItems.Enqueue(new SerieItem() { Timestamp = timestamp, Value = value });
             
-            lastReceivedVoltage = value;
-            lastReceivedTimestamp = timestamp;
+                lastReceivedVoltage = value;
 
-            if (serieItems.Count >= NUMBER_OF_MESSAGES)
-                serieItems.Dequeue();
+                if (serieItems.Count >= NUMBER_OF_MESSAGES)
+                    serieItems.Dequeue();
+            }
         }
 
         public IEnumerable<SerieItem> LoadVoltageSerie()
@@ -88,19 +87,5 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
             return serieItems;
         }
 
-        private void InitializeQueue()
-        {
-            DateTime now = DateTime.Now;
-
-            for (int index = 0; index < NUMBER_OF_MESSAGES; index++)
-            {
-                SerieItem serieItem = new SerieItem() { Timestamp = now.AddMilliseconds(-TIME_INTERVAL_IN_MILLISECONDS * index), Value = null };
-
-                if (index == NUMBER_OF_MESSAGES - 1)
-                    lastReceivedTimestamp = serieItem.Timestamp;
-
-                serieItems.Enqueue(serieItem);
-            }
-        }
     }
 }
