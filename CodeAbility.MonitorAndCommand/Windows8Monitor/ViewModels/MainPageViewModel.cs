@@ -49,7 +49,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             }
         }
 
-        string voltage;
+        string voltage = "0.0";
         public string Voltage
         {
             get { return voltage; }
@@ -216,7 +216,13 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             {
                 if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
                 {
-                    Voltage = e.Content.ToString().Substring(0, 4);
+                    const int MAX_LENGTH = 4;
+
+                    string voltageString = e.Content.ToString();
+                    int stringLength = voltageString.Length;
+                    int maxLength = (stringLength < MAX_LENGTH) ? stringLength : MAX_LENGTH;
+
+                    Voltage = e.Content.ToString().Substring(0, maxLength).PadRight(MAX_LENGTH, '0');
 
                     voltageModel.EnqueueVoltage(Double.Parse(e.Content.ToString()), e.Timestamp);
                 }   
