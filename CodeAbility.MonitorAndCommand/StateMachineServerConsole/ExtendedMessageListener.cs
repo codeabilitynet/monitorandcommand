@@ -106,7 +106,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             switch (message.Parameter.ToString())
             {
                 case Environment.MCP4921.DATA_ANALOG_VALUE :
-                    voltageKeeper.StoreVoltage(message.Content.ToString());
+                    //voltageKeeper.StoreVoltage(message.Content.ToString());
                     voltageControl.ComputeState(message.Content.ToString());
                     break;
                 default:
@@ -118,13 +118,13 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         protected virtual void CheckStates(object state)
         {
-            lock(locker)
-            { 
-                if (voltageKeeper.ShallNotifyState)
-                {
-                    SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
-                }
-            }
+            //lock(locker)
+            //{ 
+            //    if (voltageKeeper.ShallNotifyState)
+            //    {
+            //        SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
+            //    }
+            //}
 
             if (voltageControl.ShallNotifyState)
             {
