@@ -375,6 +375,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                 Message message = null;
                 if (messagesReceived.TryDequeue(out message))
                 {
+                    //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
+                    message.Timestamp = DateTime.Now;
+
                     if (IsMessageServiceActivated)
                         StoreMessage(message);
 
@@ -647,8 +650,6 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void StoreMessage(Message message)
         {
-            //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
-            message.Timestamp = DateTime.Now;
             messagesToStore.Enqueue(message);
             storeMessageEvent.Set();
         }
