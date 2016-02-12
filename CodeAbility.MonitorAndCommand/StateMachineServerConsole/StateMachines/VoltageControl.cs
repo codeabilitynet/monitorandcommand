@@ -30,7 +30,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
         const int NOTIFY_STATE_TIMER_PERIOD = 1000;
 
         const double lowLimitVoltage = 0.01d;
-        const double highLimitVoltage = 2.5d;
+        const double highLimitVoltage = 2.25d;
         const double dangerLimitVoltage = 3d;
 
         private ServerStates.VoltageStates state = ServerStates.VoltageStates.Low;
@@ -43,7 +43,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
             }
             protected set
             {
-                if (value != state)
+                if (state != value)
                 {
                     state = value;
                     ShallNotifyState = true;

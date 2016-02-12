@@ -27,15 +27,15 @@
         <Style x:Key="EllipseStyle" TargetType="Ellipse">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="100"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="95"/>
+            <Setter Property="Width" Value="95"/>
             <Setter Property="Stroke" Value="White"/>
             <Setter Property="StrokeThickness" Value="3"/>
         </Style>
         <Style x:Key="EllipseLegendStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="0"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
@@ -88,11 +88,11 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="30,0">
+                <Grid Grid.Row="0" Margin="50,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -115,7 +115,7 @@
 
                 <ListView Grid.Row="1" 
                       ItemsSource="{Binding DeviceModels}" 
-                      Margin="30,0"
+                      Margin="50,0"
                       HorizontalAlignment="Center"  
                       VerticalAlignment="Center"
                       Background="Transparent">

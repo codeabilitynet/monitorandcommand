@@ -85,9 +85,10 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         #endregion 
         
-        public const string SERVER = "SERVER";
-        public const string HEARTBEAT = "HEARTBEAT";
+        public const string SERVER = "Server";
         public const string ALL = "*";
+
+        public const string HEARTBEAT = "HEARTBEAT";
 
         public const int BUFFER_SIZE = 512;
 

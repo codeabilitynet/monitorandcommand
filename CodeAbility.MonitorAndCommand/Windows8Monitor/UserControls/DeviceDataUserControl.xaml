@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="using:CodeAbility.MonitorAndCommand.Windows8Monitor.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="600">
+             d:DesignHeight="60" d:DesignWidth="600">
     
     <UserControl.Resources>
 
@@ -16,22 +16,22 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontSize" Value="40"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="MessageIndicatorStyle" TargetType="Rectangle">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"></Setter>
-            <Setter Property="Width" Value="48"></Setter>
-            <Setter Property="Height" Value="48"></Setter>
+            <Setter Property="Width" Value="38"></Setter>
+            <Setter Property="Height" Value="38"></Setter>
         </Style>
         <Style x:Key="EllipseStyle" TargetType="Ellipse">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="50"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Stroke" Value="White"/>
             <Setter Property="StrokeThickness" Value="2"/>
         </Style>
@@ -40,12 +40,12 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
 
