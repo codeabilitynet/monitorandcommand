@@ -28,7 +28,7 @@ namespace MvcApplication.Controllers
 
         }
 
-        const int REFRESH_PERIOD_IN_MILLISECONDS = 30000;
+        const int REFRESH_PERIOD_IN_MILLISECONDS = 3000;
 
         #region Messages View
 

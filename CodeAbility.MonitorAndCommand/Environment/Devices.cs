@@ -23,21 +23,23 @@ namespace CodeAbility.MonitorAndCommand.Environment
     {
         public const string ALL = "*";
 
-        public const string WINDOWS_PHONE = "WindowsPhone";
+        public const string SERVER = "Server"; 
 
-        public const string WINDOWS_SURFACE = "WindowsSurface";
+        public const string WINDOWS_PHONE = "Nokia Lumia 520";
 
-        public const string WINDOWS_CONSOLE = "WindowsConsole";
+        public const string WINDOWS_SURFACE = "Surface RT";
 
-        public const string WPF_MONITOR = "WpfMonitor";
+        public const string WINDOWS_CONSOLE = "Windows Console";
 
-        public const string NETDUINO_PLUS = "NetduinoPlus";
+        public const string WPF_MONITOR = "WPF Monitor";
 
-        public const string NETDUINO_3_WIFI = "Netduino3Wifi";
+        public const string NETDUINO_PLUS = "Netduino Plus";
 
-        public const string RASPBERRY_PI_B = "RaspberryPiB";
+        public const string NETDUINO_3_WIFI = "Netduino 3 Wifi";
 
-        public const string RASPBERRY_PI_2 = "RaspberryPi2";
+        public const string RASPBERRY_PI_B = "Raspberry Pi B";
+
+        public const string RASPBERRY_PI_2 = "Raspberry Pi 2";
 
     }
 }
