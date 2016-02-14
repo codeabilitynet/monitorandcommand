@@ -1,4 +1,6 @@
-﻿@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
+﻿@using CodeAbility.MonitorAndCommand.Models;
+
+@model IEnumerable<CodeAbility.MonitorAndCommand.Models.Message>
 
 <table id="DataTable" style="width: 100%;">
     <!-- Header -->
@@ -35,7 +37,25 @@
     <!-- Items -->
     @foreach (var item in Model)
     {        
-        <tr>
+        var cssClass = String.Empty;
+        
+        switch(item.ContentType)
+        {
+            case ContentTypes.CONTROL: 
+                cssClass = "control";
+                break;
+            case ContentTypes.COMMAND: 
+                cssClass = "command";
+                break;
+            case ContentTypes.DATA:
+                cssClass = "data";
+                break;
+            case ContentTypes.HEARTBEAT:
+                cssClass = "heartbeat";
+                break;
+        }        
+        
+        <tr class="@cssClass">
             <td>
                 @Html.DisplayFor(modelitem => item.SendingDevice)
             </td>
