@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="580a94bd-8d77-4928-bcbc-a3ab3f1e3958" Publisher="CN=Paul" Version="1.0.0.8" />
+  <Identity Name="580a94bd-8d77-4928-bcbc-a3ab3f1e3958" Publisher="CN=Paul" Version="1.0.0.11" />
   <Properties>
     <DisplayName>Windows8Monitor</DisplayName>
     <PublisherDisplayName>Paul</PublisherDisplayName>

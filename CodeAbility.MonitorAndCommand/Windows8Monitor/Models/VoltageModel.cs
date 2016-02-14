@@ -73,7 +73,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
             {
                 GenerateNullValue = false;
 
-                serieItems.Enqueue(new SerieItem() { Timestamp = timestamp, Value = value });
+                serieItems.Enqueue(new SerieItem() { Timestamp = DateTime.Now, Value = value });
             
                 lastReceivedVoltage = value;
 
