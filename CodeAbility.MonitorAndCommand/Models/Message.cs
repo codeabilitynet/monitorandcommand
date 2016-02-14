@@ -92,6 +92,8 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         public const int BUFFER_SIZE = 512;
 
+        const string NOT_AVAILABLE = "[NA]";
+
         #region Static Helpers
 
         public static Message InstanciateRegisterMessage(string sendingDevice)
@@ -175,8 +177,6 @@ namespace CodeAbility.MonitorAndCommand.Models
 
         public override string ToString()
         {
-            const string NOT_AVAILABLE = "[NA]";
-
 #if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
             string content = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();

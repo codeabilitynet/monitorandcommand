@@ -159,19 +159,19 @@
 
                 <Ellipse Grid.Row="0" Fill="Red" 
                          Style="{StaticResource EllipseStyle}"
-                        Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                        Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
                 <TextBlock Grid.Row="1" 
                        Style="{StaticResource EllipseLegendStyle}"
                        Text="Overload"/>
                 <Ellipse Grid.Row="2" Fill="Yellow" 
                         Style="{StaticResource EllipseStyle}"
-                        Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                        Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
                 <TextBlock Grid.Row="3" 
                            Style="{StaticResource EllipseLegendStyle}"
                            Text="High"/>
                 <Ellipse Grid.Row="4" Fill="Green" 
                          Style="{StaticResource EllipseStyle}"
-                        Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
+                        Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
                 <TextBlock Grid.Row="5" 
                            Style="{StaticResource EllipseLegendStyle}"
                            Text="Normal"/>

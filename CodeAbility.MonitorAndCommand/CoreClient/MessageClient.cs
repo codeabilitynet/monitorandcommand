@@ -37,7 +37,7 @@ namespace CodeAbility.MonitorAndCommand.Client
     public class MessageClient : IMessageClient
     {
         const int HEARTBEAT_START_DELAY = 5000;
-        const int HEARTBEAT_PERIOD = 10000;
+        const int HEARTBEAT_PERIOD = 60000;
 
         #region Events
 
