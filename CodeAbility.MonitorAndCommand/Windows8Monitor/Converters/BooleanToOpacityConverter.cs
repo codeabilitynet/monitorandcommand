@@ -34,7 +34,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (bool)value ? 1 : 0.25;
+            return (bool)value ? 1 : 0.10;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

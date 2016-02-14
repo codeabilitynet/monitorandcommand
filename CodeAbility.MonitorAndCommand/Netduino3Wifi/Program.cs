@@ -36,7 +36,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
         const string IP_ADDRESS = "192.168.178.26";
         const int PORT = 11000;
 
-        const int HEARTBEAT_PERIOD = 5000;
+        const int HEARTBEAT_PERIOD = 20000;
 
         static AutoResetEvent _networkAvailableEvent = new AutoResetEvent(false);
         static AutoResetEvent _networkAddressChangedEvent = new AutoResetEvent(false);

@@ -370,15 +370,15 @@ namespace CodeAbility.MonitorAndCommand.MFClient
                             deserializedObject = JsonSerializer.DeserializeString(serializedMessage);
                             hashTable = deserializedObject as Hashtable;
 
-                            message = new Message() { 
-                                SendingDevice = hashTable["SendingDevice"].ToString(),
-                                ReceivingDevice = hashTable["ReceivingDevice"].ToString(),
-                                FromDevice = hashTable["FromDevice"].ToString(),
-                                ToDevice = hashTable["ToDevice"].ToString(),
+                            message = new Message() {
+                                SendingDevice = (string)hashTable["SendingDevice"],
+                                ReceivingDevice = (string)hashTable["ReceivingDevice"],
+                                FromDevice = (string)hashTable["FromDevice"],
+                                ToDevice = (string)hashTable["ToDevice"],
                                 ContentType = Convert.ToInt32(hashTable["ContentType"].ToString()),
-                                Name = hashTable["Name"].ToString(),
-                                Parameter = hashTable["Parameter"].ToString(),
-                                Content = hashTable.Contains("Content") ? hashTable["Content"].ToString() : String.Empty
+                                Name = (string)hashTable["Name"],
+                                Parameter = hashTable.Contains("Parameter") && hashTable["Parameter"] != null ? (string)hashTable["Parameter"] : String.Empty,
+                                Content = hashTable.Contains("Content") && hashTable["Content"] != null ? (string)hashTable["Content"] : String.Empty
                             };
 
                             if (message != null)
