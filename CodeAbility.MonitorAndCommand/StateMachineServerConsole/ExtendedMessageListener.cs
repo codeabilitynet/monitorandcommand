@@ -77,7 +77,6 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             }
         }
 
-
         protected override void PostProcess(CodeAbility.MonitorAndCommand.Models.Message message)
         {
             base.PostProcess(message);
@@ -108,6 +107,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
                 case Environment.MCP4921.DATA_ANALOG_VALUE :
                     //voltageKeeper.StoreVoltage(message.Content.ToString());
                     voltageControl.ComputeState(message.Content.ToString());
+                    CheckVoltageState();
                     break;
                 default:
                     break;
@@ -118,14 +118,16 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         protected virtual void CheckStates(object state)
         {
-            //lock(locker)
-            //{ 
-            //    if (voltageKeeper.ShallNotifyState)
-            //    {
-            //        SendToRegisteredDevices(Message.InstanciateDataMessage(Message.SERVER, Message.ALL, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE, voltageKeeper.GetLastRecoredVoltage()));
-            //    }
-            //}
+            CheckStates();
+        }
 
+        private void CheckStates()
+        {
+            //CheckVoltageState();
+        }
+
+        private void CheckVoltageState()
+        {
             if (voltageControl.ShallNotifyState)
             {
                 SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,
