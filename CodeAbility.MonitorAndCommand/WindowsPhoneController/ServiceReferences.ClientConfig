@@ -1,17 +1,6 @@
 ﻿<configuration>
     <system.serviceModel>
-        <bindings>
-            <basicHttpBinding>
-                <binding name="BasicHttpBinding_IMessageService" maxBufferSize="2147483647"
-                    maxReceivedMessageSize="2147483647">
-                    <security mode="None" />
-                </binding>
-            </basicHttpBinding>
-        </bindings>
-        <client>
-            <endpoint address="http://monitorandcommand.azurewebsites.net/MessageService.svc"
-                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMessageService"
-                contract="MessageServiceReference.IMessageService" name="BasicHttpBinding_IMessageService" />
-        </client>
+        <bindings />
+        <client />
     </system.serviceModel>
 </configuration>
