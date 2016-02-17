@@ -14,10 +14,12 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
     {
         public static void Start(string ipAddress, int portNumber)
         {
+            const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
             bool redLedStatus = false;
             bool greenLedStatus = false;
 
-            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE);
+            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
 

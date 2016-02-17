@@ -36,8 +36,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 {
     public class MessageClient : IMessageClient
     {
-        const int HEARTBEAT_START_DELAY = 5000;
-        const int HEARTBEAT_PERIOD = 0;
+        const int HEARTBEAT_START_DELAY = 15000;
 
         #region Events
 
@@ -67,6 +66,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         string DeviceName { get; set; }
         string ServerIpAddress { get; set; }
         int PortNumber { get; set; }
+        int HeartbeatPeriod { get; set; }
 
         #endregion 
 
@@ -86,9 +86,25 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
 
-        public MessageClient(string deviceName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceName"></param>
+        public MessageClient(string deviceName) : 
+            this(deviceName, 0)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <param name="heartbeatPeriod"></param>
+        public MessageClient(string deviceName, int heartbeatPeriod)
         {
             DeviceName = deviceName;
+            HeartbeatPeriod = heartbeatPeriod; 
 
             receiveThread = new Thread(new ThreadStart(Receiver));
             sendThread = new Thread(new ThreadStart(Sender));
@@ -96,6 +112,11 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         #region Public Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serverIpAddress"></param>
+        /// <param name="port"></param>
         public void Start(string serverIpAddress, int port)
         {
             ServerIpAddress = serverIpAddress;
@@ -121,10 +142,10 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Register(DeviceName);
 
                 //Start, if period is set, the Heartbeat Timer
-                if (HEARTBEAT_PERIOD > 0)
+                if (HeartbeatPeriod > 0)
                 {
                     TimerCallback heartbeatCallBack = Heartbeat;
-                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HEARTBEAT_PERIOD);
+                    heartbeatTimer = new Timer(heartbeatCallBack, heartbeatEvent, HEARTBEAT_START_DELAY, HeartbeatPeriod);
                 }
 
                 Console.WriteLine(String.Format("Device {0} connected to server.", DeviceName));
@@ -306,7 +327,10 @@ namespace CodeAbility.MonitorAndCommand.Client
 
                         Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
 
+#if DEBUG
                         Trace.WriteLine(String.Format("Received    : {0}", message));
+                        Console.WriteLine(String.Format("Received    : {0}", message));
+#endif
 
                         if (message != null)
                         {

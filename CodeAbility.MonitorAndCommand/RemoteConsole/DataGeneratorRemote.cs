@@ -29,9 +29,11 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 {
     public class DataGeneratorRemote
     {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         public static void Start(string ipAddress, int portNumber)
         {
-            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE);
+            MessageClient messageClient = new MessageClient(Devices.WINDOWS_PHONE, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
 

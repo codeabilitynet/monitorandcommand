@@ -52,6 +52,11 @@
 
 <script type="text/javascript">
 
+    $.ajaxSetup ({
+        // Disable caching of AJAX responses
+        cache: false
+    });
+
     $(function () {
         setInterval(function () { $('#messages').load('/Message/RefreshMessagePartial'); }, @refreshPeriod.ToString()); // every 3 sec
     });

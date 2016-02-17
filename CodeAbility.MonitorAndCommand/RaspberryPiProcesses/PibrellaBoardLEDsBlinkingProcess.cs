@@ -34,10 +34,11 @@ using CodeAbility.MonitorAndCommand.RaspberryPi.Tools;
 namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 {
     public class PibrellaBoardLEDsBlinkingProcess
-    {           
+    {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
         const int BLINKING_PERIOD = 1000;
-
         const int BUTTON_PRESSED_DURATION = 250;
+
         public int Period { get; set; }
         public bool Blinking { get; set; }
 
@@ -55,7 +56,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 
             Blinking = false;
 
-            messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B);
+            messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
             pibrella.Connection.Open();            

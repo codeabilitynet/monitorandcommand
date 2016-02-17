@@ -35,6 +35,8 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 {
     class MainWindowViewModel : BaseViewModel, IDisposable
     {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         const int COMPUTATION_PERIOD = 1000;
 
         MessageClient messageClient;
@@ -68,7 +70,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
 
         public MainWindowViewModel()
         {
-            messageClient = new MessageClient(Devices.WPF_MONITOR);
+            messageClient = new MessageClient(Devices.WPF_MONITOR, HEARTBEAT_PERIOD_IN_MILLESECONDS);
             App.Current.Resources.Add("MessageClient", messageClient);
 
             PibrellaViewModel = new PibrellaViewModel();

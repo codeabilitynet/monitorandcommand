@@ -34,7 +34,7 @@ namespace CodeAbility.MonitorAndCommand.MFClient
 {
     public class MessageClient : IMessageClient
     {
-        const int HEARTBEAT_START_DELAY = 5000;
+        const int HEARTBEAT_START_DELAY = 15000;
 
         const int RECEIVER_WAITING_TIME = 100; 
 
@@ -101,6 +101,17 @@ namespace CodeAbility.MonitorAndCommand.MFClient
         private AutoResetEvent heartbeatEvent = new AutoResetEvent(false);
 
         private HeartbeatStatus heartbeatStatus = HeartbeatStatus.OK;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <param name="isLoggingEnabled"></param>
+        public MessageClient(string deviceName, bool isLoggingEnabled) : 
+            this(deviceName, 0, isLoggingEnabled)
+        {
+
+        }
 
         /// <summary>
         /// 

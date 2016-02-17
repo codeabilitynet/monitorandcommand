@@ -35,7 +35,9 @@ using CodeAbility.MonitorAndCommand.RaspberryPi.Tools;
 namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 {
     public class PibrellaBoardLEDsMonitor
-    {           
+    {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         string ipAddress = ConfigurationManager.AppSettings["IpAddress"];
         int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
 
@@ -44,7 +46,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 
         public PibrellaBoardLEDsMonitor() 
         {
-            messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B);
+            messageClient = new MessageClient(Environment.Devices.RASPBERRY_PI_B, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             pibrella.ButtonPressed += HandleButtonPressed;        
             pibrella.Connection.Open();            
