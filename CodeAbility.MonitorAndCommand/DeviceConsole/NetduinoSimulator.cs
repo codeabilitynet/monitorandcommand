@@ -31,6 +31,8 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class NetduinoSimulator
     {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         static MessageClient messageClient;
 
         public static void Start(string ipAddress, int portNumber)
@@ -38,7 +40,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             bool RedLedStatus = false;
             bool GreenLedStatus = false;
 
-            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI);
+            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;

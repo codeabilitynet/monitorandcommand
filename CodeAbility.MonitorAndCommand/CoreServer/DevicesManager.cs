@@ -83,5 +83,17 @@ namespace CodeAbility.MonitorAndCommand.Server
             return (device != null);
         }
 
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (Device device in devices)
+            {
+                builder.AppendLine(device.ToString());
+            }
+
+            return builder.ToString();
+        }
+
     }
 }

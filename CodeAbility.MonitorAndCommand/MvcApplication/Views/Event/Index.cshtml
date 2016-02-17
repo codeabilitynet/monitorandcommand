@@ -40,7 +40,6 @@
 </style>
 
 
-
 <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
 
 <div id="messages">
@@ -48,6 +47,11 @@
 </div>
 
 <script type="text/javascript">
+
+    $.ajaxSetup ({
+        // Disable caching of AJAX responses
+        cache: false
+    });
 
     $(function () {
         setInterval(function () { $('#events').load('/Home/RefreshEventPartial'); }, @refreshPeriod.ToString()); // every 3 sec

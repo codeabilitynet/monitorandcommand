@@ -173,5 +173,17 @@ namespace CodeAbility.MonitorAndCommand.Server
         }
 
 		#endregion 
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder(); 
+
+            foreach(Rule rule in rules)
+            {
+                builder.AppendLine(rule.ToString()); 
+            }
+
+            return builder.ToString();
+        }
     }
 }

@@ -118,6 +118,12 @@ namespace CodeAbility.MonitorAndCommand.Server
         MessageServiceReference.MessageServiceClient messageServiceClient = null;
         EventServiceReference.EventServiceClient eventServiceClient = null;
 
+        public MessageListener(string ipAddress, int portNumber)
+            :this(ipAddress, portNumber, false)
+        {
+
+        }
+
         public MessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated)
         {           
             //Parameters
@@ -273,11 +279,12 @@ namespace CodeAbility.MonitorAndCommand.Server
                         if (receivedMessage.Name.Equals(ControlActions.REGISTER))
                             receivedMessage.Content = socket.RemoteEndPoint.ToString();
 
+#if DEBUG
+                        Console.WriteLine(String.Format("Received  : {0}", receivedMessage));
+#endif
+
                         messagesReceived.Enqueue(receivedMessage);
                     
-#if DEBUG
-                        Trace.WriteLine(String.Format("Received  : {0}", receivedMessage));
-#endif
                         offset = 0;
                     }
                     else

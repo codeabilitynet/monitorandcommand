@@ -31,6 +31,8 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class PibrellaSimulator
     {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         static MessageClient messageClient;
 
         public static void Start(string ipAddress, int portNumber)
@@ -39,7 +41,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             bool greenLedStatus = false;
             bool yellowLedStatus = false;
 
-            messageClient = new MessageClient(Devices.RASPBERRY_PI_B);
+            messageClient = new MessageClient(Devices.RASPBERRY_PI_B, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;

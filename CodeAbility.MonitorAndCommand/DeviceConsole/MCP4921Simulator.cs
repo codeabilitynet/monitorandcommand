@@ -31,11 +31,13 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class MCP4921Simulator
     {
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+
         static MessageClient messageClient;
 
         public static void Start(string ipAddress, int portNumber)
         {
-            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI);
+            messageClient = new MessageClient(Devices.NETDUINO_3_WIFI, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;
