@@ -18,7 +18,8 @@ Core projects
 - SqlStorage defines functionalities to store Message in a SQL Server Database;
 - T-SQL define the SQL Server database for Message storage;
 - WcfServiceLibrary define a WCF service receiving Messages to by stored;
-- WPClient defines the core client messaging functionalities for WindowsPhone.
+- WPClient defines the core client messaging functionalities for WindowsPhone;
+- W8Client defines the core client messaging functionalities for Windows 8.
 
 Demo projects
 - Environment defines the constants used by the messages exchanges by the Demo servers and clients;
