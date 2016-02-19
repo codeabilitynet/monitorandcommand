@@ -36,7 +36,7 @@ Netduino projects
 - Tools defines classes to address components like DS18B20 (Dallas 1-Wire temperature sensor), HIH4000 (Humidity sensor) or MCP4921 (12 bits Digital to Analog Converter);
 - Processes defines classes that uses the Tools's classes to provide some demo functionalities.
 
-Raspberry Pi projects 
+Raspberry Pi projects
 - Tools defines classes to address components like the Pibrella board;
 - Processes defines classes that uses the Tools's classes to provide demo functionalities.
 
