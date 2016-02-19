@@ -58,7 +58,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
         {   
             lock (serieItems)
             {
-                if (GenerateNullValue)
+                if (GenerateNullValue && (DateTime.Now > lastReceivedTimestamp.AddMilliseconds(500)))
                 {
                     EnqueueVoltage(lastReceivedVoltage, DateTime.Now);
                 }
