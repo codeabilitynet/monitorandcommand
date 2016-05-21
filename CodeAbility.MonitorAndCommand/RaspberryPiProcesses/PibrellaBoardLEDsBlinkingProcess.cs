@@ -36,7 +36,6 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
     public class PibrellaBoardLEDsBlinkingProcess
     {
         const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
-        const int BLINKING_PERIOD = 1000;
         const int BUTTON_PRESSED_DURATION = 250;
 
         public int Period { get; set; }
@@ -50,9 +49,9 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
         PibrellaBoard pibrella = new PibrellaBoard();
         MessageClient messageClient = null;
 
-        public PibrellaBoardLEDsBlinkingProcess(int period) 
+        public PibrellaBoardLEDsBlinkingProcess(int blinkingPeriodInMilliseconds) 
         {
-            Period = period;
+            Period = blinkingPeriodInMilliseconds;
 
             Blinking = false;
 
@@ -117,7 +116,7 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
                 messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_RED_LED, Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED);
                 messageClient.SubscribeToCommand(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_BUTTON, Environment.Objects.PibrellaBoard.COMMAND_BUTTON_PRESSED);
 
-                aTimer = new Timer(BLINKING_PERIOD);
+                aTimer = new Timer(Period);
                 // Hook up the Elapsed event for the timer. 
                 aTimer.Elapsed += OnTimedEvent;
                 aTimer.Enabled = true;

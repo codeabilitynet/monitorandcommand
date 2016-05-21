@@ -31,7 +31,14 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class MCP4921Simulator
     {
-        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000;
+
+        const double BOARD_REFERENCE_VOLTAGE = 3.3;
+
+        const double LED_MINIMUM_FORWARD_VOLTAGE = 1.5;
+        const double LED_MAXIMUM_FORWARD_VOLTAGE = 3.5;
+
+        public static int MCP49231DAC_STEPS = 4096;
 
         static MessageClient messageClient;
 
@@ -85,11 +92,43 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
         static void client_CommandReceived(object sender, MessageEventArgs e)
         {
             Console.WriteLine(e);
+
+            string objectName = e.Parameter.ToString();
+            string dataValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
+
+            if (e.FromDevice.Equals(Environment.Devices.WINDOWS_PHONE) &&
+                objectName.Equals(Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA))
+            {
+                int inputData = Int32.Parse(dataValue);
+                Convert(inputData);
+            }
         }
 
         static void client_DataReceived(object sender, MessageEventArgs e)
         {
             Console.WriteLine(e);
+        }
+
+        private static void Convert(int inputData)
+        {
+            if (!(inputData >= 0 && inputData <= 100))
+                return;
+
+            double voltage = ((double)ComputeConverterData(inputData) / (double)MCP49231DAC_STEPS) * BOARD_REFERENCE_VOLTAGE;
+
+            if (messageClient != null)
+                messageClient.SendData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE, voltage);
+        }
+
+        private static int ComputeConverterData(int inputData)
+        {
+            int converterData = 0;
+
+            double expectedVoltage = LED_MINIMUM_FORWARD_VOLTAGE + ((double)inputData / 100) * (BOARD_REFERENCE_VOLTAGE - LED_MINIMUM_FORWARD_VOLTAGE);
+
+            converterData = (int)((expectedVoltage / BOARD_REFERENCE_VOLTAGE) * MCP49231DAC_STEPS);
+
+            return converterData;
         }
     }
 }

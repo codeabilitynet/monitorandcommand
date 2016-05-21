@@ -9,8 +9,6 @@ using CodeAbility.MonitorAndCommand.Repository;
 using CodeAbility.MonitorAndCommand.SqlStorage;
 using CodeAbility.MonitorAndCommand.AzureStorage;
 
-using CodeAbility.MonitorAndCommand.Models; 
-
 namespace MvcApplication.ViewModels
 {
     public class ChartsViewModel

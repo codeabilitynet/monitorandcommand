@@ -24,7 +24,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
 {
     public class MCP4921Process : ProcessTemplate
     {
-        const int STARTUP_TIME = 5000;
+        const int STARTUP_TIME = 15000;
         const int PERIOD = 50;
 
         const int BUTTON_PRESSED_DURATION = 500;
@@ -38,7 +38,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
         MCP49231DAC converter = new MCP49231DAC(BOARD_REFERENCE_VOLTAGE);
 
         public MCP4921Process()
-            : base(Environment.Devices.NETDUINO_3_WIFI, 0, 0)
+            : base(Environment.Devices.NETDUINO_PLUS, 0, 0)
         {
             
         }

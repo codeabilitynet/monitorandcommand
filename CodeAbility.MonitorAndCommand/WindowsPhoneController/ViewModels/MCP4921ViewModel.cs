@@ -68,10 +68,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                //Pibrella
-                MessageClient.SubscribeToData(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
-
-                MessageClient.PublishCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
+                MessageClient.SubscribeToData(Devices.NETDUINO_PLUS, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                MessageClient.PublishCommand(Devices.NETDUINO_PLUS, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
 
                 Connected = true; 
             }
@@ -81,10 +79,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         {
             if (MessageClient != null)
             {
-                //Pibrella
-                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
-
-                MessageClient.Unsubscribe(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
+                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, MCP4921.OBJECT_ANALOG_DATA, MCP4921.DATA_ANALOG_VALUE);
+                MessageClient.Unsubscribe(Devices.NETDUINO_PLUS, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT);
 
                 Connected = false; 
             }
@@ -101,13 +97,13 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
                 return;
 
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, data.ToString());
+                MessageClient.SendCommand(Devices.NETDUINO_PLUS, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, data.ToString());
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages from NETDUINO_MCP4921
-            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
+            if (!e.FromDevice.Equals(Environment.Devices.NETDUINO_PLUS))
                 return;
 
             string dataName = e.Name;
