@@ -31,7 +31,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class DataGeneratorProcess
     {
-        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 1000; 
 
         const int STARTUP_TIME = 1000;
         const int PERIOD = 500;

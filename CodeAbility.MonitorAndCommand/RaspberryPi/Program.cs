@@ -10,12 +10,11 @@ namespace RaspberryPi
 {
     class Program
     {
-        const string IP_ADDRESS = "192.168.178.26";
-        const int PORT = 11000;
+        const int BLINKING_PERIOD_IN_MILLISECONDS = 1000;
 
         public static void Main()
         {
-            PibrellaBoardLEDsMonitor process = new PibrellaBoardLEDsMonitor();
+            PibrellaBoardLEDsBlinkingProcess process = new PibrellaBoardLEDsBlinkingProcess(BLINKING_PERIOD_IN_MILLISECONDS);
             process.Start();
         }
     }

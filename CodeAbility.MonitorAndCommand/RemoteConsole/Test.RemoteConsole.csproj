@@ -56,6 +56,7 @@
     <Compile Include="DataGeneratorRemote.cs" />
     <Compile Include="NetduinoRemote.cs" />
     <Compile Include="MCP4921Remote.cs" />
+    <Compile Include="PhotonRemote.cs" />
     <Compile Include="PibrellaRemote.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

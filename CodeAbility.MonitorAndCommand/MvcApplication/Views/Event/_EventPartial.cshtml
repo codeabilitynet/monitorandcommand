@@ -44,8 +44,8 @@
             @Html.DisplayFor(modelitem => item.Content)
         </td>
         <td class="nowarp">
-            <a href="#" data-toggle="timestamp" data-placement="top" title="@item.Timestamp.ToString("hh:mm:ss.fff tt")">
-                @item.Timestamp.ToString("hh:mm:ss.fff") <!-- "hh:mm:ss.fff tt" -->
+            <a href="#" data-toggle="timestamp" data-placement="top" title="@item.Timestamp.ToString("dd/MM/yyyy HH:mm:ss.fff")">
+                @item.Timestamp.ToString("dd/MM/yyyy HH:mm:ss.fff") <!-- "hh:mm:ss.fff tt" -->
                 @*@Html.DisplayFor(modelitem => item.Timestamp)*@
             </a>
         </td>

@@ -41,5 +41,7 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         public const string RASPBERRY_PI_2 = "Raspberry Pi 2";
 
+        public const string PHOTON = "Photon";
+
     }
 }

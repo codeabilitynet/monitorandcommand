@@ -10,6 +10,7 @@
     <ProjectGuid>{C879892C-64C2-468E-923C-96C017E151D6}</ProjectGuid>
     <TargetFrameworkVersion>v4.3</TargetFrameworkVersion>
     <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,9 +63,9 @@
     <Reference Include="SecretLabs.NETMF.Hardware.Netduino, Version=4.3.1.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MF43Client\Core.MF43Client.csproj">
-      <Project>{E1917F46-584A-4BFC-AC94-97B88EECD4FD}</Project>
-      <Name>Core.MF43Client</Name>
+    <ProjectReference Include="..\MFClient\Core.MF42Client.csproj">
+      <Project>{D6949075-0DE7-4ADB-8968-C52A16AF3325}</Project>
+      <Name>Core.MF42Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetduinoTools\Netduino.Tools.csproj">
       <Project>{CFC17A9B-49BB-43C8-BEB0-3D868C1FA25F}</Project>

@@ -24,19 +24,19 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Net;
 using Microsoft.SPOT.Net.NetworkInformation;
 
-//using CodeAbility.MonitorAndCommand.Netduino.DS18B20;
-//using CodeAbility.MonitorAndCommand.Netduino.LEDs;
-//using CodeAbility.MonitorAndCommand.Netduino.MCP4921;
 using CodeAbility.MonitorAndCommand.Netduino.Processes;
 
 namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 {
     public class Program
     {
-        const string IP_ADDRESS = "192.168.178.26";
+        const string IP_ADDRESS = "192.168.178.22";
         const int PORT = 11000;
 
-        const int HEARTBEAT_PERIOD = 15000;
+        const int HEARTBEAT_PERIOD = 60000;
+
+        const int DO_WORK_STARTUP = 5000;
+        const int DO_WORK_PERIOD = 10000;
 
         static AutoResetEvent _networkAvailableEvent = new AutoResetEvent(false);
         static AutoResetEvent _networkAddressChangedEvent = new AutoResetEvent(false);
@@ -60,7 +60,7 @@ namespace CodeAbility.MonitorAndCommand.Netduino3Wifi
 
             //Debug.Print(Resources.GetString(Resources.StringResources.String1));
 
-            MCP4921Process process = new MCP4921Process();
+            HomeMonitoringProcess process = new HomeMonitoringProcess(DO_WORK_STARTUP, DO_WORK_PERIOD);
             process.Start(IP_ADDRESS, PORT, HEARTBEAT_PERIOD, true);
         }
 

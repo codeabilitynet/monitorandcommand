@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SPOT.Hardware" />
+    <Reference Include="Microsoft.SPOT.Hardware.OneWire" />
     <Reference Include="Microsoft.SPOT.Native" />
     <Reference Include="Microsoft.SPOT.Net" />
     <Reference Include="SecretLabs.NETMF.Hardware, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL" />
@@ -55,6 +56,14 @@
     <ProjectReference Include="..\MFClient\Core.MF42Client.csproj">
       <Project>{D6949075-0DE7-4ADB-8968-C52A16AF3325}</Project>
       <Name>Core.MF42Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetduinoProcesses\Netduino.Processes.csproj">
+      <Project>{C879892C-64C2-468E-923C-96C017E151D6}</Project>
+      <Name>Netduino.Processes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetduinoTools\Netduino.Tools.csproj">
+      <Project>{CFC17A9B-49BB-43C8-BEB0-3D868C1FA25F}</Project>
+      <Name>Netduino.Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />

@@ -22,7 +22,7 @@ namespace MvcApplication.Controllers
         //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
         //static ILogEntryRepository logEntryRepository = new SqlLogEntryRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString); 
 
-        const int NUMBER_OF_MESSAGES = 50;
+        const int NUMBER_OF_MESSAGES = 100;
         public MessageController()
         {
 
