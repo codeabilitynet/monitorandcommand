@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DataGeneratorProcess.cs" />
     <Compile Include="MCP4921Simulator.cs" />
+    <Compile Include="PhotonSimulator.cs" />
     <Compile Include="NetduinoSimulator.cs" />
     <Compile Include="PibrellaSimulator.cs" />
     <Compile Include="Program.cs" />

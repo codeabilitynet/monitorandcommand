@@ -34,7 +34,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
             int portNumber = Int32.Parse(ConfigurationManager.AppSettings["PortNumber"]);
             bool isMessageServiceActivated = ConfigurationManager.AppSettings["IsMessageServiceActivated"].Equals("true");
 
-            ExtendedMessageListener messageListener = new ExtendedMessageListener(ipAddress, portNumber, isMessageServiceActivated);
+            PhotonDemoExtendedMessageListener messageListener = new PhotonDemoExtendedMessageListener(ipAddress, portNumber, isMessageServiceActivated);
             messageListener.StartListening();
         }
     }

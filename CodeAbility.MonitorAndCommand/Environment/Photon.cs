@@ -16,48 +16,30 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-using WinRTXamlToolkit.Controls.DataVisualization.Charting;
-
-using CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels;
-using System.Collections.ObjectModel;
-
-namespace CodeAbility.MonitorAndCommand.Windows8Monitor
+namespace CodeAbility.MonitorAndCommand.Environment
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainPage : Page
+    public static class Photon
     {
-        public MainPage()
-        {
-            this.InitializeComponent();
-        }
+        //Object
+        public const string OBJECT_SENSOR = "Sensor";
+        public const string OBJECT_BOARD_LED = "BoardLED";
+        public const string OBJECT_GREEN_LED = "GreenLED";
+        public const string OBJECT_RED_LED = "RedLED";
+        public const string OBJECT_BUTTON = "Button";
 
-        private void MCP4921Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Pages.MCP4921));
-        }
+        //Command
+        public const string COMMAND_TOGGLE_LED = "ToggleLED";
+        public const string COMMAND_BUTTON_PRESSED = "ButtonPressed";
 
-        private void PhotonsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Pages.Photons));
-        }
+        //Data
+        public const string DATA_LED_STATUS = "LEDStatus";
+        public const string DATA_SENSOR_TEMPERATURE = "Temperature";
+        public const string DATA_SENSOR_HUMIDITY = "Humidity";
+
+        //Content
+        public const string CONTENT_LED_STATUS_ON = "On";
+        public const string CONTENT_LED_STATUS_OFF = "Off";
+        public const string CONTENT_BUTTON_PRESSED = "Pressed";
     }
 }

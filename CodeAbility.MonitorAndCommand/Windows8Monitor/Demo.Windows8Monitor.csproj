@@ -115,6 +115,14 @@
     <Compile Include="Converters\BooleanToOpacityConverter.cs" />
     <Compile Include="Converters\ConnectedToStringConverter.cs" />
     <Compile Include="Converters\VoltageToOpacityConverter.cs" />
+    <Compile Include="Models\PibrellaModel.cs" />
+    <Compile Include="Models\PhotonModel.cs" />
+    <Compile Include="Pages\MCP4921.xaml.cs">
+      <DependentUpon>MCP4921.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Photons.xaml.cs">
+      <DependentUpon>Photons.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -127,10 +135,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PibrellaUserControl.xaml.cs">
+      <DependentUpon>PibrellaUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PhotonUserControl.xaml.cs">
+      <DependentUpon>PhotonUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DeviceDataUserControl.xaml.cs">
       <DependentUpon>DeviceDataUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\PhotonsViewModel.cs" />
+    <Compile Include="ViewModels\MCP4921ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -171,7 +186,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Pages\MCP4921.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Photons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PibrellaUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PhotonUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -206,9 +237,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
