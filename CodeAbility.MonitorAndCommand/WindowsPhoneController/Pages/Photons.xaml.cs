@@ -15,49 +15,45 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels;
 
-using WinRTXamlToolkit.Controls.DataVisualization.Charting;
-
-using CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels;
-using System.Collections.ObjectModel;
-
-namespace CodeAbility.MonitorAndCommand.Windows8Monitor
+namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainPage : Page
+    public partial class Photons : PhoneApplicationPage
     {
-        public MainPage()
+        PhotonsViewModel ViewModel { get; set; }
+
+        public Photons()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            ViewModel = new PhotonsViewModel();
+            DataContext = ViewModel; 
         }
 
-        private void MCP4921Button_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.Frame.Navigate(typeof(Pages.MCP4921));
+            base.OnNavigatedTo(e);
+
+            ViewModel.Subscribe();
         }
 
-        private void PhotonsButton_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-            this.Frame.Navigate(typeof(Pages.Photons));
+            base.OnNavigatingFrom(e);
+
+            ViewModel.Unsubscribe();
         }
     }
 }

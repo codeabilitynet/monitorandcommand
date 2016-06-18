@@ -96,7 +96,8 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
                 IsDisconnected = false;
                 Devices = new ObservableCollection<Device>() { new Device(Environment.Devices.NETDUINO_PLUS, "LEDs"), 
                                                                new Device(Environment.Devices.RASPBERRY_PI_B, "Pibrella"),
-                                                               new Device(Environment.Devices.NETDUINO_3_WIFI, "MCP4921")};
+                                                               new Device(Environment.Devices.NETDUINO_3_WIFI, "MCP4921"), 
+                                                               new Device("Photons", "Photons")};
             }
         }
     }

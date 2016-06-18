@@ -102,6 +102,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
+                //Set your start page here
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
 

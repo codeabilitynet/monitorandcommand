@@ -22,26 +22,26 @@ namespace CodeAbility.MonitorAndCommand.Environment
     public class Devices
     {
         public const string ALL = "*";
-
         public const string SERVER = "Server"; 
 
         public const string WINDOWS_PHONE = "Nokia Lumia 520";
-
         public const string WINDOWS_SURFACE = "Surface RT";
-
         public const string WINDOWS_CONSOLE = "Windows Console";
-
         public const string WPF_MONITOR = "WPF Monitor";
 
+        //NETMF devices 
         public const string NETDUINO_PLUS = "Netduino Plus";
-
         public const string NETDUINO_3_WIFI = "Netduino 3 Wifi";
 
+        //.NET/Mono devices 
         public const string RASPBERRY_PI_B = "Raspberry Pi B";
-
         public const string RASPBERRY_PI_2 = "Raspberry Pi 2";
+        public const string ANDROID_PHONE = "Acer Liquid Zest";
 
-        public const string PHOTON = "Photon";
+        //C++/Wiring devices 
+        public const string PHOTON_A = "Photon A";
+        public const string PHOTON_B = "Photon B";
+        public const string PHOTON_C = "Photon C"; 
 
     }
 }
