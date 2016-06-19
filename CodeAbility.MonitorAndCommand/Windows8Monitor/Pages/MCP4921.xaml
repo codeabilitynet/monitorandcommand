@@ -1,0 +1,183 @@
+﻿<Page
+    x:Class="CodeAbility.MonitorAndCommand.Windows8Monitor.Pages.MCP4921"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CodeAbility.MonitorAndCommand.Windows8Monitor"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting" 
+    xmlns:converters="using:CodeAbility.MonitorAndCommand.Windows8Monitor.Converters"
+    xmlns:usercontrols="using:CodeAbility.MonitorAndCommand.Windows8Monitor.UserControls"
+    mc:Ignorable="d">
+
+    <!-- http://eren.ws/2013/10/15/using-graphs-and-charts-in-windows-store-apps-boredom-challenge-day-11/ -->
+
+    <Page.Resources>
+        <converters:ConnectedToStringConverter x:Key="ConnectedToString"/>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrush"/>
+        <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"/>
+        <converters:VoltageToOpacityConverter x:Key="VoltageToOpacity"/>
+        <Style x:Key="LegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="EllipseStyle" TargetType="Ellipse">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="95"/>
+            <Setter Property="Width" Value="95"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="3"/>
+        </Style>
+        <Style x:Key="EllipseLegendStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <charting:Chart Grid.Column="0" 
+                        x:Name="VoltageChart" 
+                        HorizontalAlignment="Stretch" 
+                        Margin="30,10"                        
+                        Width="Auto" Height="Auto">
+                <charting:Chart.Axes>
+                    <charting:DateTimeAxis Orientation="X" ShowGridLines="False"/>
+                    <charting:LinearAxis x:Name="VoltageAxis" Orientation="Y" ShowGridLines="False"/>
+                </charting:Chart.Axes>
+                <charting:LineSeries Margin="0" 
+                                 Title="Voltage"
+                                 ItemsSource="{Binding VoltageSerie}" 
+                                 IndependentValuePath="Timestamp" 
+                                 DependentValuePath="Value"/>
+            </charting:Chart>
+            <TextBlock Grid.Column="1" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72"> 
+                <Run Text="{Binding Voltage}"/>
+                <Run Text="V"/>
+            </TextBlock>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+                
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="50,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" 
+                       Text="Status" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+                    <TextBlock Grid.Column="1" 
+                       Text="In" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+                    <TextBlock Grid.Column="2"                      
+                       Text="Out" 
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+
+                    <TextBlock Grid.Column="3"                       
+                       Text="Device" 
+                       HorizontalAlignment="Left" Margin="10,0"
+                       Style="{StaticResource LegendStyle}"></TextBlock>
+                </Grid>
+
+                <ListView Grid.Row="1" 
+                      ItemsSource="{Binding DeviceModels}" 
+                      Margin="50,0"
+                      HorizontalAlignment="Center"  
+                      VerticalAlignment="Center"
+                      Background="Transparent">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <usercontrols:DeviceDataUserControl />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="180"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Ellipse Grid.Row="1" Fill="Red" 
+                     Height="180" Width="180" 
+                     Stroke="White" StrokeThickness="3"
+                     Opacity="{Binding Voltage, Converter={StaticResource VoltageToOpacity}, FallbackValue=0.1}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" 
+                       Style="{StaticResource EllipseLegendStyle}"
+                       Text="Intensity" />
+            </Grid>
+
+            <Grid Grid.Column="2" Margin="20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Ellipse Grid.Row="0" Fill="Red" 
+                         Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
+                <TextBlock Grid.Row="1" 
+                       Style="{StaticResource EllipseLegendStyle}"
+                       Text="Overload"/>
+                <Ellipse Grid.Row="2" Fill="Yellow" 
+                        Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding YellowLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
+                <TextBlock Grid.Row="3" 
+                           Style="{StaticResource EllipseLegendStyle}"
+                           Text="High"/>
+                <Ellipse Grid.Row="4" Fill="Green" 
+                         Style="{StaticResource EllipseStyle}"
+                        Opacity="{Binding GreenLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.10}"/>
+                <TextBlock Grid.Row="5" 
+                           Style="{StaticResource EllipseLegendStyle}"
+                           Text="Normal"/>
+
+            </Grid>
+        </Grid>        
+
+    </Grid>
+</Page>

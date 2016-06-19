@@ -31,7 +31,7 @@ using CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines;
 
 namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 {
-    internal class ExtendedMessageListener : MessageListener
+    internal class MC4921ExtendedMessageListener : MessageListener
     {
         const int CHECK_STATE_TIMER_PERIOD = 1000;
 
@@ -45,7 +45,7 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         Timer checkStatesTimer; 
 
-        public ExtendedMessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated) :
+        public MC4921ExtendedMessageListener(string ipAddress, int portNumber, bool isMessageServiceActivated) :
             base(ipAddress, portNumber, isMessageServiceActivated)
         {
             this.RegistrationChanged += ExtendedMessageListener_RegistrationChanged;

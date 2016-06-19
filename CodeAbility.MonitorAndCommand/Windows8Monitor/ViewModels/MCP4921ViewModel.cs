@@ -34,7 +34,7 @@ using System.Collections.ObjectModel;
 
 namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
-    public class MainPageViewModel : INotifyPropertyChanged
+    public class MCP4921ViewModel : INotifyPropertyChanged
     {
         const string DEFAULT_IP_ADDRESS = "192.168.178.26"; 
 
@@ -111,7 +111,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
         VoltageModel voltageModel;
 
-        MainPage mainPage;
+        Pages.MCP4921 mainPage;
 
         DispatcherTimer chartTimer;
 
@@ -129,7 +129,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             get { return new ObservableCollection<DeviceModel>(deviceModels); }
         }
 
-        public MainPageViewModel(MainPage page)
+        public MCP4921ViewModel(Pages.MCP4921 page)
         {
             mainPage = page;
 
@@ -150,11 +150,11 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             IpAddress = DEFAULT_IP_ADDRESS;
             PortNumber = 11000;
 
-            deviceModels.Add(new DeviceModel(Environment.Devices.NETDUINO_3_WIFI));
-            deviceModels.Add(new DeviceModel(Environment.Devices.RASPBERRY_PI_B));
-            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_PHONE));
-            deviceModels.Add(new DeviceModel(Environment.Devices.WINDOWS_SURFACE));
-            deviceModels.Add(new DeviceModel(Environment.Devices.SERVER));
+            deviceModels.Add(new DeviceModel(Devices.NETDUINO_3_WIFI));
+            deviceModels.Add(new DeviceModel(Devices.RASPBERRY_PI_B));
+            deviceModels.Add(new DeviceModel(Devices.WINDOWS_PHONE));
+            deviceModels.Add(new DeviceModel(Devices.WINDOWS_SURFACE));
+            deviceModels.Add(new DeviceModel(Devices.SERVER));
         }
 
         public async void Start()
@@ -285,7 +285,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
         {
             string dataName = e.Name;
 
-            if (dataName.Equals(Environment.MCP4921.OBJECT_ANALOG_DATA))
+            if (dataName.Equals(MCP4921.OBJECT_ANALOG_DATA))
             {
                 const int MAX_LENGTH = 4;
 
