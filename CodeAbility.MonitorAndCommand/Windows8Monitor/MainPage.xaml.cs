@@ -45,19 +45,41 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        const string DEFAULT_IP_ADDRESS = "192.168.178.26";
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            App.Current.Resources["IpAddress"] = DEFAULT_IP_ADDRESS;
+            IpAddressTextBox.Text = App.Current.Resources["IpAddress"].ToString();
         }
 
         private void MCP4921Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Pages.MCP4921));
+            if (HasIpAddress())
+            {
+                StoreIpAddress();
+                this.Frame.Navigate(typeof(Pages.MCP4921));
+            }
         }
 
         private void PhotonsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Pages.Photons));
+            if (HasIpAddress())
+            { 
+                this.Frame.Navigate(typeof(Pages.Photons));
+            }
+        }
+
+        private void StoreIpAddress()
+        {
+            App.Current.Resources["IpAddress"] = IpAddressTextBox.Text;
+        }
+
+        private bool HasIpAddress()
+        {
+            return !String.IsNullOrEmpty(IpAddressTextBox.Text);
         }
     }
 }

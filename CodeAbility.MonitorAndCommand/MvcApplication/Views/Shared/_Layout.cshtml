@@ -6,7 +6,14 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/metricsgraphics")
+
         @Scripts.Render("~/bundles/modernizr")
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/d3")
+        @Scripts.Render("~/bundles/metricsgraphics")
+
         @RenderSection("head", required: false)
     </head>
     <body>
@@ -23,7 +30,7 @@
                         <ul id="menu">
                             @*<li>@Html.ActionLink("Index", "Index", "Home")</li>*@
                             <li>@Html.ActionLink("Messages", "Index", "Message")</li>
-                            @*<li>@Html.ActionLink("Charts", "Index", "Chart")</li>*@
+                            <li>@Html.ActionLink("Charts", "Index", "Chart")</li>
                             <li>@Html.ActionLink("Log", "Index", "Event")</li>
                             <li>@Html.ActionLink("About", "About", "Home")</li>
                             @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
@@ -46,7 +53,6 @@
             </div>
         </footer>
 
-        @Scripts.Render("~/bundles/jquery")
         @RenderSection("scripts", required: false)
 
         <script>

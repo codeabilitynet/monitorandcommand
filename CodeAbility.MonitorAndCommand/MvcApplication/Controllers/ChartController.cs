@@ -22,36 +22,22 @@ namespace MvcApplication.Controllers
         //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
         //static ILogEntryRepository logEntryRepository = new SqlLogEntryRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString); 
 
-        const int NUMBER_OF_MESSAGES = 100;
+        const int NUMBER_OF_MESSAGES = 150;
 
         public ChartController()
         {
 
         }
 
-        const int REFRESH_PERIOD_IN_MILLISECONDS = 10000;
-
+        const int REFRESH_PERIOD_IN_MILLISECONDS = 30000;
         const int DEFAULT_ROW_INTERVAL = 10;
-        const int HOURLY_ROW_INTERVAL = 60; 
 
         public ActionResult Index()
         {
             ViewBag.Message = "Charts.";
 
             ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(DEFAULT_ROW_INTERVAL); 
-
-            ViewBag.RefreshPeriod = REFRESH_PERIOD_IN_MILLISECONDS;
-
-            return View(chartsViewModel);
-        }
-
-        public ActionResult ShowHourlyView()
-        {
-            ViewBag.Message = "Charts.";
-
-            ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(HOURLY_ROW_INTERVAL);
+            chartsViewModel.Load(NUMBER_OF_MESSAGES, DEFAULT_ROW_INTERVAL); 
 
             ViewBag.RefreshPeriod = REFRESH_PERIOD_IN_MILLISECONDS;
 
@@ -62,7 +48,7 @@ namespace MvcApplication.Controllers
         public ActionResult RefreshChartPartial()
         {
             ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(DEFAULT_ROW_INTERVAL); 
+            chartsViewModel.Load(NUMBER_OF_MESSAGES, DEFAULT_ROW_INTERVAL); 
 
             return PartialView("_ChartPartial", chartsViewModel);
         }
