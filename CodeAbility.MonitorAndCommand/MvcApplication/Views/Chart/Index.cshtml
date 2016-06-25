@@ -7,123 +7,31 @@
     ViewBag.Title = "Charts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    int refreshPeriod = ViewBag.RefreshPeriod;         
+    int refreshPeriod = ViewBag.RefreshPeriod;          
 }
 
 @section head {
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-    <script type="text/javascript">
-
-        google.load('visualization', '1', { packages: ['corechart', 'line'] });
-
-        google.setOnLoadCallback(drawTemperatureChart);
-
-        function drawCharts() {
-            drawTemperatureChart();
-            drawHumidityChart();
-            drawVoltageChart();
-        }
-
-        //Temperature chart
-        function drawTemperatureChart() {
-
-            var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Timestamp');
-            data.addColumn('number', 'Temperature');
-
-            data.addRows([
-                @foreach (Message message in Model.TemperatureViewModel.Messages)
-                {
-                    @Html.Encode(String.Format("{0}[new Date({1}, {2}, {3}, {4}, {5}),{6}]", Model.TemperatureViewModel.IsCommaNeeded ? "," : String.Empty, message.Timestamp.Year, message.Timestamp.Month, message.Timestamp.Day, message.Timestamp.Hour, message.Timestamp.Minute, message.Content));
-                    Model.TemperatureViewModel.IsCommaNeeded = true;
-                }
-            ]);
-
-            var options = {
-                chart: {
-                    title: '@Model.TemperatureViewModel.Title',
-                    subtitle: '@Model.TemperatureViewModel.SubTitle'
-                },
-                width: 900,
-                height: 250
-            };
-
-            var chart = new google.charts.Line(document.getElementById('@Model.TemperatureViewModel.Name'));
-
-            chart.draw(data, options);
-        //}
-
-        ////Temperature chart
-        //function drawHumidityChart() {
-
-            var dataH = new google.visualization.DataTable();
-            dataH.addColumn('date', 'Timestamp');
-            dataH.addColumn('number', 'Humidity');
-
-            dataH.addRows([
-                @foreach (Message message in Model.HumidityViewModel.Messages)
-                {
-
-                    @Html.Encode(String.Format("{0}[new Date({1}, {2}, {3}, {4}, {5}),{6}]", Model.HumidityViewModel.IsCommaNeeded ? "," : String.Empty, message.Timestamp.Year, message.Timestamp.Month, message.Timestamp.Day, message.Timestamp.Hour, message.Timestamp.Minute, message.Content));
-                    Model.HumidityViewModel.IsCommaNeeded = true;
-                }
-            ]);
-
-            var optionsH = {
-                chart: {
-                    title: '@Model.HumidityViewModel.Title',
-                    subtitle: '@Model.HumidityViewModel.SubTitle'
-                },
-                width: 900,
-                height: 250
-            };
-
-            var chartH = new google.charts.Line(document.getElementById('@Model.HumidityViewModel.Name'));
-
-            chartH.draw(dataH, optionsH);
-        }
-
-        function drawVoltageChart() {
-
-            var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Timestamp');
-            data.addColumn('number', 'Voltage');
-
-            data.addRows([
-                @foreach (Message message in Model.VoltageViewModel.Messages)
-                {
-
-                    @Html.Encode(String.Format("{0}[new Date({1}, {2}, {3}, {4}, {5}),{6}]", Model.VoltageViewModel.IsCommaNeeded ? "," : String.Empty, message.Timestamp.Year, message.Timestamp.Month, message.Timestamp.Day, message.Timestamp.Hour, message.Timestamp.Minute, message.Content));
-                    Model.VoltageViewModel.IsCommaNeeded = true;
-                }
-            ]);
-
-            var options = {
-                chart: {
-                    title: '@Model.VoltageViewModel.Title',
-                    subtitle: '@Model.VoltageViewModel.SubTitle'
-                },
-                width: 900,
-                height: 100
-            };
-
-            var chart = new google.charts.LineChart(document.getElementById('@Model.VoltageViewModel.Name'));
-
-            chart.draw(data, options);
-        }
-
-    </script>
 
 }
 
-<div id="@Model.TemperatureViewModel.Name" style="width: 900px; height: 250px"></div>
-<div id="@Model.HumidityViewModel.Name" style="width: 900px; height: 250px"></div>
-<div id="@Model.VoltageViewModel.Name" style="width: 900px; height: 100px"></div>
+<div id="Temperature" style="width: 1000px; height: 350px; margin: auto;"></div>
+<div id="Humidity" style="width: 1000px; height: 350px; margin: auto;"></div>
 
 <div id="charts">
     @Html.Partial("_ChartPartial")
 </div>
 
+<script type="text/javascript">
 
+    $.ajaxSetup ({
+        // Disable caching of AJAX responses
+        cache: false
+    });
+
+    $(function () {
+        setInterval(function () { $('#charts').load('/Chart/RefreshChartPartial'); }, @refreshPeriod.ToString()); // every 3 sec
+    });
+
+</script>
 

@@ -49,6 +49,14 @@
                     HorizontalAlignment="Center" 
                     Style="{StaticResource ButtonStyle}"
                     Click="PhotonsButton_Click"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="IP Address"/>
+                <TextBox x:Name="IpAddressTextBox" Grid.Column="1"/>
+            </Grid>
         </StackPanel>
             
     </Grid>

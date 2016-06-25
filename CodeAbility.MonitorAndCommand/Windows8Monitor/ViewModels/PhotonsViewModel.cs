@@ -36,8 +36,6 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 {
     public class PhotonsViewModel : INotifyPropertyChanged
     {
-        const string DEFAULT_IP_ADDRESS = "192.168.178.26"; 
-
         const int LOAD_DATA_PERIOD_IN_SECONDS = 1;
         const int HANDLE_RECEIVED_EVENTS_PERIOD_IN_MILLISECONDS = 100;
 
@@ -70,7 +68,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
 
             messagesTimer.Start();
 
-            IpAddress = DEFAULT_IP_ADDRESS;
+            IpAddress = App.Current.Resources["IpAddress"].ToString();
             PortNumber = 11000;
 
             PhotonAModel = new PhotonModel(Devices.PHOTON_A);
