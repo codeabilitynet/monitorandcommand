@@ -15,8 +15,10 @@
 
 }
 
-<div id="Temperature" style="width: 1000px; height: 350px; margin: auto;"></div>
-<div id="Humidity" style="width: 1000px; height: 350px; margin: auto;"></div>
+<div id="Temperature" style="width: 1000px; height: 320px; margin: auto;"></div>
+<div class="temperaturelegend" style="width: 1000px; margin: auto; text-align: center;"></div>
+<div id="Humidity" style="width: 1000px; height: 320px; margin: auto;"></div>
+<div class="humiditylegend" style="width: 1000px; margin: auto; text-align: center;"></div>
 
 @{
     string temperatureJsonString = String.Format("[{0},{1},{2}]", Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray());
@@ -33,14 +35,19 @@
     }
 
     MG.data_graphic({
-        title: "Temperature",
-        description: "This line chart contains multiple lines.",
+        //title: "Temperature",
+        //description: "This line chart contains multiple lines.",
         data: temperature,
-        width: 900,
-        height: 300,
+        width: 1000,
+        height: 320,
+        left: 100,
+        right: 0,
+        bottom: 50,
         target: '#Temperature',
         legend: ['Photon A','Photon B','Photon C'],
-        legend_target: '.legend'
+        legend_target: '.temperaturelegend',
+        y_label: 'Temperature (c°)',
+        baselines: [{ value: 19, label: '19c°' }],
     });
 
     //Humidity
@@ -51,14 +58,19 @@
     }
 
     MG.data_graphic({
-        title: "Humidity",
-        description: "This line chart contains multiple lines.",
+        //title: "Humidity",
+        //description: "This line chart contains multiple lines.",
         data: humidity,
-        width: 900,
-        height: 300,
+        width: 1000,
+        height: 320,
+        left: 100,
+        right: 0,
+        bottom: 50,
         target: '#Humidity',
         legend: ['Photon A', 'Photon B', 'Photon C'],
-        legend_target: '.legend'
+        legend_target: '.humiditylegend',
+        y_label: 'Humidity (%)',
+        baselines: [{ value: 35, label: 'Low' }, { value: 65, label: 'High' }],
     });
 
 </script>
