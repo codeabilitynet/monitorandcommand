@@ -17,6 +17,8 @@ namespace MvcApplication.ViewModels
        
         public IEnumerable<Message> Messages { get; protected set; }
 
+        double Average { get; set; }
+
         public ChartViewModel(string name, string title, string subtitle, IEnumerable<Message> messages)
         {
             Name = name;
@@ -24,6 +26,8 @@ namespace MvcApplication.ViewModels
             SubTitle = subtitle; 
 
             Messages = messages;
+
+            Average = ComputeAverage(messages);
         }
 
         public string BuildJsonArray()
@@ -38,6 +42,9 @@ namespace MvcApplication.ViewModels
 
             foreach (Message message in Messages)
             {
+                if (!IsValid(message))
+                    continue;
+
                 if (builder.Length > 1)
                     builder.Append(",");
 
@@ -53,6 +60,26 @@ namespace MvcApplication.ViewModels
             builder.Append("]");
 
             return builder.ToString();
+        }
+
+        double lastValue; 
+        private bool IsValid(Message message)
+        {
+            double value = Double.Parse(message.Content.ToString());
+
+            bool isZero = value == 0d;
+            bool isCloseEnoughToAverage = (value > Average - 10) && (value < Average + 10);
+
+            return !isZero && isCloseEnoughToAverage; 
+        }
+
+        private double ComputeAverage(IEnumerable<Message> messages)
+        {
+            double average = 0;
+            if (messages.Count() > 0)
+                average = messages.Average(x => Convert.ToDouble(x.Content.ToString()));
+
+            return average;
         }
     }
 }
