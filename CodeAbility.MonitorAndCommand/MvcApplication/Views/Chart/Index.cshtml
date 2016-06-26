@@ -18,7 +18,52 @@
 <div id="Temperature" style="width: 1000px; height: 350px; margin: auto;"></div>
 <div id="Humidity" style="width: 1000px; height: 350px; margin: auto;"></div>
 
-<div id="charts">
+@{
+    string temperatureJsonString = String.Format("[{0},{1},{2}]", Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray());
+    string humidityJsonString = String.Format("[{0},{1},{2}]", Model.PhotonAHumidityViewModel.BuildJsonArray(), Model.PhotonAHumidityViewModel.BuildJsonArray(), Model.PhotonAHumidityViewModel.BuildJsonArray());
+}
+
+<script type="text/javascript">
+
+    //Temperature
+    temperature = JSON.parse('@Html.Raw(temperatureJsonString)');
+
+    for (var i = 0; i < temperature.length; i++) {
+        temperature[i] = MG.convert.date(temperature[i], 'date', "%Y-%m-%dT%H:%M:%S.%LZ");
+    }
+
+    MG.data_graphic({
+        title: "Temperature",
+        description: "This line chart contains multiple lines.",
+        data: temperature,
+        width: 900,
+        height: 300,
+        target: '#Temperature',
+        legend: ['Photon A','Photon B','Photon C'],
+        legend_target: '.legend'
+    });
+
+    //Humidity
+    humidity = JSON.parse('@Html.Raw(humidityJsonString)');
+
+    for (var i = 0; i < humidity.length; i++) {
+        humidity[i] = MG.convert.date(humidity[i], 'date', "%Y-%m-%dT%H:%M:%S.%LZ");
+    }
+
+    MG.data_graphic({
+        title: "Humidity",
+        description: "This line chart contains multiple lines.",
+        data: humidity,
+        width: 900,
+        height: 300,
+        target: '#Humidity',
+        legend: ['Photon A', 'Photon B', 'Photon C'],
+        legend_target: '.legend'
+    });
+
+</script>
+
+@*<div id="charts">
     @Html.Partial("_ChartPartial")
 </div>
 
@@ -33,5 +78,5 @@
         setInterval(function () { $('#charts').load('/Chart/RefreshChartPartial'); }, @refreshPeriod.ToString()); // every 3 sec
     });
 
-</script>
+</script>*@
 

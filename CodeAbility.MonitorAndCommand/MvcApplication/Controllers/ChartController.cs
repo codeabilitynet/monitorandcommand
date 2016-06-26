@@ -22,7 +22,7 @@ namespace MvcApplication.Controllers
         //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
         //static ILogEntryRepository logEntryRepository = new SqlLogEntryRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString); 
 
-        const int NUMBER_OF_MESSAGES = 150;
+        const int NUMBER_OF_MESSAGES = 192;
 
         public ChartController()
         {
@@ -30,8 +30,8 @@ namespace MvcApplication.Controllers
         }
 
         const int REFRESH_PERIOD_IN_MILLISECONDS = 30000;
-        const int DEFAULT_ROW_INTERVAL = 10;
-
+        const int DEFAULT_ROW_INTERVAL = 15;
+            
         public ActionResult Index()
         {
             ViewBag.Message = "Charts.";

@@ -18,8 +18,8 @@ namespace MvcApplication
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
+            bundles.Add(new StyleBundle("~/styles/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/styles/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",
                         "~/Content/themes/base/jquery.ui.selectable.css",
@@ -32,7 +32,7 @@ namespace MvcApplication
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
-            bundles.Add(new StyleBundle("~/Content/metricsgraphics").Include("~/Content/MetricsGraphics/metricsgraphics.css"));
+            bundles.Add(new StyleBundle("~/styles/metricsgraphics").Include("~/Content/MetricsGraphics/metricsgraphics.css"));
 
         }
     }
