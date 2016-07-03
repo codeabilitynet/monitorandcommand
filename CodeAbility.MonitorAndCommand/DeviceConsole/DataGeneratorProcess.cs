@@ -31,10 +31,10 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 {
     public class DataGeneratorProcess
     {
-        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 1000; 
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 0; 
 
         const int STARTUP_TIME = 1000;
-        const int PERIOD = 500;
+        //const int PERIOD = 500;
 
         static MessageClient messageClient;
 
@@ -44,6 +44,19 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
             messageClient.CommandReceived += client_CommandReceived;
             messageClient.Start(ipAddress, portNumber);
+
+            string typedNumber;
+            int messagesPerSecond;
+            int period;
+
+            do
+            {
+                Console.WriteLine("Type number of messages per second:");
+                typedNumber = Console.ReadLine();
+            }
+            while (!Int32.TryParse(typedNumber, out messagesPerSecond));
+
+            period = Convert.ToInt32(Math.Round(1000d / messagesPerSecond));
 
             Console.WriteLine("Hit a key to start data generation.");
             Console.ReadKey();
@@ -55,7 +68,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             messageClient.SubscribeToCommand(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.COMMAND_TOGGLE_GENERATION);
 
             TimerCallback workTimerCallBack = DoWork;
-            Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
+            Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, period);
 
             Console.WriteLine("Hit a key to stop data generation.");
             Console.ReadKey();
@@ -70,9 +83,9 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             try
             {
                 //Sensor data
-                string sensorDataString = new Random().NextDouble().ToString();
+                string generatorDataString = new Random().NextDouble().ToString();
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.LEDs.OBJECT_SENSOR, Environment.LEDs.DATA_SENSOR_RANDOM, sensorDataString);
+                    messageClient.SendData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA, generatorDataString);
             }
             catch (Exception)
             {

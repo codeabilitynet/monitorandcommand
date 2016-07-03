@@ -24,6 +24,7 @@ using System.ServiceModel;
 using System.Text;
 
 using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Repository;
 
 namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
 {
@@ -38,7 +39,9 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
         IEnumerable<Message> ListLastMessages(int numberOfMessages);
 
         [OperationContract]
-        IEnumerable<Message> ListDeviceLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval);
+        IEnumerable<Average> ListDeviceHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
 
+        [OperationContract]
+        IEnumerable<Average> ListDevice15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
     }
 }

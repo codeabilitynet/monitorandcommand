@@ -37,16 +37,17 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
         public static void Start(string ipAddress, int portNumber)
         {
+            bool BoardLedStatus = false;
             bool RedLedStatus = false;
             bool GreenLedStatus = false;
 
-            messageClient = new MessageClient(Devices.PHOTON_A, HEARTBEAT_PERIOD_IN_MILLESECONDS);
+            messageClient = new MessageClient(Devices.PHOTON_B, HEARTBEAT_PERIOD_IN_MILLESECONDS);
 
             messageClient.DataReceived += client_DataReceived;
             messageClient.CommandReceived += client_CommandReceived;
 
             Console.WriteLine("Device console.");
-            Console.WriteLine("Hit a key to start client, hit [0,2] to send Photon data, hit ESC to exit.");
+            Console.WriteLine("Hit a key to start client, hit [0,3] to send Photon data, hit ESC to exit.");
             Console.ReadKey();
 
             messageClient.Start(ipAddress, portNumber);
@@ -71,9 +72,19 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendData(Devices.ALL, Photon.OBJECT_BUTTON, Photon.DATA_SENSOR_TEMPERATURE, "20");
+                    messageClient.SendData(Devices.ALL, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE, "20");
                 }
                 else if (keyInfo.KeyChar.Equals('1'))
+                {
+                    BoardLedStatus = !BoardLedStatus;
+                    messageClient.SendData(Devices.ALL,
+                                            Photon.OBJECT_BOARD_LED,
+                                            Photon.DATA_LED_STATUS,
+                                            BoardLedStatus ?
+                                            Photon.CONTENT_LED_STATUS_ON :
+                                                Photon.CONTENT_LED_STATUS_OFF);
+                }
+                else if (keyInfo.KeyChar.Equals('2'))
                 {
                     RedLedStatus = !RedLedStatus;
                     messageClient.SendData(Devices.ALL,
@@ -83,7 +94,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                                                 Photon.CONTENT_LED_STATUS_ON :
                                                 Photon.CONTENT_LED_STATUS_OFF);
                 }
-                else if (keyInfo.KeyChar.Equals('2'))
+                else if (keyInfo.KeyChar.Equals('3'))
                 {
                     GreenLedStatus = !GreenLedStatus;
                     messageClient.SendData(Devices.ALL,

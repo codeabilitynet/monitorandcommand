@@ -22,7 +22,7 @@ namespace MvcApplication.Controllers
         //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
         //static ILogEntryRepository logEntryRepository = new SqlLogEntryRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString); 
 
-        const int NUMBER_OF_MESSAGES = 192;
+        const int NUMBER_OF_MESSAGES = 200;
 
         public ChartController()
         {
@@ -30,14 +30,13 @@ namespace MvcApplication.Controllers
         }
 
         const int REFRESH_PERIOD_IN_MILLISECONDS = 30000;
-        const int DEFAULT_ROW_INTERVAL = 15;
             
         public ActionResult Index()
         {
             ViewBag.Message = "Charts.";
 
             ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(NUMBER_OF_MESSAGES, DEFAULT_ROW_INTERVAL); 
+            chartsViewModel.Load(NUMBER_OF_MESSAGES); 
 
             ViewBag.RefreshPeriod = REFRESH_PERIOD_IN_MILLISECONDS;
 
@@ -48,7 +47,7 @@ namespace MvcApplication.Controllers
         public ActionResult RefreshChartPartial()
         {
             ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(NUMBER_OF_MESSAGES, DEFAULT_ROW_INTERVAL); 
+            chartsViewModel.Load(NUMBER_OF_MESSAGES); 
 
             return PartialView("_ChartPartial", chartsViewModel);
         }

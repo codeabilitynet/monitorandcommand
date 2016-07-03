@@ -78,5 +78,7 @@
     <Build Include="dbo\Stored Procedures\SP_Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\SP_Message_List.sql" />
     <Build Include="dbo\Stored Procedures\SP_Message_Purge.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Message_15MinutesAveragesList.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Message_HourlyAveragesList.sql" />
   </ItemGroup>
 </Project>
