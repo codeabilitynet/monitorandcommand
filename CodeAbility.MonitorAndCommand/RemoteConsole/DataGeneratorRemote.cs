@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using CodeAbility.MonitorAndCommand.Client;
@@ -29,7 +30,12 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 {
     public class DataGeneratorRemote
     {
-        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000; 
+        const int STARTUP_TIME = 1000;
+        const int PERIOD = 1000;
+
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000;
+
+        static int messagesReceived = 0;
 
         public static void Start(string ipAddress, int portNumber)
         {
@@ -40,6 +46,9 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             Console.WriteLine("Remote console");
             Console.WriteLine("Hit a key to start client, hit ESC to exit.");
             Console.ReadKey();
+
+            TimerCallback workTimerCallBack = DoWork;
+            Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, PERIOD);
 
             messageClient.Start(ipAddress, portNumber);
 
@@ -64,9 +73,24 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             messageClient.Stop();
         }
 
+        private static void DoWork(object state)
+        {
+            try
+            {
+                Console.WriteLine(String.Format("Messages received per second: {0}", messagesReceived.ToString()));
+                messagesReceived = 0;
+            } 
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         static void client_DataReceived(object sender, MessageEventArgs e)
         {
-            Console.WriteLine(e);
+            //Console.WriteLine(e);
+
+            messagesReceived++;
         }       
     }
 }

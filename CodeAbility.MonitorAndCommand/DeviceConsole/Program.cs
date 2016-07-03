@@ -42,14 +42,16 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
             Console.WriteLine("Hit [2] to start a Pibrella simulation.");
             Console.WriteLine("Hit [3] to start a LEDs simulation.");
             Console.WriteLine("Hit [4] to start a MCP4921 simulation.");
-            
+            Console.WriteLine("Hit [5] to start a Photon simulation.");
+
+
             ConsoleKeyInfo keyInfo;
 
             do
             {
                 keyInfo = Console.ReadKey();
             }
-            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3') || keyInfo.KeyChar.Equals('4')));
+            while (!(keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3') || keyInfo.KeyChar.Equals('4') || keyInfo.KeyChar.Equals('5')));
 
             if (keyInfo.KeyChar.Equals('1'))
                 DataGeneratorProcess.Start(ipAddress, portNumber);
@@ -59,6 +61,8 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 NetduinoSimulator.Start(ipAddress, portNumber);
             else if (keyInfo.KeyChar.Equals('4'))
                 MCP4921Simulator.Start(ipAddress, portNumber);
+            else if (keyInfo.KeyChar.Equals('5'))
+                PhotonSimulator.Start(ipAddress, portNumber);
         }
     }
 }

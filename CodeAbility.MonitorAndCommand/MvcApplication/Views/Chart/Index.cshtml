@@ -31,13 +31,14 @@
     temperature = JSON.parse('@Html.Raw(temperatureJsonString)');
 
     for (var i = 0; i < temperature.length; i++) {
-        temperature[i] = MG.convert.date(temperature[i], 'date', "%Y-%m-%dT%H:%M:%S.%LZ");
+        temperature[i] = MG.convert.date(temperature[i], 'date', "%Y-%m-%dT%H:%M:%SZ");
     }
 
     MG.data_graphic({
         //title: "Temperature",
         //description: "This line chart contains multiple lines.",
         data: temperature,
+        min_y_from_data: true,
         width: 1000,
         height: 320,
         left: 100,
@@ -54,13 +55,14 @@
     humidity = JSON.parse('@Html.Raw(humidityJsonString)');
 
     for (var i = 0; i < humidity.length; i++) {
-        humidity[i] = MG.convert.date(humidity[i], 'date', "%Y-%m-%dT%H:%M:%S.%LZ");
+        humidity[i] = MG.convert.date(humidity[i], 'date', "%Y-%m-%dT%H:%M:%SZ");
     }
 
     MG.data_graphic({
         //title: "Humidity",
         //description: "This line chart contains multiple lines.",
         data: humidity,
+        min_y_from_data: true,
         width: 1000,
         height: 320,
         left: 100,
@@ -70,7 +72,7 @@
         legend: ['Photon A', 'Photon B', 'Photon C'],
         legend_target: '.humiditylegend',
         y_label: 'Humidity (%)',
-        baselines: [{ value: 35, label: 'Low' }, { value: 65, label: 'High' }],
+        baselines: [{ value: 35, label: 'Low' }, { value: 55, label: '55%' }, { value: 65, label: 'High' }],
     });
 
 </script>

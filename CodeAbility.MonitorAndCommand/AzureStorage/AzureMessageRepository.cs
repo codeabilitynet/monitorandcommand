@@ -59,7 +59,13 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
             return messages;
         }
 
-        public IEnumerable<Models.Message> ListLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval)
+
+        public IEnumerable<Average> ListHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Average> List15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
         {
             throw new NotImplementedException();
         }

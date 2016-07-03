@@ -5,7 +5,8 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Web;
 
-using CodeAbility.MonitorAndCommand.Models; 
+using CodeAbility.MonitorAndCommand.Models;
+using CodeAbility.MonitorAndCommand.Repository;
 
 namespace MvcApplication.ViewModels
 {
@@ -15,19 +16,17 @@ namespace MvcApplication.ViewModels
         public string Title { get; set; }
         public string SubTitle { get; set; }
        
-        public IEnumerable<Message> Messages { get; protected set; }
+        public IEnumerable<Average> Averages { get; protected set; }
 
         double Average { get; set; }
 
-        public ChartViewModel(string name, string title, string subtitle, IEnumerable<Message> messages)
+        public ChartViewModel(string name, string title, string subtitle, IEnumerable<Average> averages)
         {
             Name = name;
             Title = title;
             SubTitle = subtitle; 
 
-            Messages = messages;
-
-            Average = ComputeAverage(messages);
+            Averages = averages;
         }
 
         public string BuildJsonArray()
@@ -40,16 +39,13 @@ namespace MvcApplication.ViewModels
 
             builder.Append("[");
 
-            foreach (Message message in Messages)
+            foreach (Average average in Averages)
             {
-                if (!IsValid(message))
-                    continue;
-
                 if (builder.Length > 1)
                     builder.Append(",");
 
-                string dateString = String.Format(DATE_FORMAT_STRING, JsonConvert.SerializeObject(message.Timestamp.ToUniversalTime()));
-                string valueString = String.Format(VALUE_FORMAT_STRING, message.Content.ToString());
+                string dateString = String.Format(DATE_FORMAT_STRING, JsonConvert.SerializeObject(average.TimeStamp.ToUniversalTime()));
+                string valueString = String.Format(VALUE_FORMAT_STRING, average.JsonValue);
                 string fullString = String.Format(TOKEN_FORMAT_STRING, dateString, valueString);
 
                 builder.Append("{");
@@ -60,26 +56,6 @@ namespace MvcApplication.ViewModels
             builder.Append("]");
 
             return builder.ToString();
-        }
-
-        double lastValue; 
-        private bool IsValid(Message message)
-        {
-            double value = Double.Parse(message.Content.ToString());
-
-            bool isZero = value == 0d;
-            bool isCloseEnoughToAverage = (value > Average - 10) && (value < Average + 10);
-
-            return !isZero && isCloseEnoughToAverage; 
-        }
-
-        private double ComputeAverage(IEnumerable<Message> messages)
-        {
-            double average = 0;
-            if (messages.Count() > 0)
-                average = messages.Average(x => Convert.ToDouble(x.Content.ToString()));
-
-            return average;
         }
     }
 }

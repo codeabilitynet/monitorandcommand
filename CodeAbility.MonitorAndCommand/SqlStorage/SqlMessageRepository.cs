@@ -115,11 +115,11 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
             return messages;
         }
 
-        public IEnumerable<Message> ListLastMessages(int numberOfMessages, string deviceName, string objectName, string parameterName, int rowInterval)
+        public IEnumerable<Average> ListHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
         {
-            const string CommandName = "SP_Message_FilteredList";
+            const string CommandName = "SP_Message_HourlyAveragesList";
 
-            List<Message> messages = new List<Message>();
+            List<Average> averages = new List<Average>();
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -133,7 +133,6 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                     command.Parameters.AddWithValue("strDeviceName", deviceName);
                     command.Parameters.AddWithValue("strObjectName", objectName);
                     command.Parameters.AddWithValue("strParameterName", parameterName);
-                    command.Parameters.AddWithValue("intRowInterval", rowInterval);
                     command.CommandText = CommandName;
 
                     try
@@ -141,8 +140,8 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                         SqlDataReader reader = command.ExecuteReader();
                         while (reader.Read())
                         {
-                            Message message = InstanciateMessage(reader);
-                            messages.Add(message);
+                            Average average = InstanciateAverage(reader);
+                            averages.Add(average);
                         }
                     }
                     catch (Exception)
@@ -155,7 +154,49 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                     connection.Close();
             }
 
-            return messages;
+            return averages;
+        }
+
+        public IEnumerable<Average> List15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
+        {
+            const string CommandName = "SP_Message_15MinutesAveragesList";
+
+            List<Average> averages = new List<Average>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("intNumberOfMessages", numberOfMessages);
+                    command.Parameters.AddWithValue("strDeviceName", deviceName);
+                    command.Parameters.AddWithValue("strObjectName", objectName);
+                    command.Parameters.AddWithValue("strParameterName", parameterName);
+                    command.CommandText = CommandName;
+
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Average average = InstanciateAverage(reader);
+                            averages.Add(average);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return averages;
         }
 
         public void Purge()
@@ -203,6 +244,21 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
             };
 
             return message;
+        }
+
+        private Average InstanciateAverage(SqlDataReader reader)
+        {
+            Average average = new Average()
+            {
+                Year = Int32.Parse(reader["Year"].ToString()),
+                Month = Int32.Parse(reader["Month"].ToString()),
+                Day = Int32.Parse(reader["Day"].ToString()),
+                Hour = Int32.Parse(reader["Hour"].ToString()),
+                Minute = Int32.Parse(reader["Minute"].ToString()),
+                Value = Double.Parse(reader["Average"].ToString())
+            };
+
+            return average;
         }
     }
 }

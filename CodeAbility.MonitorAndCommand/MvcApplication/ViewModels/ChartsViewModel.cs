@@ -27,23 +27,23 @@ namespace MvcApplication.ViewModels
 
         public ChartsViewModel() { }
 
-        public void Load(int numberOfMessages, int rowInterval)
+        public void Load(int numberOfMessages)
         {
-            IEnumerable<Message> photonATemperatureMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE, rowInterval);
-            IEnumerable<Message> photonBTemperatureMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE, rowInterval);
-            IEnumerable<Message> photonCTemperatureMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE, rowInterval);
+            IEnumerable<Average> photonATemperatureAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
+            IEnumerable<Average> photonBTemperatureAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
+            IEnumerable<Average> photonCTemperatureAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
 
-            IEnumerable<Message> photonAHumidityMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY, rowInterval);
-            IEnumerable<Message> photonBHumidityMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY, rowInterval);
-            IEnumerable<Message> photonCHumidityMessages = messageRepository.ListLastMessages(numberOfMessages, Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY, rowInterval);
+            IEnumerable<Average> photonAHumidityAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
+            IEnumerable<Average> photonBHumidityAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
+            IEnumerable<Average> photonCHumidityAverages = messageRepository.List15MinutesAverages(numberOfMessages, Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
 
-            PhotonATemperatureViewModel = new ChartViewModel(Devices.PHOTON_A, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonATemperatureMessages);
-            PhotonBTemperatureViewModel = new ChartViewModel(Devices.PHOTON_B, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonBTemperatureMessages);
-            PhotonCTemperatureViewModel = new ChartViewModel(Devices.PHOTON_C, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonCTemperatureMessages);
+            PhotonATemperatureViewModel = new ChartViewModel(Devices.PHOTON_A, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonATemperatureAverages);
+            PhotonBTemperatureViewModel = new ChartViewModel(Devices.PHOTON_B, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonBTemperatureAverages);
+            PhotonCTemperatureViewModel = new ChartViewModel(Devices.PHOTON_C, Photon.DATA_SENSOR_TEMPERATURE, String.Empty, photonCTemperatureAverages);
 
-            PhotonAHumidityViewModel = new ChartViewModel(Devices.PHOTON_A, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonAHumidityMessages);
-            PhotonBHumidityViewModel = new ChartViewModel(Devices.PHOTON_B, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonBHumidityMessages);
-            PhotonCHumidityViewModel = new ChartViewModel(Devices.PHOTON_C, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonCHumidityMessages);
+            PhotonAHumidityViewModel = new ChartViewModel(Devices.PHOTON_A, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonAHumidityAverages);
+            PhotonBHumidityViewModel = new ChartViewModel(Devices.PHOTON_B, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonBHumidityAverages);
+            PhotonCHumidityViewModel = new ChartViewModel(Devices.PHOTON_C, Photon.DATA_SENSOR_HUMIDITY, String.Empty, photonCHumidityAverages);
         }
     }
 }
