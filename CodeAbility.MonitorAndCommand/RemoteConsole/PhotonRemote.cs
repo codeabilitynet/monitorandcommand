@@ -45,14 +45,14 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Running.");
 
-            messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
-            messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
-            messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
-            messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
 
-            messageClient.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
-            messageClient.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
+            messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
 
             bool running = true;
             while (running)
@@ -61,7 +61,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendCommand(Devices.PHOTON_A, "BoardLED", "ToggleLED", String.Empty);
+                    messageClient.SendCommand(Devices.PHOTON_B, "BoardLED", "ToggleLED", String.Empty);
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {

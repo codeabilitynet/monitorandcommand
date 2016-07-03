@@ -54,7 +54,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Running.");
 
-            messageClient.SubscribeToData(Devices.WINDOWS_CONSOLE, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
+            messageClient.SubscribeToData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
 
             bool running = true;
             while (running)
