@@ -58,14 +58,14 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
 
             period = Convert.ToInt32(Math.Round(1000d / messagesPerSecond));
 
-            Console.WriteLine("Hit a key to start data generation.");
-            Console.ReadKey();
-
             Console.WriteLine("Data generator.");
             Console.WriteLine("Running.");
 
             messageClient.PublishData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
             messageClient.SubscribeToCommand(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.COMMAND_TOGGLE_GENERATION);
+
+            Console.WriteLine("Hit a key to start data generation.");
+            Console.ReadKey();
 
             TimerCallback workTimerCallBack = DoWork;
             Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, period);
