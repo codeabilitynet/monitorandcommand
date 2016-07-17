@@ -130,31 +130,31 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_BUTTON_PRESSED, LEDs.OBJECT_BUTTON, LEDs.CONTENT_BUTTON_PRESSED);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_BUTTON, LEDs.COMMAND_BUTTON_PRESSED, LEDs.CONTENT_BUTTON_PRESSED);
         }
 
         public void TurnRedLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_RED_LED, LEDs.COMMAND_TOGGLE_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnRedLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_RED_LED, LEDs.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_RED_LED, LEDs.COMMAND_TOGGLE_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         public void TurnGreenLedOn()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_ON);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_GREEN_LED, LEDs.COMMAND_TOGGLE_LED, LEDs.CONTENT_LED_STATUS_ON);
         }
 
         public void TurnGreenLedOff()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.COMMAND_TOGGLE_LED, LEDs.OBJECT_GREEN_LED, LEDs.CONTENT_LED_STATUS_OFF);
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, LEDs.OBJECT_GREEN_LED, LEDs.COMMAND_TOGGLE_LED, LEDs.CONTENT_LED_STATUS_OFF);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)

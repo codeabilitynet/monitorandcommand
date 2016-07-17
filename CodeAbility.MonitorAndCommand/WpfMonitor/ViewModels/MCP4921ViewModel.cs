@@ -90,7 +90,7 @@ namespace CodeAbility.MonitorAndCommand.WpfMonitor.ViewModels
             int data = (int)value;
 
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, data.ToString());
+                MessageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, data.ToString());
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)

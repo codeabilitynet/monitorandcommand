@@ -60,12 +60,7 @@ namespace CodeAbility.MonitorAndCommand.AzureStorage
         }
 
 
-        public IEnumerable<Average> ListHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Average> List15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
+        public IEnumerable<Average> ListAverages(Average.ChartSpans chartSpan, string deviceName, string objectName, string parameterName)
         {
             throw new NotImplementedException();
         }

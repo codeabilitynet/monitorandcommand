@@ -97,7 +97,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
                 return;
 
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.NETDUINO_PLUS, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, data.ToString());
+                MessageClient.SendCommand(Devices.NETDUINO_PLUS, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, data.ToString());
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)

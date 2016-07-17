@@ -131,9 +131,9 @@ namespace CodeAbility.MonitorAndCommand.Models
             return new Message(sendingDevice, fromDevice, toDevice, ContentTypes.CONTROL, ControlActions.UNSUBSCRIBE, publicationSource, publicationName);
         }
 
-        public static Message InstanciateCommandMessage(string sendingDevice, string toDevice, string commandName, string commandTarget, object commandContent)
+        public static Message InstanciateCommandMessage(string sendingDevice, string toDevice, string commandTarget, string commandName, object commandContent)
         {
-            return new Message(sendingDevice, sendingDevice, toDevice, ContentTypes.COMMAND, commandName, commandTarget, commandContent);
+            return new Message(sendingDevice, sendingDevice, toDevice, ContentTypes.COMMAND, commandTarget, commandName, commandContent);
         }
 
         public static Message InstanciateDataMessage(string sendingDevice, string toDevice, string dataSource, string dataName, object dataContent)
@@ -179,7 +179,7 @@ namespace CodeAbility.MonitorAndCommand.Models
         {
 #if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
-            string content = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
+            string content = String.IsNullOrEmpty(Content.ToString()) ? NOT_AVAILABLE : Content.ToString();
 
             return String.Format("{0}, {1}: {2}, {3} - From:{4}, To:{5}, Parameter:{6}, Content:{7}", Timestamp, SendingDevice, ContentType, Name, FromDevice, ToDevice, parameter, content);
 #else 

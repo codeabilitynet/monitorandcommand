@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 using CodeAbility.MonitorAndCommand.Models;
 using Windows.UI.Xaml;
-
+using Windows.UI;
 
 namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
 {
@@ -113,6 +113,44 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
                 OnPropertyChanged("GreenLED");
             }
         }
+
+        private int rgbRed = 0;
+        public int RGBRed
+        {
+            get { return rgbRed; }
+            set
+            {
+                rgbRed = value;
+                OnPropertyChanged("RGB");
+            }
+        }
+
+        private int rgbGreen = 0;
+        public int RGBGreen
+        {
+            get { return rgbGreen; }
+            set
+            {
+                rgbGreen = value;
+                OnPropertyChanged("RGB");
+            }
+        }
+
+        private int rgbBlue = 0;
+        public int RGBBlue
+        {
+            get { return rgbBlue; }
+            set
+            {
+                rgbBlue = value;
+                OnPropertyChanged("RGB");
+            }
+        }
+
+        public Color RGB
+        {
+            get { return Color.FromArgb(255, (byte)RGBRed, (byte)RGBGreen, (byte)RGBBlue); }
+        } 
 
         public PhotonModel(string name) 
         {

@@ -115,9 +115,9 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
             return messages;
         }
 
-        public IEnumerable<Average> ListHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
+        public IEnumerable<Average> ListAverages(Average.ChartSpans chartSpan, string deviceName, string objectName, string parameterName)
         {
-            const string CommandName = "SP_Message_HourlyAveragesList";
+            const string CommandName = "SP_Message_AveragesList";
 
             List<Average> averages = new List<Average>();
 
@@ -129,49 +129,7 @@ namespace CodeAbility.MonitorAndCommand.SqlStorage
                 {
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("intNumberOfMessages", numberOfMessages);
-                    command.Parameters.AddWithValue("strDeviceName", deviceName);
-                    command.Parameters.AddWithValue("strObjectName", objectName);
-                    command.Parameters.AddWithValue("strParameterName", parameterName);
-                    command.CommandText = CommandName;
-
-                    try
-                    {
-                        SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            Average average = InstanciateAverage(reader);
-                            averages.Add(average);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                }
-
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
-            }
-
-            return averages;
-        }
-
-        public IEnumerable<Average> List15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
-        {
-            const string CommandName = "SP_Message_15MinutesAveragesList";
-
-            List<Average> averages = new List<Average>();
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("intNumberOfMessages", numberOfMessages);
+                    command.Parameters.AddWithValue("intChartSpan", (int)chartSpan);
                     command.Parameters.AddWithValue("strDeviceName", deviceName);
                     command.Parameters.AddWithValue("strObjectName", objectName);
                     command.Parameters.AddWithValue("strParameterName", parameterName);

@@ -123,7 +123,7 @@ namespace CodeAbility.MonitorAndCommand.WindowsPhoneController.ViewModels
         public void ButtonPushed()
         {
             if (MessageClient != null)
-                MessageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.OBJECT_BUTTON, Pibrella.CONTENT_BUTTON_PRESSED);
+                MessageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_BUTTON, Pibrella.COMMAND_BUTTON_PRESSED, Pibrella.CONTENT_BUTTON_PRESSED);
         }
 
         void messageClient_DataReceived(object sender, MessageEventArgs e)

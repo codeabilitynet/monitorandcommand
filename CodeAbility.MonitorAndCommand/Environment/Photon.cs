@@ -23,6 +23,7 @@ namespace CodeAbility.MonitorAndCommand.Environment
     {
         //Object
         public const string OBJECT_SENSOR = "Sensor";
+        public const string OBJECT_RGB_LED = "RGBLED";
         public const string OBJECT_BOARD_LED = "BoardLED";
         public const string OBJECT_GREEN_LED = "GreenLED";
         public const string OBJECT_RED_LED = "RedLED";
@@ -30,10 +31,16 @@ namespace CodeAbility.MonitorAndCommand.Environment
 
         //Command
         public const string COMMAND_TOGGLE_LED = "ToggleLED";
+        public const string COMMAND_SET_RGB_RED = "SetRGBRed";
+        public const string COMMAND_SET_RGB_GREEN = "SetRGBGreen";
+        public const string COMMAND_SET_RGB_BLUE = "SetRGBBlue";
         public const string COMMAND_BUTTON_PRESSED = "ButtonPressed";
 
         //Data
         public const string DATA_LED_STATUS = "LEDStatus";
+        public const string DATA_RGB_RED = "RGBRed";
+        public const string DATA_RGB_GREEN = "RGBGreen";
+        public const string DATA_RGB_BLUE = "RGBBlue";
         public const string DATA_SENSOR_TEMPERATURE = "Temperature";
         public const string DATA_SENSOR_HUMIDITY = "Humidity";
 

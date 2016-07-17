@@ -66,15 +66,15 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
                 }
                 if (keyInfo.KeyChar.Equals('1'))
                 {
-                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED, null);
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
-                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B,  Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED, null);
                 }
                 else if (keyInfo.KeyChar.Equals('3'))
                 {
-                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED, null);
+                    messageClient.SendCommand(Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED, null);
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {

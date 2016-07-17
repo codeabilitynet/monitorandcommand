@@ -152,7 +152,7 @@ namespace CodeAbility.MonitorAndCommand.Client
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
+                Trace.WriteLine(exception);
                 throw;
             }            
         }
@@ -189,9 +189,9 @@ namespace CodeAbility.MonitorAndCommand.Client
             EnqueueMessage(message);
         }
 
-        public void SubscribeToCommand(string fromDevice, string commandName, string commandTarget)
+        public void SubscribeToCommand(string fromDevice, string commandTarget, string commandName)
         {
-            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandName, commandTarget);
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandTarget, commandName);
             EnqueueMessage(message);
         }
 
@@ -200,7 +200,6 @@ namespace CodeAbility.MonitorAndCommand.Client
             Message message = Message.InstanciateSubscribeMessage(DeviceName, Message.SERVER, DeviceName, Message.SERVER, stateName);
             EnqueueMessage(message);
         }
-
 
         public void SubscribeToTraffic(string fromDevice, string toDevice)
         {
@@ -214,9 +213,9 @@ namespace CodeAbility.MonitorAndCommand.Client
             EnqueueMessage(message);
         }
 
-        public void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue)
+        public void SendCommand(string toDevice, string commandTarget, string commandName, object commandValue)
         {
-            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandName, commandTarget, commandValue);
+            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandTarget, commandName, commandValue);
             EnqueueMessage(message);
         }
 
@@ -281,22 +280,20 @@ namespace CodeAbility.MonitorAndCommand.Client
                 Trace.WriteLine(String.Format("Sending     : {0}", message));
 
                 string serializedMessage = JsonConvert.SerializeObject(message);
-
-#if DEBUG
-                Trace.WriteLine(String.Format("JSON        : {0}", serializedMessage));
-#endif
-
+//#if DEBUG
+//                Trace.WriteLine(String.Format("JSON        : {0}", serializedMessage));
+//#endif
                 string paddedSerializedData = JsonHelpers.PadSerializedMessage(serializedMessage, Message.BUFFER_SIZE);
-
-#if DEBUG
-                Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
-#endif
-
+//#if DEBUG
+//                Trace.WriteLine(String.Format("Padded      : {0}", paddedSerializedData));
+//#endif
                 byte[] byteData = Encoding.UTF8.GetBytes(paddedSerializedData);
 
                 socket.Send(byteData, 0, Message.BUFFER_SIZE, 0);
-
-                Trace.WriteLine(String.Format("Sent        : {0}", message));
+//#if DEBUG
+//                Trace.WriteLine(String.Format("Sent        : {0}", message));
+//                Console.WriteLine(String.Format("Sent        : {0}", paddedSerializedData));
+//#endif
             }
             catch(Exception exception)
             {
@@ -326,12 +323,10 @@ namespace CodeAbility.MonitorAndCommand.Client
                         string serializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedData);
 
                         Message message = JsonConvert.DeserializeObject<Message>(serializedMessage);
-
-#if DEBUG
-                        Trace.WriteLine(String.Format("Received    : {0}", message));
-                        Console.WriteLine(String.Format("Received    : {0}", message));
-#endif
-
+//#if DEBUG
+//                        Trace.WriteLine(String.Format("Received    : {0}", message));
+//                        Console.WriteLine(String.Format("Received    : {0}", message));
+//#endif
                         if (message != null)
                         {
                             if (message.ContentType.Equals(ContentTypes.COMMAND))

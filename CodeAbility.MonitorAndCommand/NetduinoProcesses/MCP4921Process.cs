@@ -57,11 +57,11 @@ namespace CodeAbility.MonitorAndCommand.Netduino.Processes
 
         protected override void HandleReceivedCommand(Models.MessageEventArgs e)
         {
-            string objectName = e.Parameter.ToString();
+            string targetName = e.Name.ToString();
             string dataValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
             if (e.FromDevice.Equals(Environment.Devices.WINDOWS_PHONE) && 
-                objectName.Equals(Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA))
+                targetName.Equals(Environment.Objects.MCP4921.OBJECT_DIGITAL_DATA))
             {
                 int inputData = Int32.Parse(dataValue);
                 Convert(inputData);

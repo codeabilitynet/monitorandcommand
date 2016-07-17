@@ -39,9 +39,6 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
         IEnumerable<Message> ListLastMessages(int numberOfMessages);
 
         [OperationContract]
-        IEnumerable<Average> ListDeviceHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
-
-        [OperationContract]
-        IEnumerable<Average> ListDevice15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
+        IEnumerable<Average> ListDeviceAverages(Average.ChartSpans chartSpan, string deviceName, string objectName, string parameterName);
     }
 }

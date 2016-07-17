@@ -45,7 +45,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         public override string ToString()
         {
-            return String.Format("Originator: {0}, From: {1}, To: {2}, Parameter: {3}, Content: {4}", OriginatorDevice, FromDevice, ToDevice, DataSourceOrCommandTarget, DataOrCommandName);
+            return String.Format("Originator: {0}, From: {1}, To: {2}, DataSourceOrCommandTarget: {3}, DataOrCommandName: {4}", OriginatorDevice, FromDevice, ToDevice, DataSourceOrCommandTarget, DataOrCommandName);
         }
     }
 }

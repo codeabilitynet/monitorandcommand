@@ -22,34 +22,59 @@ namespace MvcApplication.Controllers
         //static IMessageRepository messageRepository = new AzureMessageRepository(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
         //static ILogEntryRepository logEntryRepository = new SqlLogEntryRepository(ConfigurationManager.ConnectionStrings["MonitorAndCommand"].ConnectionString); 
 
-        const int NUMBER_OF_MESSAGES = 200;
-
         public ChartController()
         {
 
         }
 
-        const int REFRESH_PERIOD_IN_MILLISECONDS = 30000;
-            
         public ActionResult Index()
         {
             ViewBag.Message = "Charts.";
 
-            ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(NUMBER_OF_MESSAGES); 
-
-            ViewBag.RefreshPeriod = REFRESH_PERIOD_IN_MILLISECONDS;
+            ChartsViewModel chartsViewModel = new ChartsViewModel(Average.ChartSpans.Last48Hours);
+            chartsViewModel.Load();
 
             return View(chartsViewModel);
         }
 
-        //[OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 60)]
-        public ActionResult RefreshChartPartial()
+        public ActionResult Last7Days()
         {
-            ChartsViewModel chartsViewModel = new ChartsViewModel();
-            chartsViewModel.Load(NUMBER_OF_MESSAGES); 
+            ViewBag.Message = "Charts.";
 
-            return PartialView("_ChartPartial", chartsViewModel);
+            ChartsViewModel chartsViewModel = new ChartsViewModel(Average.ChartSpans.Last7Days);
+            chartsViewModel.Load();
+
+            return View("Index", chartsViewModel);
+        }
+
+        public ActionResult Last30Days()
+        {
+            ViewBag.Message = "Charts.";
+
+            ChartsViewModel chartsViewModel = new ChartsViewModel(Average.ChartSpans.Last30Days);
+            chartsViewModel.Load();
+
+            return View("Index", chartsViewModel);
+        }
+
+        public ActionResult Last3Monthes()
+        {
+            ViewBag.Message = "Charts.";
+
+            ChartsViewModel chartsViewModel = new ChartsViewModel(Average.ChartSpans.Last3Monthes);
+            chartsViewModel.Load();
+
+            return View("Index", chartsViewModel);
+        }
+
+        public ActionResult LastYear()
+        {
+            ViewBag.Message = "Charts.";
+
+            ChartsViewModel chartsViewModel = new ChartsViewModel(Average.ChartSpans.LastYear);
+            chartsViewModel.Load();
+
+            return View("Index", chartsViewModel);
         }
     }
 }

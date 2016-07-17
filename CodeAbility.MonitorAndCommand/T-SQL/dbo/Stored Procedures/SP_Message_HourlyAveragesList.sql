@@ -49,8 +49,8 @@ BEGIN
 					   AND [Name] = @strObjectName
 			           AND [Parameter] = @strParameterName
 					   AND [TimeStamp] > @lowestTimeStamp) iT
-			 WHERE Value > @average - @standardDeviation 
-			   AND Value < @average + @standardDeviation 
+			 WHERE Value > @average - 3 * @standardDeviation 
+			   AND Value < @average + 3 * @standardDeviation 
 			 GROUP BY iT.YEAR, iT.MONTH, iT.DAY, iT.HOUR) eT
 	 ORDER BY eT.YEAR, eT.MONTH, eT.DAY, eT.HOUR;
 	 

@@ -107,18 +107,18 @@ namespace CodeAbility.MonitorAndCommand.MFDeviceConsole
                 if (!e.ToDevice.Equals(Environment.Devices.NETDUINO_3_WIFI))
                     return;
 
-                string objectName = e.Parameter.ToString();
+                string targetName = e.Name.ToString();
                 string commandValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
-                if (objectName.Equals(Environment.LEDs.OBJECT_BUTTON))
+                if (targetName.Equals(Environment.LEDs.OBJECT_BUTTON))
                 {
                     //boardLedEvent.Set();
                 }
-                else if (objectName.Equals(Environment.LEDs.OBJECT_RED_LED))
+                else if (targetName.Equals(Environment.LEDs.OBJECT_RED_LED))
                 {
                     ToggleRedLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }
-                else if (objectName.Equals(Environment.LEDs.OBJECT_GREEN_LED))
+                else if (targetName.Equals(Environment.LEDs.OBJECT_GREEN_LED))
                 {
                     ToggleGreenLed(commandValue == Environment.LEDs.CONTENT_LED_STATUS_ON);
                 }

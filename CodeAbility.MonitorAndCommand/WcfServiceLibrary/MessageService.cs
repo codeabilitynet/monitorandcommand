@@ -53,15 +53,9 @@ namespace CodeAbility.MonitorAndCommand.WcfServiceLibrary
         }
 
         //[WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ListLastDevicesMessages")]
-        public IEnumerable<Average> ListDeviceHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
+        public IEnumerable<Average> ListDeviceAverages(Average.ChartSpans chartSpan, string deviceName, string objectName, string parameterName)
         {
-            return messageRepository.ListHourlyAverages(numberOfMessages, deviceName, objectName, parameterName);
-        }
-
-        //[WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ListLastDevicesMessages")]
-        public IEnumerable<Average> ListDevice15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName)
-        {
-            return messageRepository.List15MinutesAverages(numberOfMessages, deviceName, objectName, parameterName);
+            return messageRepository.ListAverages(chartSpan, deviceName, objectName, parameterName);
         }
     }
 }

@@ -114,8 +114,8 @@ BEGIN
 			           AND [Parameter] = @strParameterName
 					   AND [TimeStamp] > @lowestTimeStamp) iT
 			  JOIN @quarters q ON q.Minute = iT.MINUTE
-			 WHERE Value > @average - @standardDeviation 
-			   AND Value < @average + @standardDeviation 
+			 WHERE Value > @average - 3 * @standardDeviation 
+			   AND Value < @average + 3 * @standardDeviation 
 			 GROUP BY iT.YEAR, iT.MONTH, iT.DAY, iT.HOUR, q.Quarter) eT
 	 ORDER BY eT.YEAR DESC, eT.MONTH DESC, eT.DAY DESC, eT.HOUR DESC, eT.MINUTE DESC;
 	

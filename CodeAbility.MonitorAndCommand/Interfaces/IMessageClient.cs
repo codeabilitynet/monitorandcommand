@@ -49,7 +49,7 @@ namespace CodeAbility.MonitorAndCommand.Interfaces
         /// <param name="fromDevice"></param>
         /// <param name="commandName"></param>
         /// <param name="commandTarget"></param>
-        void SubscribeToCommand(string fromDevice, string commandName, string commandTarget);
+        void SubscribeToCommand(string fromDevice, string commandTarget, string commandName);
 
         /// <summary>
         /// 
@@ -71,7 +71,7 @@ namespace CodeAbility.MonitorAndCommand.Interfaces
         /// <param name="commandName"></param>
         /// <param name="commandTarget"></param>
         /// <param name="commandValue"></param>
-        void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue);
+        void SendCommand(string toDevice, string commandTarget, string commandName, object commandValue);
 
         /// <summary>
         /// 

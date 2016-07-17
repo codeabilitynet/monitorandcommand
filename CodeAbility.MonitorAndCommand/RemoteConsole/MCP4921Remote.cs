@@ -55,19 +55,19 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, "10");
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, "10");
                 }
                 if (keyInfo.KeyChar.Equals('1'))
                 {
-                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, "30");
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, "30");
                 }
                 else if (keyInfo.KeyChar.Equals('2'))
                 {
-                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, "60");
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, "60");
                 }
                 else if (keyInfo.KeyChar.Equals('3'))
                 {
-                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.COMMAND_CONVERT, MCP4921.OBJECT_DIGITAL_DATA, "90");
+                    messageClient.SendCommand(Devices.NETDUINO_3_WIFI, MCP4921.OBJECT_DIGITAL_DATA, MCP4921.COMMAND_CONVERT, "90");
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {
