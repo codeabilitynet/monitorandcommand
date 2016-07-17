@@ -145,15 +145,15 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
         {
             if (photonsControl.ShallNotifyState)
             {
-                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_GREEN_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.OBJECT_GREEN_LED, Pibrella.COMMAND_TOGGLE_LED,
                                                                        photonsControl.State == ServerStates.PhotonsStates.Normal ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));
-                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_YELLOW_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.OBJECT_YELLOW_LED, Pibrella.COMMAND_TOGGLE_LED,
                                                                        photonsControl.State == ServerStates.PhotonsStates.Warning ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));
-                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.COMMAND_TOGGLE_LED, Pibrella.OBJECT_RED_LED,
+                SendToRegisteredDevices(Message.InstanciateCommandMessage(Devices.SERVER, Devices.RASPBERRY_PI_B, Pibrella.OBJECT_RED_LED, Pibrella.COMMAND_TOGGLE_LED,
                                                                        photonsControl.State == ServerStates.PhotonsStates.Danger ?
                                                                             Pibrella.CONTENT_LED_STATUS_ON :
                                                                             Pibrella.CONTENT_LED_STATUS_OFF));

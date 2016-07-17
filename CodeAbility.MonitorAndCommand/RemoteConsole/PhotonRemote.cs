@@ -38,7 +38,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Remote console");
 
-            Console.WriteLine("Hit a key to start client, hit [0] to send Photon commands, hit ESC to exit.");
+            Console.WriteLine("Hit a key to start client, hit [0,3] to send Photon commands, hit ESC to exit.");
             Console.ReadKey();
 
             messageClient.Start(ipAddress, portNumber);
@@ -51,17 +51,42 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
             messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
             messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
 
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
+            messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
+
             messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
             messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
+
+            messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED);
+            messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN);
+            messageClient.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE);
 
             bool running = true;
             while (running)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
+                double random = new Random().NextDouble();
+
                 if (keyInfo.KeyChar.Equals('0'))
                 {
-                    messageClient.SendCommand(Devices.PHOTON_B, "BoardLED", "ToggleLED", String.Empty);
+                    messageClient.SendCommand(Devices.PHOTON_B, Photon.OBJECT_BOARD_LED, Photon.COMMAND_TOGGLE_LED, String.Empty);
+                }
+                if (keyInfo.KeyChar.Equals('1'))
+                {
+                    int rgbRed = (int)(random * 255);
+                    messageClient.SendCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED, rgbRed.ToString());
+                }
+                if (keyInfo.KeyChar.Equals('2'))
+                {
+                    int rgbGreen = (int)(random * 255);
+                    messageClient.SendCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN, rgbGreen.ToString());
+                }
+                if (keyInfo.KeyChar.Equals('3'))
+                {
+                    int rgbBlue = (int)(random * 255);
+                    messageClient.SendCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE, rgbBlue.ToString());
                 }
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {

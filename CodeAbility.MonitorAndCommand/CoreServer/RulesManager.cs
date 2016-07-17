@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CodeAbility.MonitorAndCommand.Models;
+using System.Diagnostics;
 
 namespace CodeAbility.MonitorAndCommand.Server
 {
@@ -37,21 +38,36 @@ namespace CodeAbility.MonitorAndCommand.Server
         public void AddRule(string originator, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataOrCommandName)
         {
             if (!Exists(originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName))
-                rules.Add(new Rule(originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName));
+            {
+                Rule rule = new Rule(originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName);
+                rules.Add(rule);
+//#if DEBUG
+//                Trace.WriteLine(String.Format("Add rule for {0} : {1} {2} {3} {4}", originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName));
+//#endif
+            }
         }
 
         public void RemoveRule(string originator, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataOrCommandName)
         {
-            rules.RemoveAll(x => x.OriginatorDevice.Equals(originator) && 
-                                 x.FromDevice.Equals(fromDevice) && 
-                                 x.ToDevice.Equals(toDevice) && 
-                                 x.DataSourceOrCommandTarget.Equals(dataSourceOrCommandTarget) && 
-                                 x.DataSourceOrCommandTarget.Equals(dataOrCommandName));
+            if (Exists(originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName))
+            {
+                int result = rules.RemoveAll(x => x.OriginatorDevice.Equals(originator) &&
+                               x.FromDevice.Equals(fromDevice) &&
+                               x.ToDevice.Equals(toDevice) &&
+                               x.DataSourceOrCommandTarget.Equals(dataSourceOrCommandTarget) &&
+                               x.DataOrCommandName.Equals(dataOrCommandName));
+//#if DEBUG
+//                Trace.WriteLine(String.Format("Remove rule for {0} : {1} {2} {3} {4}", originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName));
+//#endif
+            }
         }
 
         public void RemoveAllRules(string deviceName)
         {
-            rules.RemoveAll(x => x.FromDevice.Equals(deviceName) || x.ToDevice.Equals(deviceName));
+            int result = rules.RemoveAll(x => x.FromDevice.Equals(deviceName) || x.ToDevice.Equals(deviceName));
+//#if DEBUG
+//            Trace.WriteLine(String.Format("Remove rule for {0}", deviceName));
+//#endif
         }
 
         public void RemoveAllRules()
@@ -59,28 +75,28 @@ namespace CodeAbility.MonitorAndCommand.Server
             rules.Clear();
         }
 
-        public IEnumerable<string> GetAuthorizedDeviceNames(ContentTypes contentType, string fromDevice, string toDevice, string parameter, string content)
+        public IEnumerable<string> GetAuthorizedDeviceNames(ContentTypes contentType, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataNameOrCommandName)
         {
 			IEnumerable<string> deviceNames = null; 
 
 			if (contentType == ContentTypes.COMMAND)
-				deviceNames = GetAuthorizedDeviceNamesForCommand (fromDevice, toDevice, content, parameter);
+				deviceNames = GetAuthorizedDeviceNamesForCommand (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
 			else if (contentType == ContentTypes.DATA)
-				deviceNames = GetAuthorizedDeviceNamesForData (fromDevice, toDevice, parameter, content);
+				deviceNames = GetAuthorizedDeviceNamesForData (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
 			else
 				throw new NotSupportedException ();
 
             return deviceNames.Distinct(); 
         }
 
-		protected IEnumerable<string> GetAuthorizedDeviceNamesForCommand(string fromDevice, string toDevice, string parameter, string content)
+		protected IEnumerable<string> GetAuthorizedDeviceNamesForCommand(string fromDevice, string toDevice, string commandTarget, string commandName)
 		{
 			IEnumerable<string> deviceNames = null; 
 
-			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForCommand (toDevice, parameter, content);
-			IEnumerable<Rule> publishRules = GetPublishRulesForCommand (fromDevice, parameter, content);
+			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForCommand (toDevice, commandTarget, commandName);
+			IEnumerable<Rule> publishRules = GetPublishRulesForCommand (fromDevice, commandTarget, commandName);
 
-			if (ContainsFromAllDevices (subscribeRules)) 
+			if (ContainsFromAllDevicesStar (subscribeRules)) 
 			{
 				deviceNames = from rule in subscribeRules
                              where !rule.OriginatorDevice.Equals(fromDevice)
@@ -91,18 +107,24 @@ namespace CodeAbility.MonitorAndCommand.Server
                 deviceNames = from rule in subscribeRules
                               select rule.OriginatorDevice; 
 			}
-				
-			return deviceNames.Distinct();
+
+//#if DEBUG
+//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForCommand for {0} {1} {2} {3}", fromDevice, toDevice, parameter, content));
+//            foreach (string device in deviceNames)
+//                Trace.WriteLine(String.Format("Device: {0} ", device));
+//#endif				
+
+            return deviceNames.Distinct();
 		}
 
-		protected IEnumerable<string> GetAuthorizedDeviceNamesForData(string fromDevice, string toDevice, string parameter, string content)
+		protected IEnumerable<string> GetAuthorizedDeviceNamesForData(string fromDevice, string toDevice, string dataSource, string dataName)
 		{
 			IEnumerable<string> deviceNames = null; 
 
-			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForData (fromDevice, parameter, content);
-			IEnumerable<Rule> publishRules = GetPublishRulesForData (fromDevice, parameter, content);
+			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForData (fromDevice, dataSource, dataName);
+			IEnumerable<Rule> publishRules = GetPublishRulesForData (fromDevice, dataSource, dataName);
 
-			if (ContainsToAllDevices (publishRules)) 
+			if (ContainsToAllDevicesStar (publishRules)) 
 			{
 				deviceNames = from rule in subscribeRules
                              where !rule.OriginatorDevice.Equals(fromDevice)
@@ -114,16 +136,22 @@ namespace CodeAbility.MonitorAndCommand.Server
                               select rule.OriginatorDevice;  
 			}
 
-			return deviceNames;
+//#if DEBUG
+//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForData for {0} {1} {2} {3}", fromDevice, toDevice, parameter, content));
+//            foreach (string device in deviceNames)
+//                Trace.WriteLine(String.Format("Device: {0} ", device));
+//#endif
+
+            return deviceNames;
 		}
 
 		#region Publish/Subscribe rules for Command/Data 
 
-        protected IEnumerable<Rule> GetSubscribeRulesForData(string fromDevice, string commandTarget, string commandName)
+        protected IEnumerable<Rule> GetSubscribeRulesForData(string fromDevice, string dataSource, string dataName)
         {
 			return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
-                                    (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
-                                    (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
+                                    (x.DataSourceOrCommandTarget.Equals(dataSource) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
+                                    (x.DataOrCommandName.Equals(dataName) || x.DataOrCommandName.Equals(ALL)));
         }
 			
         protected IEnumerable<Rule> GetSubscribeRulesForCommand(string toDevice, string commandTarget, string commandName)
@@ -133,11 +161,11 @@ namespace CodeAbility.MonitorAndCommand.Server
 	                                (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
         }
 
-		protected IEnumerable<Rule> GetPublishRulesForData(string fromDevice, string commandTarget, string commandName)
+		protected IEnumerable<Rule> GetPublishRulesForData(string fromDevice, string dataSource, string dataName)
         {
             return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
-	                                  (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
-	                                  (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
+	                                  (x.DataSourceOrCommandTarget.Equals(dataSource) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
+	                                  (x.DataOrCommandName.Equals(dataName) || x.DataOrCommandName.Equals(ALL)));
         }
 
         protected IEnumerable<Rule> GetPublishRulesForCommand(string fromDevice, string commandTarget, string commandName)
@@ -151,25 +179,30 @@ namespace CodeAbility.MonitorAndCommand.Server
 
 		#region Helpers
 
-		protected bool ContainsToAllDevices(IEnumerable<Rule> rules)
+		protected bool ContainsToAllDevicesStar(IEnumerable<Rule> rules)
 		{
 			return rules.Count (x => x.ToDevice.Equals (ALL)) > 0;
 		}
 
-		protected bool ContainsFromAllDevices(IEnumerable<Rule> rules)
+		protected bool ContainsFromAllDevicesStar(IEnumerable<Rule> rules)
 		{
 			return rules.Count (x => x.FromDevice.Equals (ALL)) > 0;
 		}
 
         protected bool Exists(string originator, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataOrCommandName)
         {
-            Rule route = rules.FirstOrDefault(x => x.OriginatorDevice.Equals(originator) &&
+            Rule rule = rules.FirstOrDefault(x => x.OriginatorDevice.Equals(originator) &&
                                                    x.FromDevice.Equals(fromDevice) && 
                                                    x.ToDevice.Equals(toDevice) &&
                                                    x.DataSourceOrCommandTarget.Equals(dataSourceOrCommandTarget) &&
                                                    x.DataOrCommandName.Equals(dataOrCommandName));
 
-            return (route != null);
+//#if DEBUG
+//            Trace.WriteLine(String.Format("Rule exists for {0} : {1} {2} {3} {4}", originator, fromDevice, toDevice, dataSourceOrCommandTarget, dataOrCommandName));
+//            Trace.WriteLine(String.Format("Rule found : {0}", rule != null ? rule.ToString() : "-"));
+//#endif
+
+            return (rule != null);
         }
 
 		#endregion 

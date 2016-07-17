@@ -232,9 +232,9 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             EnqueueMessage(message);
         }
 
-        public void SubscribeToCommand(string fromDevice, string commandName, string commandTarget)
+        public void SubscribeToCommand(string fromDevice, string commandTarget, string commandName)
         {
-            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandName, commandTarget);
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandTarget, commandName);
             EnqueueMessage(message);
         }
 
@@ -256,9 +256,9 @@ namespace CodeAbility.MonitorAndCommand.MFClient
             EnqueueMessage(message);
         }
 
-        public void SendCommand(string toDevice, string commandName, string commandTarget, object commandValue)
+        public void SendCommand(string toDevice, string commandTarget, string commandName, object commandValue)
         {
-            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandName, commandTarget, commandValue);
+            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandTarget, commandName, commandValue);
             EnqueueMessage(message);
         }
 

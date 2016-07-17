@@ -6,8 +6,6 @@
 @{
     ViewBag.Title = "Charts";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    int refreshPeriod = ViewBag.RefreshPeriod;          
 }
 
 @section head {
@@ -15,14 +13,69 @@
 
 }
 
-<div id="Temperature" style="width: 1000px; height: 320px; margin: auto;"></div>
+<style type="text/css">
+    .title {
+         font-weight: bolder;
+    }
+</style>
+
+<div style="width: 800px; margin: auto;">
+
+    @if (Model.ChartSpan != CodeAbility.MonitorAndCommand.Repository.Average.ChartSpans.Last48Hours)
+    {
+        <a href="/Chart/">Last 48 hours</a>
+    }
+    else
+    {
+        <span class="title">@Model.Title</span>
+    }
+
+    @if (Model.ChartSpan != CodeAbility.MonitorAndCommand.Repository.Average.ChartSpans.Last7Days)
+    {
+        <a href="/Chart/Last7Days">Last 7 days</a>
+    }
+    else
+    {
+        <span class="title">@Model.Title</span>
+    }
+
+    @if (Model.ChartSpan != CodeAbility.MonitorAndCommand.Repository.Average.ChartSpans.Last30Days)
+    {
+        <a href="/Chart/Last30Days">Last 30 days</a>
+    }
+    else
+    {
+        <span class="title">@Model.Title</span>
+    }
+
+    @if (Model.ChartSpan != CodeAbility.MonitorAndCommand.Repository.Average.ChartSpans.Last3Monthes)
+    {
+        <a href="/Chart/Last3Monthes">Last 3 monthes</a>
+    }
+    else
+    {
+        <span class="title">@Model.Title</span>
+    }
+
+    @if (Model.ChartSpan != CodeAbility.MonitorAndCommand.Repository.Average.ChartSpans.LastYear)
+    {
+        <a href="/Chart/LastYear">Last year</a>
+    }
+    else
+    {
+        <span class="title">@Model.Title</span>
+    }
+
+</div>
+
+<div id="Temperature" style="width: 1000px; height: 300px; margin: auto;"></div>
 <div class="temperaturelegend" style="width: 1000px; margin: auto; text-align: center;"></div>
-<div id="Humidity" style="width: 1000px; height: 320px; margin: auto;"></div>
+<div id="Humidity" style="width: 1000px; height: 300px; margin: auto;"></div>
 <div class="humiditylegend" style="width: 1000px; margin: auto; text-align: center;"></div>
 
 @{
-    string temperatureJsonString = String.Format("[{0},{1},{2}]", Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonATemperatureViewModel.BuildJsonArray());
-    string humidityJsonString = String.Format("[{0},{1},{2}]", Model.PhotonAHumidityViewModel.BuildJsonArray(), Model.PhotonAHumidityViewModel.BuildJsonArray(), Model.PhotonAHumidityViewModel.BuildJsonArray());
+    string temperatureJsonString = String.Format("[{0},{1},{2}]", Model.PhotonATemperatureViewModel.BuildJsonArray(), Model.PhotonBTemperatureViewModel.BuildJsonArray(), Model.PhotonCTemperatureViewModel.BuildJsonArray());
+    string humidityJsonString = String.Format("[{0},{1},{2}]", Model.PhotonAHumidityViewModel.BuildJsonArray(), Model.PhotonBHumidityViewModel.BuildJsonArray(), Model.PhotonCHumidityViewModel.BuildJsonArray());
 }
 
 <script type="text/javascript">
@@ -40,7 +93,7 @@
         data: temperature,
         min_y_from_data: true,
         width: 1000,
-        height: 320,
+        height: 300,
         left: 100,
         right: 0,
         bottom: 50,
@@ -64,7 +117,7 @@
         data: humidity,
         min_y_from_data: true,
         width: 1000,
-        height: 320,
+        height: 300,
         left: 100,
         right: 0,
         bottom: 50,
@@ -77,20 +130,6 @@
 
 </script>
 
-@*<div id="charts">
-    @Html.Partial("_ChartPartial")
-</div>
 
-<script type="text/javascript">
 
-    $.ajaxSetup ({
-        // Disable caching of AJAX responses
-        cache: false
-    });
-
-    $(function () {
-        setInterval(function () { $('#charts').load('/Chart/RefreshChartPartial'); }, @refreshPeriod.ToString()); // every 3 sec
-    });
-
-</script>*@
 

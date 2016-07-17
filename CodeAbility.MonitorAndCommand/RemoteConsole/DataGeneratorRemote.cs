@@ -33,7 +33,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
         const int STARTUP_TIME = 1000;
         const int PERIOD = 1000;
 
-        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 10000;
+        const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 0;
 
         static int messagesReceived = 0;
 
@@ -54,7 +54,7 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
 
             Console.WriteLine("Running.");
 
-            messageClient.SubscribeToData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
+            messageClient.SubscribeToData(Devices.WINDOWS_CONSOLE, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
 
             bool running = true;
             while (running)
@@ -89,7 +89,6 @@ namespace CodeAbility.MonitorAndCommand.RemoteConsole
         static void client_DataReceived(object sender, MessageEventArgs e)
         {
             //Console.WriteLine(e);
-
             messagesReceived++;
         }       
     }

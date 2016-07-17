@@ -14,9 +14,7 @@ namespace CodeAbility.MonitorAndCommand.Repository
 
         IEnumerable<Message> ListLastMessages(int numberOfMessages);
 
-        IEnumerable<Average> ListHourlyAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
-
-        IEnumerable<Average> List15MinutesAverages(int numberOfMessages, string deviceName, string objectName, string parameterName);
+        IEnumerable<Average> ListAverages(Average.ChartSpans chartSpan, string deviceName, string objectName, string parameterName);
 
         void Purge();
     }

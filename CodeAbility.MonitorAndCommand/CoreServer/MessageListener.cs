@@ -55,9 +55,9 @@ namespace CodeAbility.MonitorAndCommand.Server
         #region Constants
 
         const int PROCESS_PERIOD = 50; 
-        const int PROCESS_START_DELAY = 0; 
+        const int PROCESS_START_DELAY = 0;
 
-        #endregion 
+        #endregion
 
         #region Properties 
 
@@ -278,11 +278,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                     //HACK : we pass the ip:port address in the Property argument
                         if (receivedMessage.Name.Equals(ControlActions.REGISTER))
                             receivedMessage.Content = socket.RemoteEndPoint.ToString();
-
-#if DEBUG
-                        Console.WriteLine(String.Format("Received  : {0}", receivedMessage));
-#endif
-
+//#if DEBUG
+//                        Console.WriteLine(String.Format("Received  : {0}", receivedMessage));
+//#endif
                         messagesReceived.Enqueue(receivedMessage);
                     
                         offset = 0;
@@ -420,10 +418,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                     case ContentTypes.RESPONSE:
                         throw new NotImplementedException();
                 }
-
-#if DEBUG
-                Trace.WriteLine(String.Format("Processed : {0}", message));
-#endif 
+//#if DEBUG
+//                Trace.WriteLine(String.Format("Processed : {0}", message));
+//#endif 
             }
             catch (Exception exception)
             {
@@ -611,10 +608,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                         socket.Send(byteData, 0, Message.BUFFER_SIZE, 0);
 
                         PostSend(message);
-
-#if DEBUG
-                        Trace.WriteLine(String.Format("Sent      : {0}", message));
-#endif
+//#if DEBUG
+//                        Console.WriteLine(String.Format("Sent      : {0}", message));
+//#endif
                     }
                     else
                     {

@@ -69,18 +69,18 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
                 if (messageClient != null)
-                    messageClient.SendData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE, keyInfo.KeyChar.ToString());
-
-                if (keyInfo.KeyChar.Equals('0') || keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3'))
                 {
-                    if (messageClient != null)
-                        messageClient.SendData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE, keyInfo.KeyChar.ToString());
+                    if (keyInfo.KeyChar.Equals('0') || keyInfo.KeyChar.Equals('1') || keyInfo.KeyChar.Equals('2') || keyInfo.KeyChar.Equals('3'))
+                    {
+                        if (messageClient != null)
 
-                }
-                else if (keyInfo.Key == ConsoleKey.Escape)
-                {
-                    running = false;
-                    break;
+                            messageClient.SendData(Environment.Devices.ALL, Environment.Objects.MCP4921.OBJECT_ANALOG_DATA, Environment.Objects.MCP4921.DATA_ANALOG_VALUE, keyInfo.KeyChar.ToString());
+                    }
+                    else if (keyInfo.Key == ConsoleKey.Escape)
+                    {
+                        running = false;
+                        break;
+                    }
                 }
             }
 
@@ -93,7 +93,7 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
         {
             Console.WriteLine(e);
 
-            string objectName = e.Parameter.ToString();
+            string objectName = e.Name.ToString();
             string dataValue = (e.Content != null) ? e.Content.ToString() : String.Empty;
 
             if (e.FromDevice.Equals(Environment.Devices.WINDOWS_PHONE) &&

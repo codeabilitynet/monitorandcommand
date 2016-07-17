@@ -142,9 +142,9 @@ namespace CodeAbility.MonitorAndCommand.W8Client
             Send(message);
         }
 
-        public void SubscribeToCommand(string fromDevice, string commandName, string commandTarget)
+        public void SubscribeToCommand(string fromDevice, string commandTarget, string commandName)
         {
-            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandName, commandTarget);
+            Message message = Message.InstanciateSubscribeMessage(DeviceName, fromDevice, DeviceName, commandTarget, commandName);
             Send(message);
         }
 
@@ -172,9 +172,9 @@ namespace CodeAbility.MonitorAndCommand.W8Client
             Send(message);
         }
 
-        public void SendCommand(string toDevice, string commandName, string commandTarget, object commandContent)
+        public void SendCommand(string toDevice, string commandTarget, string commandName, object commandContent)
         {
-            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandName, commandTarget, commandContent);
+            Message message = Message.InstanciateCommandMessage(DeviceName, toDevice, commandTarget, commandName, commandContent);
             Send(message);
         }
 

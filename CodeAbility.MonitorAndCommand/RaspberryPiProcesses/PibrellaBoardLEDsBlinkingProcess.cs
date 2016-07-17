@@ -67,17 +67,17 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
             if (!e.ToDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
                 return;
 
-            string commandName = e.Name; 
-            string parameter = e.Parameter.ToString();
+            string targetName = e.Name.ToString();
+            string commandName = e.Parameter.ToString();
             string content = e.Content.ToString();
 
             if (commandName.Equals(Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED))
             {
-                if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED))
+                if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED))
 	                ToggleGreenLed();
-                else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED))
+                else if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED))
 	                ToggleYellowLed();
-                else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_RED_LED))
+                else if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_RED_LED))
 	                ToggleRedLed();
             }
             else if (commandName.Equals(Environment.Objects.PibrellaBoard.COMMAND_BUTTON_PRESSED))

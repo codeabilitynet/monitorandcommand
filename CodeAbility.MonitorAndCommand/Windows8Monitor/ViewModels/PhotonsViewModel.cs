@@ -107,17 +107,29 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                 messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
 
+                messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
+                messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
+                messageClient.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
+
                 messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
                 messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
                 messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
 
+                messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
+                messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
+                messageClient.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
+
                 messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_HUMIDITY);
                 messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_SENSOR, Photon.DATA_SENSOR_TEMPERATURE);
                 messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
                 messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
+
+                messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
+                messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
+                messageClient.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
 
                 messageClient.SubscribeToTraffic(Devices.RASPBERRY_PI_B, Devices.SERVER);
                 messageClient.SubscribeToTraffic(Devices.SERVER, Devices.RASPBERRY_PI_B);
@@ -239,6 +251,15 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             else if (objectName.Equals(Photon.OBJECT_BOARD_LED))
             {
                 model.BoardLED = e.Content.ToString().Equals(Photon.CONTENT_LED_STATUS_ON);
+            }
+            else if (objectName.Equals(Photon.OBJECT_RGB_LED))
+            {
+                if (parameter.Equals(Photon.DATA_RGB_RED))
+                    model.RGBRed = Int32.Parse(e.Content.ToString());
+                else if (parameter.Equals(Photon.DATA_RGB_GREEN))
+                    model.RGBGreen = Int32.Parse(e.Content.ToString());
+                else if (parameter.Equals(Photon.DATA_RGB_BLUE))
+                    model.RGBBlue = Int32.Parse(e.Content.ToString());
             }
             else if (objectName.Equals(Photon.OBJECT_GREEN_LED))
             {

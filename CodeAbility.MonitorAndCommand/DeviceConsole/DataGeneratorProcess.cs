@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics; 
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -34,48 +35,54 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
         const int HEARTBEAT_PERIOD_IN_MILLESECONDS = 0; 
 
         const int STARTUP_TIME = 1000;
-        //const int PERIOD = 500;
 
         static MessageClient messageClient;
 
         public static void Start(string ipAddress, int portNumber)
         {
-            messageClient = new MessageClient(Devices.WINDOWS_CONSOLE, HEARTBEAT_PERIOD_IN_MILLESECONDS);
-
-            messageClient.CommandReceived += client_CommandReceived;
-            messageClient.Start(ipAddress, portNumber);
-
-            string typedNumber;
-            int messagesPerSecond;
-            int period;
-
-            do
+            try
             {
-                Console.WriteLine("Type number of messages per second:");
-                typedNumber = Console.ReadLine();
+                messageClient = new MessageClient(Devices.WINDOWS_CONSOLE, HEARTBEAT_PERIOD_IN_MILLESECONDS);
+
+                messageClient.CommandReceived += client_CommandReceived;
+                messageClient.Start(ipAddress, portNumber);
+
+                string typedNumber;
+                int messagesPerSecond;
+                int period;
+
+                do
+                {
+                    Console.WriteLine("Type number of messages per second:");
+                    typedNumber = Console.ReadLine();
+                }
+                while (!Int32.TryParse(typedNumber, out messagesPerSecond));
+
+                period = Convert.ToInt32(Math.Round(1000d / messagesPerSecond));
+
+                Console.WriteLine("Data generator.");
+                Console.WriteLine("Running.");
+
+                messageClient.PublishData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
+                messageClient.SubscribeToCommand(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.COMMAND_TOGGLE_GENERATION);
+
+                Console.WriteLine("Hit a key to start data generation.");
+                Console.ReadKey();
+
+                TimerCallback workTimerCallBack = DoWork;
+                Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, period);
+
+                Console.WriteLine("Hit a key to stop data generation.");
+                Console.ReadKey();
+
+                Console.WriteLine("Stopped.");
+
+                messageClient.Stop();
             }
-            while (!Int32.TryParse(typedNumber, out messagesPerSecond));
-
-            period = Convert.ToInt32(Math.Round(1000d / messagesPerSecond));
-
-            Console.WriteLine("Data generator.");
-            Console.WriteLine("Running.");
-
-            messageClient.PublishData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA);
-            messageClient.SubscribeToCommand(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.COMMAND_TOGGLE_GENERATION);
-
-            Console.WriteLine("Hit a key to start data generation.");
-            Console.ReadKey();
-
-            TimerCallback workTimerCallBack = DoWork;
-            Timer workTimer = new Timer(workTimerCallBack, messageClient, STARTUP_TIME, period);
-
-            Console.WriteLine("Hit a key to stop data generation.");
-            Console.ReadKey();
-
-            Console.WriteLine("Stopped.");
-
-            messageClient.Stop();
+            catch (Exception exception)
+            {
+                Trace.WriteLine(exception);
+            }
         }
 
         private static void DoWork(object state)
@@ -85,10 +92,13 @@ namespace CodeAbility.MonitorAndCommand.DeviceConsole
                 //Sensor data
                 string generatorDataString = new Random().NextDouble().ToString();
                 if (messageClient != null)
+                { 
                     messageClient.SendData(Devices.ALL, DataGenerator.OBJECT_GENERATOR, DataGenerator.DATA_GENERATOR_DATA, generatorDataString);
+                }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Trace.WriteLine(exception);
                 throw;
             }
         }
