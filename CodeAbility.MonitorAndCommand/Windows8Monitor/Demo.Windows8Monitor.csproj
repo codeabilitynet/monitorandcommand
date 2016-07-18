@@ -212,7 +212,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CodeAbility.MonitorAndCommand.PortableModels, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.ApplicationInsights, Version=0.14.0.20632, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.0.14.0-build20632\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.winmd</HintPath>
       <Private>True</Private>
