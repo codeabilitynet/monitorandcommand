@@ -211,12 +211,23 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                     Address address = new Address(socket.RemoteEndPoint.ToString());
 
-                    clientsSockets.TryAdd(address, socket);
+                    if (clientsSockets.TryAdd(address, socket))
+                    {
+                        Thread receiveThread = new Thread(new ParameterizedThreadStart(Receiver));
 
-                    Thread receiveThread = new Thread(new ParameterizedThreadStart(Receiver));
-
-                    receiveThreads.TryAdd(address, receiveThread);
-                    receiveThread.Start(socket);
+                        if (receiveThreads.TryAdd(address, receiveThread))
+                        {
+                            receiveThread.Start(socket);
+                        }
+                        else
+                        {
+                            Trace.WriteLine(String.Format("Could not add thread {0} to collection !", receiveThread.ToString()));
+                        }
+                    }
+                    else
+                    {
+                        Trace.WriteLine(String.Format("Could not add socket {0} to collection !", address.ToString()));
+                    }
                 }
             }
             catch (Exception exception)
@@ -279,7 +290,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                         if (receivedMessage.Name.Equals(ControlActions.REGISTER))
                             receivedMessage.Content = socket.RemoteEndPoint.ToString();
 //#if DEBUG
-//                        Console.WriteLine(String.Format("Received  : {0}", receivedMessage));
+//                        Trace.WriteLine(String.Format("Received  : {0}", receivedMessage));
 //#endif
                         messagesReceived.Enqueue(receivedMessage);
                     
@@ -591,6 +602,8 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void Send(Message message)
         {
+            Address destinationAddress = null;
+
             try
             {
                 string serializedMessage = JsonConvert.SerializeObject(message);
@@ -599,17 +612,16 @@ namespace CodeAbility.MonitorAndCommand.Server
                 // Convert the string data to byte data using UTF8 encoding.
                 byte[] byteData = Encoding.UTF8.GetBytes(serializedMessage);
 
-                Address destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
+                destinationAddress = devicesManager.GetAddressFromDeviceName(message.ReceivingDevice);
                 if (destinationAddress != null)
                 {
                     Socket socket = clientsSockets.FirstOrDefault(x => x.Key.Equals(destinationAddress)).Value as Socket;
                     if (socket != null && socket.Connected)
                     {
                         socket.Send(byteData, 0, Message.BUFFER_SIZE, 0);
-
                         PostSend(message);
 //#if DEBUG
-//                        Console.WriteLine(String.Format("Sent      : {0}", message));
+//                        Trace.WriteLine(String.Format("Sent      : {0}", message));
 //#endif
                     }
                     else
@@ -626,8 +638,9 @@ namespace CodeAbility.MonitorAndCommand.Server
             }
             catch (Exception exception)
             {
-                string content = String.Format("Send exception : {0}", exception);
+                string content = String.Format("Send socket   : {0}", exception);
                 LogEvent(content);
+                CleanUp(destinationAddress);
             }
         }
 

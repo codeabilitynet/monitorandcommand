@@ -74,6 +74,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
             Client = new MessageClient(Devices.ANDROID_PHONE);
 
+            Client.DataReceived += Client_DataReceived;
+
             if (Client != null)
             {
                 Client.Start(ipAddress, portNumber);
@@ -130,13 +132,25 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE);
             }
 
-            uiUpdatesTimer.Elapsed += UiUpdatesTimer_Elapsed;
-            uiUpdatesTimer.Start();
-
-            Client.DataReceived += Client_DataReceived;
-
             RedLEDButton.Click += RedLEDButton_Click;
             GreenLEDButton.Click += GreenLEDButton_Click;
+
+            uiUpdatesTimer.Elapsed += UiUpdatesTimer_Elapsed;
+            uiUpdatesTimer.Start();
+        }
+
+        protected override void OnStop()
+        {
+            //Client.Stop();
+
+            //base.OnStop();
+        }
+
+        protected override void OnDestroy()
+        {
+            Client.Stop();
+
+            base.OnDestroy();
         }
 
         private void RedLEDButton_Click(object sender, EventArgs e)
@@ -158,10 +172,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             Client.SendCommand(deviceName, objectName, Photon.COMMAND_TOGGLE_LED, String.Empty);
         }
 
-        public void Client_DataReceived(object sender, MessageEventArgs e)
+        protected void Client_DataReceived(object sender, MessageEventArgs e)
         {
-            //Button.Text = String.Format("{0} : {1}", e.Parameter.ToString(), e.Content.ToString());
-
             Models.Message message = new Models.Message(e.SendingDevice, e.FromDevice, e.ToDevice, e.ContentType, e.Name, e.Parameter, e.Content);
             receivedMessages.Enqueue(message);
         }
@@ -234,20 +246,27 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
         protected void UpdateTextView(string deviceName, string dataName, string value)
         {
-            int textViewId = 0;
-            switch (dataName)
+            try
             {
-                case Photon.DATA_SENSOR_TEMPERATURE:
-                    textViewId = Resource.Id.temperatureTextView;
-                    break;
-                case Photon.DATA_SENSOR_HUMIDITY:
-                    textViewId = Resource.Id.humidityTextView;
-                    break;
+                int textViewId = 0;
+                switch (dataName)
+                {
+                    case Photon.DATA_SENSOR_TEMPERATURE:
+                        textViewId = Resource.Id.temperatureTextView;
+                        break;
+                    case Photon.DATA_SENSOR_HUMIDITY:
+                        textViewId = Resource.Id.humidityTextView;
+                        break;
+                }
+
+                TextView textView = FindViewById<TextView>(textViewId);
+
+                textView.Text = value;
             }
+            catch(Exception exception)
+            {
 
-            TextView textView = FindViewById<TextView>(textViewId);
-
-            textView.Text = value;
+            }
         }
 
         protected void ToggleLEDButton(string deviceName, string objectName, string state)
@@ -283,29 +302,36 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
         void HandleSeekBarsChanges(string deviceName)
         {
-            SeekBar seekBarRed = FindViewById<SeekBar>(Resource.Id.seekBarRed);
-            SeekBar seekBarGreen = FindViewById<SeekBar>(Resource.Id.seekBarGreen);
-            SeekBar seekBarBlue = FindViewById<SeekBar>(Resource.Id.seekBarBlue);
-
-            if (seekBarRed.Progress != RedSeekBar)
+            try
             {
-                RedSeekBar = seekBarRed.Progress;
-                int setRGBRed = (int)(RedSeekBar * 2.555);
-                Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED, setRGBRed.ToString());
+                SeekBar seekBarRed = FindViewById<SeekBar>(Resource.Id.seekBarRed);
+                SeekBar seekBarGreen = FindViewById<SeekBar>(Resource.Id.seekBarGreen);
+                SeekBar seekBarBlue = FindViewById<SeekBar>(Resource.Id.seekBarBlue);
+
+                if (seekBarRed.Progress != RedSeekBar)
+                {
+                    RedSeekBar = seekBarRed.Progress;
+                    int setRGBRed = (int)(RedSeekBar * 2.555);
+                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED, setRGBRed.ToString());
+                }
+
+                if (seekBarGreen.Progress != GreenSeekBar)
+                {
+                    GreenSeekBar = seekBarGreen.Progress;
+                    int setRGBGreen = (int)(GreenSeekBar * 2.555);
+                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN, setRGBGreen.ToString());
+                }
+
+                if (seekBarBlue.Progress != BlueSeekBar)
+                {
+                    BlueSeekBar = seekBarBlue.Progress;
+                    int setRGBBlue = (int)(BlueSeekBar * 2.555);
+                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE, setRGBBlue.ToString());
+                }
             }
-
-            if (seekBarGreen.Progress != GreenSeekBar)
+            catch(Exception exception)
             {
-                GreenSeekBar = seekBarGreen.Progress;
-                int setRGBGreen = (int)(GreenSeekBar * 2.555);
-                Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN, setRGBGreen.ToString());
-            }
 
-            if (seekBarBlue.Progress != BlueSeekBar)
-            {
-                BlueSeekBar = seekBarBlue.Progress;
-                int setRGBBlue = (int)(BlueSeekBar * 2.555);
-                Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE, setRGBBlue.ToString());
             }
         }
     }
