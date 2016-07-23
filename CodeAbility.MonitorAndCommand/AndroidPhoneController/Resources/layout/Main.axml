@@ -20,25 +20,19 @@
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:background="@drawable/LEDButton"
-        android:gravity="center_vertical"
-        android:text="SomeText"
-        android:textColor="#fff" />
+        android:gravity="center_vertical" />
     <Button
         android:id="@+id/RedLEDButton"
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:background="@drawable/LEDButton"
-        android:gravity="center_vertical"
-        android:text="SomeText"
-        android:textColor="#fff" />
+        android:gravity="center_vertical" />
     <Button
         android:id="@+id/GreenLEDButton"
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:background="@drawable/LEDButton"
-        android:gravity="center_vertical"
-        android:text="SomeText"
-        android:textColor="#fff" />
+        android:gravity="center_vertical" />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

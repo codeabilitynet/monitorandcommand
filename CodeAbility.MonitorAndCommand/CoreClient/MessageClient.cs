@@ -164,11 +164,10 @@ namespace CodeAbility.MonitorAndCommand.Client
             Thread.Sleep(1000);
 
             receiveThread.Abort();
+            sendThread.Abort();
 
             if (socket != null && socket.Connected)
                 socket.Shutdown(SocketShutdown.Both);
-            
-            sendThread.Abort();
         }
 
         public void PublishCommand(string toDevice, string commandTarget, string commandName)
@@ -249,7 +248,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private void Sender()
         {
-            Trace.WriteLine("Starting Sender() thread.");
+            //Trace.WriteLine("Starting Sender() thread.");
 
             while (socket.Connected)
             {
@@ -277,7 +276,7 @@ namespace CodeAbility.MonitorAndCommand.Client
         {
             try
             {
-                Trace.WriteLine(String.Format("Sending     : {0}", message));
+                //Trace.WriteLine(String.Format("Sending     : {0}", message));
 
                 string serializedMessage = JsonConvert.SerializeObject(message);
 //#if DEBUG
@@ -303,7 +302,7 @@ namespace CodeAbility.MonitorAndCommand.Client
 
         private void Receiver()
         {
-            Trace.WriteLine("Starting Receiver() thread.");
+            //Trace.WriteLine("Starting Receiver() thread.");
 
             byte[] buffer = new byte[Message.BUFFER_SIZE];
             int offset = 0;

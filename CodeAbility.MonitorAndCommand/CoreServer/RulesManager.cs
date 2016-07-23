@@ -109,7 +109,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 			}
 
 //#if DEBUG
-//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForCommand for {0} {1} {2} {3}", fromDevice, toDevice, parameter, content));
+//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForCommand for {0} {1} {2} {3}", fromDevice, toDevice, commandTarget, commandName));
 //            foreach (string device in deviceNames)
 //                Trace.WriteLine(String.Format("Device: {0} ", device));
 //#endif				
@@ -137,7 +137,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 			}
 
 //#if DEBUG
-//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForData for {0} {1} {2} {3}", fromDevice, toDevice, parameter, content));
+//            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForData for {0} {1} {2} {3}", fromDevice, toDevice, dataSource, dataName));
 //            foreach (string device in deviceNames)
 //                Trace.WriteLine(String.Format("Device: {0} ", device));
 //#endif
