@@ -1,52 +1,299 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/temperatureTextView" />
-    <TextView
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/humidityTextView" />
-    <Button
-        android:id="@+id/BoardLEDButton"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:background="@drawable/LEDButton"
-        android:gravity="center_vertical" />
-    <Button
-        android:id="@+id/RedLEDButton"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:background="@drawable/LEDButton"
-        android:gravity="center_vertical" />
-    <Button
-        android:id="@+id/GreenLEDButton"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:background="@drawable/LEDButton"
-        android:gravity="center_vertical" />
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBarRed" />
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBarGreen" />
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBarBlue" />
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:padding="10sp">
     <ToggleButton
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toggleButton1" />
+        android:layout_height="50sp"
+        android:text="Connect"
+        android:id="@+id/ConnectButton" />
+<!-- Photon A -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:layout_column="0"
+        android:id="@+id/Photon_A_LinearLayout">
+        <TextView
+            android:text="A"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_height="match_parent"
+            android:layout_width="30sp"
+            android:gravity="center_vertical"
+            android:id="@+id/Photon_A_deviceTextView" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Photon_A_linearLayout">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="80sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_A_buttonsLinearLayout">
+                <TextView
+                    android:text="°c"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_A_temperatureTextView" />
+                <TextView
+                    android:text="%"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_A_humidityTextView" />
+                <Button
+                    android:id="@+id/Photon_A_boardLEDButton"
+                    android:layout_height="50sp"
+                    android:layout_width="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/BlueLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_A_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_A_greenLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/GreenLEDButton"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_A_RGBLEDLinearLayout">
+                <Button
+                    android:id="@+id/Photon_A_RGBLEDButton"
+                    android:layout_width="55sp"
+                    android:layout_height="55sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RGBLEDButton"
+                    android:gravity="center_vertical" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="260sp"
+                    android:layout_height="60sp"
+                    android:id="@+id/seekbarsLinearLayout">
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_A_seekBarRed" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_A_seekBarGreen" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_A_seekBarBlue" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+<!-- Photon B -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:layout_column="0"
+        android:id="@+id/Photon_B_LinearLayout">
+        <TextView
+            android:text="B"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_height="match_parent"
+            android:layout_width="30sp"
+            android:gravity="center_vertical"
+            android:id="@+id/Photon_B_deviceTextView" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Photon_B_linearLayout">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="80sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_B_buttonsLinearLayout">
+                <TextView
+                    android:text="°c"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_B_temperatureTextView" />
+                <TextView
+                    android:text="%"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_B_humidityTextView" />
+                <Button
+                    android:id="@+id/Photon_B_boardLEDButton"
+                    android:layout_height="50sp"
+                    android:layout_width="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/BlueLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_B_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_B_greenLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/GreenLEDButton"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_B_RGBLEDLinearLayout">
+                <Button
+                    android:id="@+id/Photon_B_RGBLEDButton"
+                    android:layout_width="55sp"
+                    android:layout_height="55sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RGBLEDButton"
+                    android:gravity="center_vertical" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="260sp"
+                    android:layout_height="60sp"
+                    android:id="@+id/seekbarsLinearLayout">
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_B_seekBarRed" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_B_seekBarGreen" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_B_seekBarBlue" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+<!-- Photon C -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:layout_column="0"
+        android:id="@+id/Photon_C_LinearLayout">
+        <TextView
+            android:text="C"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_height="match_parent"
+            android:layout_width="30sp"
+            android:gravity="center_vertical"
+            android:id="@+id/Photon_C_deviceTextView" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Photon_C_linearLayout">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="80sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_C_buttonsLinearLayout">
+                <TextView
+                    android:text="°c"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_C_temperatureTextView" />
+                <TextView
+                    android:text="%"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_height="wrap_content"
+                    android:layout_width="70sp"
+                    android:gravity="center"
+                    android:id="@+id/Photon_C_humidityTextView" />
+                <Button
+                    android:id="@+id/Photon_C_boardLEDButton"
+                    android:layout_height="50sp"
+                    android:layout_width="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/BlueLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_C_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_C_greenLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/GreenLEDButton"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:layout_column="0"
+                android:id="@+id/Photon_C_RGBLEDLinearLayout">
+                <Button
+                    android:id="@+id/Photon_C_RGBLEDButton"
+                    android:layout_width="55sp"
+                    android:layout_height="55sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RGBLEDButton"
+                    android:gravity="center_vertical" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="260sp"
+                    android:layout_height="60sp"
+                    android:id="@+id/seekbarsLinearLayout">
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_C_seekBarRed" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_C_seekBarGreen" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="20sp"
+                        android:id="@+id/Photon_C_seekBarBlue" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
