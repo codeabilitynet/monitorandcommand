@@ -56,6 +56,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         const int PROCESS_PERIOD = 50; 
         const int PROCESS_START_DELAY = 0;
+        const int BACKLOG = 10;
 
         #endregion
 
@@ -187,7 +188,7 @@ namespace CodeAbility.MonitorAndCommand.Server
 
                 //Start listening
                 listener.Bind(localEndPoint);
-                listener.Listen(10);
+                listener.Listen(BACKLOG);
 
                 sendingThread.Start();
 
@@ -207,27 +208,27 @@ namespace CodeAbility.MonitorAndCommand.Server
                 {
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
-                    Socket socket = listener.Accept();
 
+                    Socket socket = listener.Accept();
                     Address address = new Address(socket.RemoteEndPoint.ToString());
+                    string content = String.Format("new connection from {0}", address.ToString());
+                    Trace.WriteLine(content);
+                    LogEvent(content);
+
+                    //Clean up if a previous socket still exists for that address
+                    if (clientsSockets.ContainsKey(address))
+                        CleanUp(address);
 
                     if (clientsSockets.TryAdd(address, socket))
                     {
                         Thread receiveThread = new Thread(new ParameterizedThreadStart(Receiver));
-
                         if (receiveThreads.TryAdd(address, receiveThread))
-                        {
                             receiveThread.Start(socket);
-                        }
                         else
-                        {
                             Trace.WriteLine(String.Format("Could not add thread {0} to collection !", receiveThread.ToString()));
-                        }
                     }
                     else
-                    {
                         Trace.WriteLine(String.Format("Could not add socket {0} to collection !", address.ToString()));
-                    }
                 }
             }
             catch (Exception exception)
@@ -277,11 +278,9 @@ namespace CodeAbility.MonitorAndCommand.Server
                     int length = offset > 0 ? missingBytesLength : Message.BUFFER_SIZE;
                     
                     int receivedBytesLength = socket.Receive(buffer, offset, length, 0);
-
                     if (receivedBytesLength == Message.BUFFER_SIZE || receivedBytesLength + offset == Message.BUFFER_SIZE)
                     { 
                         string paddedSerializedMessage = Encoding.UTF8.GetString(buffer, 0, Message.BUFFER_SIZE);
-
                         string cleanedUpSerializedMessage = JsonHelpers.CleanUpPaddedSerializedMessage(paddedSerializedMessage);
 
                         Message receivedMessage = JsonConvert.DeserializeObject<Message>(cleanedUpSerializedMessage);
@@ -321,35 +320,46 @@ namespace CodeAbility.MonitorAndCommand.Server
         {
             string deviceName = devicesManager.GetDeviceNameFromAddress(address);
 
-            string content = String.Format("Device {0} disconnected.", deviceName);
+            string content = String.Format("Device {0} disconnected for {1}.", deviceName, address);
             Console.WriteLine(content);
             LogEvent(content);
 
             //Close socket and abort thread
             Thread thread = null;
-
+ 
             Unregister(deviceName);
 
-            if (receiveThreads.TryRemove(address, out thread))
+            try
             {
-                Socket _socket = null;
-                if (clientsSockets.TryRemove(address, out _socket))
-                { 
-                    if (_socket.Connected)
-					{
-						_socket.Shutdown(SocketShutdown.Both); 
-						_socket.Close();
-					}
+                if (receiveThreads.TryRemove(address, out thread))
+                {
+                    //Stop the receive thread before closing the socket
+                    thread.Abort();
+                    Trace.WriteLine(String.Format("Device {0} thread aborted.", deviceName));
 
-                    _socket.Dispose();
+                    Socket _socket = null;
+                    if (clientsSockets.TryRemove(address, out _socket))
+                    {
+                        if (_socket.Connected)
+                        {
+                            _socket.Shutdown(SocketShutdown.Both);
+                            _socket.Close();
+                        }
+
+                        _socket.Dispose();
+                    }
+
+                    Trace.WriteLine(String.Format("Device {0} socket for {1} closed.", deviceName, address));
                 }
-
-                Trace.WriteLine(String.Format("Device {0} socket closed.", deviceName));
-
-                thread.Abort();
-
-                Trace.WriteLine(String.Format("Device {0} thread aborted.", deviceName));
             }
+            catch(Exception exception)
+            {
+                Trace.WriteLine(String.Format("Cleanup exception for {0} : {1}", deviceName, exception.ToString()));
+            }
+
+            content = String.Format("Device {0} socket and thread cleaned up for {1}.", deviceName, address);
+            Console.WriteLine(content);
+            LogEvent(content);
         }
 
         #endregion 
@@ -391,7 +401,7 @@ namespace CodeAbility.MonitorAndCommand.Server
                 Message message = null;
                 if (messagesReceived.TryDequeue(out message))
                 {
-                    //HACK : the Timestamp produced by some devices being unreliable, we override it with a Timestamp produced by the server.
+                    //HACK : the Timestamp produced by some devices is not reliable, so we redefine it with a Timestamp produced by the server.
                     message.Timestamp = DateTime.Now;
 
                     if (IsMessageServiceActivated)
@@ -493,6 +503,11 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         private void Register(Address origin, string deviceName)
         {
+            //Clean up old connection data if any
+            Address previousAddress = devicesManager.GetAddressFromDeviceName(deviceName);
+            if (previousAddress != null)
+                CleanUp(previousAddress);
+
             devicesManager.AddDevice(deviceName, origin);
 
             string content = String.Format("Device {0} registered.", deviceName);
@@ -640,7 +655,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             {
                 string content = String.Format("Send socket   : {0}", exception);
                 LogEvent(content);
-                CleanUp(destinationAddress);
+                //CleanUp(destinationAddress);
             }
         }
 

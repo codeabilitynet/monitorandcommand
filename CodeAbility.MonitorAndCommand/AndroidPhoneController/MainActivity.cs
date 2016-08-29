@@ -34,6 +34,10 @@ using CodeAbility.MonitorAndCommand.Models;
 
 namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 {
+    /// <summary>
+    /// 
+    /// </summary>
+
     [Activity(Label = "Android Phone Controller", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
@@ -42,23 +46,52 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
         MessageClient Client { get; set; }
 
-        Button RedLEDButton { get; set; }
-        Button GreenLEDButton { get; set; }
+        ToggleButton ConnectButton { get; set; }
 
-        TextView TemperatureTextView { get; set; }
-        TextView HumidityTextView { get; set; }
+        Button PhotonA_RedLEDButton { get; set; }
+        Button PhotonA_GreenLEDButton { get; set; }
+        TextView PhotonA_TemperatureTextView { get; set; }
+        TextView PhotonA_HumidityTextView { get; set; }
+
+        Button PhotonB_RedLEDButton { get; set; }
+        Button PhotonB_GreenLEDButton { get; set; }
+        TextView PhotonB_TemperatureTextView { get; set; }
+        TextView PhotonB_HumidityTextView { get; set; }
+
+        Button PhotonC_RedLEDButton { get; set; }
+        Button PhotonC_GreenLEDButton { get; set; }
+        TextView PhotonC_TemperatureTextView { get; set; }
+        TextView PhotonC_HumidityTextView { get; set; }
+
+        public class PhotonStates
+        {
+            public int RedSeekBar { get; set; }
+            public int GreenSeekBar { get; set; }
+            public int BlueSeekBar { get; set; }
+
+            public int RGBRed { get; set; }
+            public int RGBGreen { get; set; }
+            public int RGBBlue { get; set; }
+
+            public PhotonStates()
+            {
+                RedSeekBar = 0;
+                GreenSeekBar = 0;
+                BlueSeekBar = 0;
+
+                RGBRed = 0;
+                RGBGreen = 0;
+                RGBBlue = 0;
+            }
+        }
+
+        PhotonStates PhotonA_States = new PhotonStates();
+        PhotonStates PhotonB_States = new PhotonStates();
+        PhotonStates PhotonC_States = new PhotonStates();
 
         ConcurrentQueue<Models.Message> receivedMessages = new ConcurrentQueue<Models.Message>();
 
         Timer uiUpdatesTimer = new Timer(100);
-
-        int RGBRed { get; set; }
-        int RGBGreen { get; set; }
-        int RGBBlue { get; set; }
-
-        int RedSeekBar { get; set; }
-        int GreenSeekBar { get; set; }
-        int BlueSeekBar { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -67,15 +100,46 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
-            // Get our button from the layout resource,
-            // and attach an event to it
-            RedLEDButton = FindViewById<Button>(Resource.Id.RedLEDButton);
-            GreenLEDButton = FindViewById<Button>(Resource.Id.GreenLEDButton);
+            ConnectButton = FindViewById<ToggleButton>(Resource.Id.ConnectButton);
 
+            PhotonA_RedLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_A, "redLEDButton"));
+            PhotonA_GreenLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_A, "greenLEDButton"));
+            PhotonB_RedLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_B, "redLEDButton"));
+            PhotonB_GreenLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_B, "greenLEDButton"));
+            PhotonC_RedLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_C, "redLEDButton"));
+            PhotonC_GreenLEDButton = FindViewById<Button>(GetResourceId(Devices.PHOTON_C, "greenLEDButton"));
+
+            ConnectButton.Text = "Connect";
             Client = new MessageClient(Devices.ANDROID_PHONE);
-
             Client.DataReceived += Client_DataReceived;
 
+            ConnectButton.Click += ConnectButton_Click;
+
+            PhotonA_RedLEDButton.Click += RedLEDButton_Click;
+            PhotonA_GreenLEDButton.Click += GreenLEDButton_Click;
+            PhotonB_RedLEDButton.Click += RedLEDButton_Click;
+            PhotonB_GreenLEDButton.Click += GreenLEDButton_Click;
+            PhotonC_RedLEDButton.Click += RedLEDButton_Click;
+            PhotonC_GreenLEDButton.Click += GreenLEDButton_Click;
+
+            ToggleLEDButton(Devices.PHOTON_A, Photon.OBJECT_BOARD_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED, Photon.CONTENT_LED_STATUS_OFF);
+
+            ToggleLEDButton(Devices.PHOTON_B, Photon.OBJECT_BOARD_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.CONTENT_LED_STATUS_OFF);
+
+            ToggleLEDButton(Devices.PHOTON_C, Photon.OBJECT_BOARD_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_C, Photon.OBJECT_RED_LED, Photon.CONTENT_LED_STATUS_OFF);
+            ToggleLEDButton(Devices.PHOTON_C, Photon.OBJECT_GREEN_LED, Photon.CONTENT_LED_STATUS_OFF);
+
+            uiUpdatesTimer.Elapsed += UiUpdatesTimer_Elapsed;
+            uiUpdatesTimer.Start();
+        }
+
+        private void ConnectButton_Click(object sender, EventArgs e)
+        {
             if (Client != null)
             {
                 Client.Start(ipAddress, portNumber);
@@ -85,7 +149,6 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
-
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
                 Client.SubscribeToData(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
@@ -95,7 +158,6 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
-
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
                 Client.SubscribeToData(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
@@ -105,50 +167,46 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_BOARD_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_GREEN_LED, Photon.DATA_LED_STATUS);
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RED_LED, Photon.DATA_LED_STATUS);
-
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_RED);
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_GREEN);
                 Client.SubscribeToData(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.DATA_RGB_BLUE);
 
                 Client.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
                 Client.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
-
                 Client.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED);
                 Client.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN);
                 Client.PublishCommand(Devices.PHOTON_A, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE);
 
                 Client.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
                 Client.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
-
                 Client.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED);
                 Client.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN);
                 Client.PublishCommand(Devices.PHOTON_B, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE);
 
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_GREEN_LED, Photon.COMMAND_TOGGLE_LED);
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_RED_LED, Photon.COMMAND_TOGGLE_LED);
-
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED);
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN);
                 Client.PublishCommand(Devices.PHOTON_C, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE);
+
+                ConnectButton = FindViewById<ToggleButton>(Resource.Id.ConnectButton);
+                ConnectButton.Text = "Disconnect";
             }
-
-            RedLEDButton.Click += RedLEDButton_Click;
-            GreenLEDButton.Click += GreenLEDButton_Click;
-
-            uiUpdatesTimer.Elapsed += UiUpdatesTimer_Elapsed;
-            uiUpdatesTimer.Start();
         }
 
         protected override void OnStop()
         {
-            //Client.Stop();
+            Client.Stop();
 
-            //base.OnStop();
+            base.OnStop();
         }
 
         protected override void OnDestroy()
         {
-            Client.Stop();
+            if (Client != null && Client.IsConnected)
+            {
+                Client.Stop();
+            }
 
             base.OnDestroy();
         }
@@ -156,20 +214,21 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
         private void RedLEDButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-
             ButtonClick(Devices.PHOTON_B, Photon.OBJECT_RED_LED);
         }
 
         private void GreenLEDButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-
             ButtonClick(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED);           
         }
 
         private void ButtonClick(string deviceName, string objectName)
         {
-            Client.SendCommand(deviceName, objectName, Photon.COMMAND_TOGGLE_LED, String.Empty);
+            if (Client != null && Client.IsConnected)
+            {
+                Client.SendCommand(deviceName, objectName, Photon.COMMAND_TOGGLE_LED, String.Empty);
+            }
         }
 
         protected void Client_DataReceived(object sender, MessageEventArgs e)
@@ -178,7 +237,6 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             receivedMessages.Enqueue(message);
         }
 
-        bool checkSeekBars = false;
         private void UiUpdatesTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
@@ -188,6 +246,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                     Models.Message message = null;
                     if (receivedMessages.TryDequeue(out message))
                     {
+                        PhotonStates photonStates = GetPhotonStates(message.FromDevice);
+
                         if (message.Name.Equals(Photon.OBJECT_SENSOR))
                         {
                             if (message.Parameter.Equals(Photon.DATA_SENSOR_TEMPERATURE))
@@ -222,25 +282,39 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                         }
                         else if (message.Name.Equals(Photon.OBJECT_RGB_LED))
                         {
+                            switch(message.FromDevice)
+                            {
+                                case Environment.Devices.PHOTON_A:
+                                    photonStates = PhotonA_States;
+                                    break;
+                                case Environment.Devices.PHOTON_B:
+                                    photonStates = PhotonB_States;
+                                    break;
+                                case Environment.Devices.PHOTON_C:
+                                    photonStates = PhotonC_States;
+                                    break;
+                            }
+
                             if (message.Parameter.Equals(Photon.DATA_RGB_RED))
-                                RGBRed = Int32.Parse(message.Content.ToString());
+                                photonStates.RGBRed = Int32.Parse(message.Content.ToString());
                             else if (message.Parameter.Equals(Photon.DATA_RGB_GREEN))
-                                RGBGreen = Int32.Parse(message.Content.ToString());
+                                photonStates.RGBGreen = Int32.Parse(message.Content.ToString());
                             else if (message.Parameter.Equals(Photon.DATA_RGB_BLUE))
-                                RGBBlue = Int32.Parse(message.Content.ToString());
+                                photonStates.RGBBlue = Int32.Parse(message.Content.ToString());
+
+                            this.RunOnUiThread(() => { SetRGBButton(message.FromDevice, photonStates.RGBRed, photonStates.RGBGreen, photonStates.RGBBlue); });
                         }
                     }
                 }
 
-                checkSeekBars = !checkSeekBars;
-                if (checkSeekBars)
-                {
-                    HandleSeekBarsChanges(Devices.PHOTON_B);
-                }
+                HandleSeekBarsChanges(Devices.PHOTON_A);
+                HandleSeekBarsChanges(Devices.PHOTON_B);
+                HandleSeekBarsChanges(Devices.PHOTON_C);
+                
             }
             catch(Exception)
             {
-
+                //Add logging for Mono.Android
             }
         }
 
@@ -252,10 +326,12 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 switch (dataName)
                 {
                     case Photon.DATA_SENSOR_TEMPERATURE:
-                        textViewId = Resource.Id.temperatureTextView;
+                        textViewId = GetResourceId(deviceName, "temperatureTextView");
+                        value = value + "°c";
                         break;
                     case Photon.DATA_SENSOR_HUMIDITY:
-                        textViewId = Resource.Id.humidityTextView;
+                        textViewId = GetResourceId(deviceName, "humidityTextView");
+                        value = value + "%";
                         break;
                 }
 
@@ -265,38 +341,55 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             }
             catch(Exception exception)
             {
-
+                //Add logging for Mono.Android
             }
         }
 
         protected void ToggleLEDButton(string deviceName, string objectName, string state)
         {
-            int ledButtonId = Resource.Id.BoardLEDButton;
-            switch(objectName)
-            {
-                case Photon.OBJECT_BOARD_LED:
-                    ledButtonId = Resource.Id.BoardLEDButton;
-                    break;
-                case Photon.OBJECT_RED_LED:
-                    ledButtonId = Resource.Id.RedLEDButton;
-                    break;
-                case Photon.OBJECT_GREEN_LED:
-                    ledButtonId = Resource.Id.GreenLEDButton;
-                    break;
-            }
-
+         
             try
             {
+                int ledButtonId = GetLEDButtonId(deviceName, objectName);
                 Button ledButton = FindViewById<Button>(ledButtonId);
+                Drawable background = ledButton.Background;
+                background.SetAlpha(state.Equals(Photon.CONTENT_LED_STATUS_ON) ? 255 : 50);
 
-                Color PaleColor = new Color(50, 0, 0);
-                Color IntenseColor = new Color(50, 0, 0);
-
-                ledButton.SetBackgroundColor(state.Equals("On") ? IntenseColor : PaleColor);
             }
             catch (Exception exception)
             {
+                //Add logging for Mono.Android
+            }
+        }
 
+        protected void SetRGBButton(string deviceName, int redLED, int greenLED, int blueLED)
+        {
+
+            try
+            {
+                Button ledButton = FindViewById<Button>(GetResourceId(deviceName, "RGBLEDButton"));
+                Color color = new Color(redLED, greenLED, blueLED);
+                GradientDrawable background = (GradientDrawable)ledButton.Background;
+                background.SetColor(color);
+            }
+            catch (Exception exception)
+            {
+                //Add logging for Mono.Android
+            }
+        }
+
+        protected PhotonStates GetPhotonStates(string deviceName)
+        {
+            switch (deviceName)
+            {
+                case Environment.Devices.PHOTON_A:
+                    return PhotonA_States;
+                case Environment.Devices.PHOTON_B:
+                    return PhotonB_States;
+                case Environment.Devices.PHOTON_C:
+                    return PhotonC_States;
+                default:
+                    return null;
             }
         }
 
@@ -304,35 +397,83 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
         {
             try
             {
-                SeekBar seekBarRed = FindViewById<SeekBar>(Resource.Id.seekBarRed);
-                SeekBar seekBarGreen = FindViewById<SeekBar>(Resource.Id.seekBarGreen);
-                SeekBar seekBarBlue = FindViewById<SeekBar>(Resource.Id.seekBarBlue);
+                SeekBar seekBarRed = FindViewById<SeekBar>(GetResourceId(deviceName, "seekBarRed"));
+                SeekBar seekBarGreen = FindViewById<SeekBar>(GetResourceId(deviceName, "seekBarGreen"));
+                SeekBar seekBarBlue = FindViewById<SeekBar>(GetResourceId(deviceName, "seekBarBlue"));
 
-                if (seekBarRed.Progress != RedSeekBar)
+                PhotonStates photonStates = GetPhotonStates(deviceName);
+
+                if (seekBarRed.Progress != photonStates.RedSeekBar)
                 {
-                    RedSeekBar = seekBarRed.Progress;
-                    int setRGBRed = (int)(RedSeekBar * 2.555);
-                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED, setRGBRed.ToString());
+                    photonStates.RedSeekBar = seekBarRed.Progress;
+                    int setRGBRed = (int)(photonStates.RedSeekBar * 2.555);
+                    SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_RED, setRGBRed.ToString());
                 }
 
-                if (seekBarGreen.Progress != GreenSeekBar)
+                if (seekBarGreen.Progress != photonStates.GreenSeekBar)
                 {
-                    GreenSeekBar = seekBarGreen.Progress;
-                    int setRGBGreen = (int)(GreenSeekBar * 2.555);
-                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN, setRGBGreen.ToString());
+                    photonStates.GreenSeekBar = seekBarGreen.Progress;
+                    int setRGBGreen = (int)(photonStates.GreenSeekBar * 2.555);
+                    SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_GREEN, setRGBGreen.ToString());
                 }
 
-                if (seekBarBlue.Progress != BlueSeekBar)
+                if (seekBarBlue.Progress != photonStates.BlueSeekBar)
                 {
-                    BlueSeekBar = seekBarBlue.Progress;
-                    int setRGBBlue = (int)(BlueSeekBar * 2.555);
-                    Client.SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE, setRGBBlue.ToString());
+                    photonStates.BlueSeekBar = seekBarBlue.Progress;
+                    int setRGBBlue = (int)(photonStates.BlueSeekBar * 2.555);
+                    SendCommand(deviceName, Photon.OBJECT_RGB_LED, Photon.COMMAND_SET_RGB_BLUE, setRGBBlue.ToString());
                 }
             }
             catch(Exception exception)
             {
-
+                //Add logging for Mono.Android
             }
+        }
+
+        void SendCommand(string deviceName, string targetName, string commandName, string content)
+        {
+            if (Client != null && Client.IsConnected)
+            {
+                Client.SendCommand(deviceName, targetName, commandName, content);
+            }
+        }
+
+        protected int GetLEDButtonId(string deviceName, string objectName)
+        {
+            switch (objectName)
+            {
+                case Photon.OBJECT_BOARD_LED:
+                    return GetResourceId(deviceName, "boardLEDButton");
+                case Photon.OBJECT_RED_LED:
+                    return GetResourceId(deviceName, "redLEDButton");
+                case Photon.OBJECT_GREEN_LED:
+                    return GetResourceId(deviceName, "greenLEDButton");
+                default:
+                    return 0;
+            }
+        }
+
+        protected Color GetLEDColor(string objectSource, bool isOn)
+        {
+            switch (objectSource)
+            {
+                case Photon.OBJECT_RED_LED:
+                    return isOn ? new Color(255, 0, 0, 255) : new Color(255, 0, 0, 50);
+                case Photon.OBJECT_GREEN_LED:
+                    return isOn ? new Color(0, 255, 0, 255) : new Color(0, 255, 0, 50);
+                case Photon.OBJECT_BOARD_LED:
+                    return isOn ? new Color(0, 0, 255, 255) : new Color(0, 0, 255, 50);
+            }
+
+            return new Color();
+        }
+
+        protected int GetResourceId(string deviceName, string resourceBaseName)
+        {
+            const string formatString = "{0}_{1}";
+
+            string resourceName = string.Format(formatString, deviceName.Replace(' ', '_'), resourceBaseName);
+            return this.Resources.GetIdentifier(resourceName, "drawable", null);
         }
     }
 }
