@@ -33,7 +33,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="80sp"
+                android:layout_height="70sp"
                 android:layout_column="0"
                 android:id="@+id/Photon_A_buttonsLinearLayout">
                 <TextView
@@ -128,7 +128,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="80sp"
+                android:layout_height="70sp"
                 android:layout_column="0"
                 android:id="@+id/Photon_B_buttonsLinearLayout">
                 <TextView
@@ -223,7 +223,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="80sp"
+                android:layout_height="70sp"
                 android:layout_column="0"
                 android:id="@+id/Photon_C_buttonsLinearLayout">
                 <TextView

@@ -17,7 +17,9 @@ To start the "Demo" environment presented in the showcase video(s), in "multiple
 - Demo.WpfServer (on Windows only) or Demo.Console (on Windows or Raspberry Pi); 
 - Test.DeviceConsole, using the "Data Generator" option; 
 - Demo.WindowsPhoneController;
+- Demo.AndroidPhoneController;
 - Demo.WpfMonitor;
+- Demo.WindowsMonitor;
 - for Raspberry Pi users having a Pibrella board, Demo.RaspberryPi;
 - for Netduino users:
 -- Demo.Netduino3Wifi referencing processes from Netduino.Processes to address DS18B20, HIH4000 sensors and MCP4921 converter;
