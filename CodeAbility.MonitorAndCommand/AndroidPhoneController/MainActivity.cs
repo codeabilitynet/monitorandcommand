@@ -31,6 +31,7 @@ using Android.Graphics;
 using CodeAbility.MonitorAndCommand.Client;
 using CodeAbility.MonitorAndCommand.Environment;
 using CodeAbility.MonitorAndCommand.Models;
+using static Android.Graphics.PorterDuff;
 
 namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 {
@@ -115,12 +116,12 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
             ConnectButton.Click += ConnectButton_Click;
 
-            PhotonA_RedLEDButton.Click += RedLEDButton_Click;
-            PhotonA_GreenLEDButton.Click += GreenLEDButton_Click;
-            PhotonB_RedLEDButton.Click += RedLEDButton_Click;
-            PhotonB_GreenLEDButton.Click += GreenLEDButton_Click;
-            PhotonC_RedLEDButton.Click += RedLEDButton_Click;
-            PhotonC_GreenLEDButton.Click += GreenLEDButton_Click;
+            PhotonA_RedLEDButton.Click += PhotonA_RedLEDButton_Click;
+            PhotonA_GreenLEDButton.Click += PhotonA_GreenLEDButton_Click;
+            PhotonB_RedLEDButton.Click += PhotonB_RedLEDButton_Click;
+            PhotonB_GreenLEDButton.Click += PhotonB_GreenLEDButton_Click;
+            PhotonC_RedLEDButton.Click += PhotonC_RedLEDButton_Click;
+            PhotonC_GreenLEDButton.Click += PhotonC_GreenLEDButton_Click;
 
             ToggleLEDButton(Devices.PHOTON_A, Photon.OBJECT_BOARD_LED, Photon.CONTENT_LED_STATUS_OFF);
             ToggleLEDButton(Devices.PHOTON_A, Photon.OBJECT_RED_LED, Photon.CONTENT_LED_STATUS_OFF);
@@ -140,7 +141,7 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            if (Client != null)
+            if (Client != null && !Client.IsConnected)
             {
                 Client.Start(ipAddress, portNumber);
 
@@ -192,6 +193,10 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                 ConnectButton = FindViewById<ToggleButton>(Resource.Id.ConnectButton);
                 ConnectButton.Text = "Disconnect";
             }
+            else if (Client != null && Client.IsConnected)
+            {
+                OnStop();
+            }
         }
 
         protected override void OnStop()
@@ -211,16 +216,40 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             base.OnDestroy();
         }
 
-        private void RedLEDButton_Click(object sender, EventArgs e)
+        private void PhotonA_RedLEDButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            ButtonClick(Devices.PHOTON_A, Photon.OBJECT_RED_LED);
+        }
+
+        private void PhotonA_GreenLEDButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            ButtonClick(Devices.PHOTON_A, Photon.OBJECT_GREEN_LED);           
+        }
+
+        private void PhotonB_RedLEDButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
             ButtonClick(Devices.PHOTON_B, Photon.OBJECT_RED_LED);
         }
 
-        private void GreenLEDButton_Click(object sender, EventArgs e)
+        private void PhotonB_GreenLEDButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            ButtonClick(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED);           
+            ButtonClick(Devices.PHOTON_B, Photon.OBJECT_GREEN_LED);
+        }
+
+        private void PhotonC_RedLEDButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            ButtonClick(Devices.PHOTON_C, Photon.OBJECT_RED_LED);
+        }
+
+        private void PhotonC_GreenLEDButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            ButtonClick(Devices.PHOTON_C, Photon.OBJECT_GREEN_LED);
         }
 
         private void ButtonClick(string deviceName, string objectName)
@@ -369,8 +398,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             {
                 Button ledButton = FindViewById<Button>(GetResourceId(deviceName, "RGBLEDButton"));
                 Color color = new Color(redLED, greenLED, blueLED);
-                GradientDrawable background = (GradientDrawable)ledButton.Background;
-                background.SetColor(color);
+                Drawable background = ledButton.Background;
+                background.SetColorFilter(color, Mode.Screen);
             }
             catch (Exception exception)
             {
@@ -473,7 +502,7 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
             const string formatString = "{0}_{1}";
 
             string resourceName = string.Format(formatString, deviceName.Replace(' ', '_'), resourceBaseName);
-            return this.Resources.GetIdentifier(resourceName, "drawable", null);
+            return this.Resources.GetIdentifier(resourceName, "id", this.ApplicationContext.PackageName);
         }
     }
 }
