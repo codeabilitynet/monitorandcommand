@@ -311,19 +311,6 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
                         }
                         else if (message.Name.Equals(Photon.OBJECT_RGB_LED))
                         {
-                            switch(message.FromDevice)
-                            {
-                                case Environment.Devices.PHOTON_A:
-                                    photonStates = PhotonA_States;
-                                    break;
-                                case Environment.Devices.PHOTON_B:
-                                    photonStates = PhotonB_States;
-                                    break;
-                                case Environment.Devices.PHOTON_C:
-                                    photonStates = PhotonC_States;
-                                    break;
-                            }
-
                             if (message.Parameter.Equals(Photon.DATA_RGB_RED))
                                 photonStates.RGBRed = Int32.Parse(message.Content.ToString());
                             else if (message.Parameter.Equals(Photon.DATA_RGB_GREEN))

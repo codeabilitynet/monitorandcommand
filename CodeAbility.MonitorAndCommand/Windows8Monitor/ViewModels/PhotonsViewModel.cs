@@ -210,7 +210,8 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
             string deviceName = stateName.Split('.')[1];
 
             DeviceModel deviceModel = deviceModels.FirstOrDefault(x => x.Name == deviceName);
-            deviceModel.IsConnected = e.Content.Equals(ServerStates.ConnectionStates.Connected.ToString());
+            if (deviceModel != null)
+                deviceModel.IsConnected = e.Content.Equals(ServerStates.ConnectionStates.Connected.ToString());
         }
 
         private void HandleRaspberryPiBMessage(MessageEventArgs e)

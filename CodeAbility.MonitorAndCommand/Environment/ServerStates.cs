@@ -16,7 +16,7 @@ namespace CodeAbility.MonitorAndCommand.Environment
         public const string STATE_CONNECTION_NETDUINO_3_WIFI = "Connection.Netduino 3 Wifi";
 
         public const string STATE_CONNECTION_RASPBERRY_B = "Connection.Raspberry Pi B";
-        public const string STATE_CONNECTION_ANDROID_PHONE = "Connection.Android Phone";
+        public const string STATE_CONNECTION_ANDROID_PHONE = "Connection.Acer Liquid Zest";
 
         public const string STATE_CONNECTION_PHOTON_A = "Connection.Photon A";
         public const string STATE_CONNECTION_PHOTON_B = "Connection.Photon B";

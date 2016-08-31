@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using CodeAbility.MonitorAndCommand.Models;
 using Windows.UI.Xaml;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
 {
@@ -147,9 +148,9 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.Models
             }
         }
 
-        public Color RGB
+        public SolidColorBrush RGB
         {
-            get { return Color.FromArgb(255, (byte)RGBRed, (byte)RGBGreen, (byte)RGBBlue); }
+            get { return new SolidColorBrush(Color.FromArgb(255, (byte)RGBRed, (byte)RGBGreen, (byte)RGBBlue)); }
         } 
 
         public PhotonModel(string name) 
