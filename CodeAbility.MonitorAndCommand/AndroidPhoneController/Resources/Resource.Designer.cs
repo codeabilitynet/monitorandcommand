@@ -93,8 +93,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f050002
 			public const int Photon_A_deviceTextView = 2131034114;
 			
-			// aapt resource value: 0x7f050009
-			public const int Photon_A_greenLEDButton = 2131034121;
+			// aapt resource value: 0x7f050008
+			public const int Photon_A_greenLEDButton = 2131034120;
 			
 			// aapt resource value: 0x7f050006
 			public const int Photon_A_humidityTextView = 2131034118;
@@ -102,8 +102,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f050003
 			public const int Photon_A_linearLayout = 2131034115;
 			
-			// aapt resource value: 0x7f050008
-			public const int Photon_A_redLEDButton = 2131034120;
+			// aapt resource value: 0x7f050009
+			public const int Photon_A_redLEDButton = 2131034121;
 			
 			// aapt resource value: 0x7f05000f
 			public const int Photon_A_seekBarBlue = 2131034127;
@@ -135,8 +135,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f050011
 			public const int Photon_B_deviceTextView = 2131034129;
 			
-			// aapt resource value: 0x7f050018
-			public const int Photon_B_greenLEDButton = 2131034136;
+			// aapt resource value: 0x7f050017
+			public const int Photon_B_greenLEDButton = 2131034135;
 			
 			// aapt resource value: 0x7f050015
 			public const int Photon_B_humidityTextView = 2131034133;
@@ -144,8 +144,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f050012
 			public const int Photon_B_linearLayout = 2131034130;
 			
-			// aapt resource value: 0x7f050017
-			public const int Photon_B_redLEDButton = 2131034135;
+			// aapt resource value: 0x7f050018
+			public const int Photon_B_redLEDButton = 2131034136;
 			
 			// aapt resource value: 0x7f05001d
 			public const int Photon_B_seekBarBlue = 2131034141;
@@ -177,8 +177,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f05001f
 			public const int Photon_C_deviceTextView = 2131034143;
 			
-			// aapt resource value: 0x7f050026
-			public const int Photon_C_greenLEDButton = 2131034150;
+			// aapt resource value: 0x7f050025
+			public const int Photon_C_greenLEDButton = 2131034149;
 			
 			// aapt resource value: 0x7f050023
 			public const int Photon_C_humidityTextView = 2131034147;
@@ -186,8 +186,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
 			// aapt resource value: 0x7f050020
 			public const int Photon_C_linearLayout = 2131034144;
 			
-			// aapt resource value: 0x7f050025
-			public const int Photon_C_redLEDButton = 2131034149;
+			// aapt resource value: 0x7f050026
+			public const int Photon_C_redLEDButton = 2131034150;
 			
 			// aapt resource value: 0x7f05002b
 			public const int Photon_C_seekBarBlue = 2131034155;

@@ -58,18 +58,18 @@
                     android:background="@drawable/BlueLEDButton"
                     android:gravity="center_vertical" />
                 <Button
-                    android:id="@+id/Photon_A_redLEDButton"
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
-                    android:padding="10sp"
-                    android:background="@drawable/RedLEDButton"
-                    android:gravity="center_vertical" />
-                <Button
                     android:id="@+id/Photon_A_greenLEDButton"
                     android:layout_width="50sp"
                     android:layout_height="50sp"
                     android:padding="10sp"
                     android:background="@drawable/GreenLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_A_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
                     android:gravity="center_vertical" />
             </LinearLayout>
             <LinearLayout
@@ -153,19 +153,19 @@
                     android:background="@drawable/BlueLEDButton"
                     android:gravity="center_vertical" />
                 <Button
-                    android:id="@+id/Photon_B_redLEDButton"
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
-                    android:padding="10sp"
-                    android:background="@drawable/RedLEDButton"
-                    android:gravity="center_vertical" />
-                <Button
                     android:id="@+id/Photon_B_greenLEDButton"
                     android:layout_width="50sp"
                     android:layout_height="50sp"
                     android:padding="10sp"
                     android:background="@drawable/GreenLEDButton"
                     android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_B_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
+                    android:gravity="center_vertical" />  
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -248,18 +248,18 @@
                     android:background="@drawable/BlueLEDButton"
                     android:gravity="center_vertical" />
                 <Button
-                    android:id="@+id/Photon_C_redLEDButton"
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
-                    android:padding="10sp"
-                    android:background="@drawable/RedLEDButton"
-                    android:gravity="center_vertical" />
-                <Button
                     android:id="@+id/Photon_C_greenLEDButton"
                     android:layout_width="50sp"
                     android:layout_height="50sp"
                     android:padding="10sp"
                     android:background="@drawable/GreenLEDButton"
+                    android:gravity="center_vertical" />
+                <Button
+                    android:id="@+id/Photon_C_redLEDButton"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:padding="10sp"
+                    android:background="@drawable/RedLEDButton"
                     android:gravity="center_vertical" />
             </LinearLayout>
             <LinearLayout

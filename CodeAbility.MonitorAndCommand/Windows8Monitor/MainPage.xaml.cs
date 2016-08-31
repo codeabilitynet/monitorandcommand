@@ -45,7 +45,7 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        const string DEFAULT_IP_ADDRESS = "192.168.178.26";
+        const string DEFAULT_IP_ADDRESS = "192.168.178.22";
 
         public MainPage()
         {
