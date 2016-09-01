@@ -29,7 +29,11 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
     {
         const int NOTIFY_STATE_TIMER_PERIOD = 250;
 
-        private ServerStates.PhotonsStates state = ServerStates.PhotonsStates.Normal;
+        private bool IsPhotonARed { get; set; }
+        private bool IsPhotonBRed { get; set; }
+        private bool IsPhotonCRed { get; set; }
+
+        private ServerStates.PhotonsStates state = ServerStates.PhotonsStates.Danger;
         public ServerStates.PhotonsStates State
         {
             get
@@ -57,8 +61,22 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole.StateMachines
 
         public void ComputeState(string deviceName, string parameter, string value)
         {
-            //TODO 
-            State = ServerStates.PhotonsStates.Normal;
+            if (!parameter.Equals(Photon.DATA_LED_STATUS))
+                return;
+
+            if (deviceName.Equals(Devices.PHOTON_A))
+                IsPhotonARed = value.Equals(Photon.CONTENT_LED_STATUS_ON);
+            else if (deviceName.Equals(Devices.PHOTON_B))
+                IsPhotonBRed = value.Equals(Photon.CONTENT_LED_STATUS_ON);
+            else if (deviceName.Equals(Devices.PHOTON_C))
+                IsPhotonBRed = value.Equals(Photon.CONTENT_LED_STATUS_ON);
+
+            if (IsPhotonARed && IsPhotonBRed && IsPhotonCRed)
+                State = ServerStates.PhotonsStates.Danger;
+            else if (IsPhotonARed || IsPhotonBRed || IsPhotonCRed)
+                State = ServerStates.PhotonsStates.Warning;
+            else
+                State = ServerStates.PhotonsStates.Normal;
         }
 
         protected override void DoNotifyState(object state)

@@ -117,11 +117,10 @@ namespace CodeAbility.MonitorAndCommand.StateMachineServerConsole
 
         private void ProcessPayloadMessage(Message message)
         {
-            switch (message.Parameter.ToString())
+            switch (message.Name.ToString())
             {
-                case MCP4921.DATA_ANALOG_VALUE :
-                    //voltageKeeper.StoreVoltage(message.Content.ToString());
-                    photonsControl.ComputeState(message.SendingDevice, message.Parameter.ToString(), message.Content.ToString());                    
+                case Photon.OBJECT_RED_LED:
+                    photonsControl.ComputeState(message.SendingDevice, message.Parameter.ToString(), message.Content.ToString());
                     CheckLEDsStates();
                     break;
                 default:

@@ -103,7 +103,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>           
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Photon" Style="{StaticResource PhotonsLegendStyle}"/>
                 <TextBlock Grid.Column="1" Text="Temperature" Style="{StaticResource PhotonsLegendStyle}"/>
@@ -123,7 +123,7 @@
             <usercontrols:PhotonUserControl Grid.Row="3" 
                                             HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                             DataContext="{Binding PhotonCModel}"></usercontrols:PhotonUserControl>
-            <usercontrols:PibrellaUserControl Grid.Row="4" 
+            <usercontrols:PibrellaUserControl Grid.Row="4" DataContext="{Binding PibrellaModel}"
                                               HorizontalAlignment="Center" VerticalAlignment="Center">
             </usercontrols:PibrellaUserControl>
         </Grid>

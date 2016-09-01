@@ -55,21 +55,21 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
         void client_CommandReceived(object sender, MessageEventArgs e)
         {
             //Only consider the messages addressed to me
-            if (!e.ToDevice.Equals(Environment.Devices.RASPBERRY_PI_B))
+            if (e.ToDevice != Environment.Devices.RASPBERRY_PI_B)
                 return;
 
-            string commandName = e.Name; 
-            string parameter = e.Parameter.ToString();
+            string targetName = e.Name;
+            string commandName = e.Parameter.ToString();
             string content = e.Content.ToString();
 
             if (commandName.Equals(Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED))
             {
-                if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED))
-	                ToggleGreenLed(content);
-                else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED))
-	                ToggleYellowLed(content);
-                else if (parameter.Equals(Environment.Objects.PibrellaBoard.OBJECT_RED_LED))
-	                ToggleRedLed(content);
+                if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED))
+                    ToggleGreenLed(content);
+                else if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED))
+                    ToggleYellowLed(content);
+                else if (targetName.Equals(Environment.Objects.PibrellaBoard.OBJECT_RED_LED))
+                    ToggleRedLed(content);
             }
         }
 
@@ -85,10 +85,10 @@ namespace CodeAbility.MonitorAndCommand.RaspberryPi.Processes
 
             if (pibrella.Connection.IsOpened)
             {
-                messageClient.PublishData(Environment.Devices.WINDOWS_SURFACE, Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
-                messageClient.PublishData(Environment.Devices.WINDOWS_SURFACE, Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
-                messageClient.PublishData(Environment.Devices.WINDOWS_SURFACE, Environment.Objects.PibrellaBoard.OBJECT_RED_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
-                messageClient.PublishData(Environment.Devices.WINDOWS_SURFACE, Environment.Objects.PibrellaBoard.OBJECT_BUTTON, Environment.Objects.PibrellaBoard.DATA_BUTTON_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_RED_LED, Environment.Objects.PibrellaBoard.DATA_LED_STATUS);
+                messageClient.PublishData(Environment.Devices.ALL, Environment.Objects.PibrellaBoard.OBJECT_BUTTON, Environment.Objects.PibrellaBoard.DATA_BUTTON_STATUS);
 
                 messageClient.SubscribeToCommand(Environment.Devices.SERVER, Environment.Objects.PibrellaBoard.OBJECT_GREEN_LED, Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED);
                 messageClient.SubscribeToCommand(Environment.Devices.SERVER, Environment.Objects.PibrellaBoard.OBJECT_YELLOW_LED, Environment.Objects.PibrellaBoard.COMMAND_TOGGLE_LED);

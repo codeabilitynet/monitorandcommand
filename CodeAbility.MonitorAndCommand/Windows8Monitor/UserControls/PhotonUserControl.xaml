@@ -6,7 +6,7 @@
              xmlns:converters="using:CodeAbility.MonitorAndCommand.Windows8Monitor.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="180" d:DesignWidth="600">
-    
+
     <UserControl.Resources>
         <converters:BooleanToOpacityConverter x:Key="BooleanToOpacity"/>
         <Style x:Key="TitleStyle" TargetType="TextBlock">
@@ -20,7 +20,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="60"/>
+            <Setter Property="FontSize" Value="56"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="EllipseStyle" TargetType="Ellipse">
@@ -42,27 +42,27 @@
             <Setter Property="StrokeThickness" Value="2"/>
         </Style>
         <Style x:Key="MidEllipseStyle" TargetType="Ellipse">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="Height" Value="70"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Stroke" Value="Gray"/>
             <Setter Property="StrokeThickness" Value="2"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>           
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
-        
+
         <TextBlock Grid.Column="0"
                    Text="{Binding ShortName}"                    
                    Style="{StaticResource TitleStyle}"></TextBlock>
@@ -73,7 +73,7 @@
         <TextBlock Grid.Column="2" 
                    Text="{Binding Humidity, FallbackValue=0.0}" 
                    Style="{StaticResource DataStyle}"></TextBlock>
-        
+
         <Grid Grid.Column="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -82,8 +82,9 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="55"/>
+                <ColumnDefinition Width="55"/>
+                <ColumnDefinition Width="40"/>
 
             </Grid.ColumnDefinitions>
             <Ellipse Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" 
@@ -94,15 +95,15 @@
                  Fill="Red" 
                  Style="{StaticResource EllipseStyle}" HorizontalAlignment="Right" VerticalAlignment="Top"                                                
                  Opacity="{Binding RedLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
-            
+
             <Ellipse Grid.Row="1" Grid.RowSpan="2" Grid.Column="0"  
                  Fill="Blue" 
                  Style="{StaticResource SmallEllipseStyle}" HorizontalAlignment="Left"
                  Opacity="{Binding BoardLED, Converter={StaticResource BooleanToOpacity}, FallbackValue=0.25}"/>
 
-            <Ellipse Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"  
+            <Ellipse Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2"  
                  Fill="{Binding RGB}" 
-                 Style="{StaticResource MidEllipseStyle}" HorizontalAlignment="Right"></Ellipse>
+                 Style="{StaticResource MidEllipseStyle}"></Ellipse>
         </Grid>
 
     </Grid>

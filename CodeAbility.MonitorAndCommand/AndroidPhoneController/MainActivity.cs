@@ -39,6 +39,8 @@ namespace CodeAbility.MonitorAndCommand.AndroidPhoneController
     /// 
     /// </summary>
 
+    //N.B. There must be a better way to organise this Activity using componentization, but i am an Android noobs...
+
     [Activity(Label = "Android Phone Controller", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {

@@ -29,3 +29,5 @@ Note for Netduino users :
 - Netduino.Tools.DS18B20 uses OneWire and will only work with NetMF 4.2 or higher;
 - Netduino.Tools.LEDs will run on NetMF 4.2/4.3 , provided that the project is targeting the appropriate framework version;
 - Netduino.* may require .dll and 'using' adaptation based on your particular hardware and software configuration.
+
+C++/Wiring client code to integrate devices like Particle's Photon is available at http://github.com/codeabilitynet/monitorandcommandclientforparticlephoton
