@@ -282,9 +282,9 @@ namespace CodeAbility.MonitorAndCommand.Windows8Monitor.ViewModels
                     return PhotonBModel;
                 case Devices.PHOTON_C:
                     return PhotonCModel;
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

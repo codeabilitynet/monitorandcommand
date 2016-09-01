@@ -64,9 +64,9 @@ namespace CodeAbility.MonitorAndCommand.Models
 
 #if !MF_FRAMEWORK_VERSION_V4_2 && !MF_FRAMEWORK_VERSION_V4_3
             string parameter = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
-            string content = String.IsNullOrEmpty(Parameter.ToString()) ? NOT_AVAILABLE : Parameter.ToString();
+            string content = String.IsNullOrEmpty(Content.ToString()) ? NOT_AVAILABLE : Content.ToString();
 
-            return String.Format("{0}, {1}: {2}, {3} - From:{4}, To:{5}, Parameter:{6}, Content:{7}", Timestamp, SendingDevice, ContentType, Name, FromDevice, ToDevice, parameter, Content);
+            return String.Format("{0}, {1}: {2}, {3} - From:{4}, To:{5}, Parameter:{6}, Content:{7}", Timestamp, SendingDevice, ContentType, Name, FromDevice, ToDevice, parameter, content);
 #else 
             string parameter =  (Parameter != null) ? Parameter.ToString() : NOT_AVAILABLE;
             string content = (Content != null) ? Content.ToString() : NOT_AVAILABLE;

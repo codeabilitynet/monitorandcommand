@@ -14,7 +14,8 @@ namespace RaspberryPi
 
         public static void Main()
         {
-            PibrellaBoardLEDsBlinkingProcess process = new PibrellaBoardLEDsBlinkingProcess(BLINKING_PERIOD_IN_MILLISECONDS);
+            //PibrellaBoardLEDsBlinkingProcess process = new PibrellaBoardLEDsBlinkingProcess(BLINKING_PERIOD_IN_MILLISECONDS);
+            PibrellaBoardLEDsMonitor process = new PibrellaBoardLEDsMonitor();
             process.Start();
         }
     }
