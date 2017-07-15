@@ -43,33 +43,31 @@ Detailed description of the solution : https://monitorandcommand.codeplex.com/So
 
 # "How to" Documentation
 
-### Adding messaging capabilities to your projects
+## Adding messaging capabilities to your projects
 
 To add "server" capabilities to your .NET/Mono project, reference the CodeAbility.Core.Server library, instanciate a MessageListener object and start listening for messages using the StartListening() method.
 
 * public MessageListener(string ipAddress, int portNumber, int heartbeatPeriod, bool isMessageServiceActivated)
 * public void StartListening()
 
-{{
+```c#
 MessageListener listener = new MessageListener(ipAddress, portNumber, heartbeatPeriod, false);
 listener.StartListening();
-}}
+```
 
 N.B. The machine running the Server may have several IP addresses (e.g. internal, external...). Therefor, the one to be used shall be specified (e.g. 192.168.178.20).
 
-To add "client" capabilities to your .NET/Mono project, reference the CodeAbility.Core.Client library and the CodeAbility.Core.Models, and instanciate a MessageClient object, start the communication using the Start method.
-        
+To add "client" capabilities to your .NET/Mono project, reference the CodeAbility.Core.Client library and the CodeAbility.Core.Models, and instanciate a MessageClient object, start the communication using the Start method.   
 * public MessageClient(string deviceName)
 * public void Start(string ipAddress, int port)
 * public void Stop()
 
-{{
+```c#
 MessageClient client = new MessageClient(Devices.PIBRELLA);
 client.Start(ipAddress, portNumber);
-}}
+```
 
 They then use the following methods to publish/subscribe to commands and data.
-
 * public void PublishCommand(string toDevice, string commandTarget, string commandName)
 * public void PublishData(string toDevice, string dataSource, string dataName)
 * public void SubscribeToData(string fromDevice, string dataSource, string dataName)
@@ -182,13 +180,14 @@ void client_CommandReceived(object sender, MessageEventArgs e)
 
 The CodeAbility.Test.* console Server, Device & Remote projects illustrate such use in more details.
 
-### Extending the server's functionality
+## Extending the server's functionality
 
 The server's functionality can be extended though inheritance. The PostProcess() method of the ServiceListener class can be overriden to had special processing of the messages after the base routing functionality. This can be use, for instance, to define state machines that will, based on the messages received, compute states and trigger commands sent to the connected device, as illustrated in the Windows 8 demo ([url:https://youtu.be/jgTgU7ul_Jo]).
 
-[url:http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/StateMachineServerConsole/ExtendedMessageListener.cs]
+[ExtendedMessageListener.cs]
+(http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/StateMachineServerConsole/ExtendedMessageListener.cs)
 
-### Communication and Message format
+## Communication and Message format
 
 Clients and Server communicate using simple sockets. 
 
@@ -209,9 +208,9 @@ Messages are exchanged using JSON, with the following format :
 
 Sending/Receiving devices may be distinct from To/From devices to allow some clients to "listen/spy on" messages that are not normally destined to them, allowing for the development of specific monitoring clients (see the WPFClient project as an example).
 
-### Internals
+## Internals
 
-#### Multithreading 
+### Multithreading 
 
 The server uses :
 * one thread for each connected client;
@@ -222,7 +221,7 @@ Received messages are added to a ConcurrentQueue. The content of that queue is a
 
 Communication between receiving, Processor and Sender threads is ensured by ManualResetEvent objects.
 
-[url:http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/MessageListener.cs]
+[MessageListener.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/MessageListener.cs)
 
 The clients use a Sender and Receiver threads for sending and receiving messages in a similar fashion.
 
@@ -232,8 +231,8 @@ Within the server, Register/Unregister messages are used maintain a list of conn
 
 When a message is received, the *RulesManager* checks _fromDevice & _toDevice_ properties values against all rules to build the list of *Device*s to which that message shall be "routed". 
 
-[url:http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Device.cs]
-[url:http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Rule.cs]
-[url:http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/RulesManager.cs]
+[Device.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Device.cs)
+[Rule.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Rule.cs)
+[RulesManager.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/RulesManager.cs)
 
 
