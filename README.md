@@ -12,7 +12,7 @@ Xamarin being integrated in Visual Studio 2015 Community Edition, it's now possi
 C++/Wiring "client" code is available for devices like Particle's Photon.
 http://github.com/codeabilitynet/monitorandcommandclientforparticlephoton
 
-![alt-text](Monitor and Command Schema.png)
+![alt-text](schema.png)
 
 # Showcase videos
 
