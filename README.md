@@ -37,7 +37,7 @@ Additionnaly, an ASP.NET MVC application logs, through a WCF service called by t
 
 # Visual Studio Solution
 
-Detailed description of the solution : https://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/Projects.txt
+Detailed description of the solution : https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/Projects.txt
 
 ![alt-text](Solution.png)
 
@@ -185,7 +185,7 @@ The CodeAbility.Test.* console Server, Device & Remote projects illustrate such 
 The server's functionality can be extended though inheritance. The PostProcess() method of the ServiceListener class can be overriden to had special processing of the messages after the base routing functionality. This can be use, for instance, to define state machines that will, based on the messages received, compute states and trigger commands sent to the connected device, as illustrated in the Windows 8 demo ([url:https://youtu.be/jgTgU7ul_Jo]).
 
 [ExtendedMessageListener.cs]
-(http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/StateMachineServerConsole/ExtendedMessageListener.cs)
+(https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/StateMachineServerConsole/MC4921ExtendedMessageListener.cs)
 
 ## Communication and Message format
 
@@ -221,7 +221,7 @@ Received messages are added to a ConcurrentQueue. The content of that queue is a
 
 Communication between receiving, Processor and Sender threads is ensured by ManualResetEvent objects.
 
-[MessageListener.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/MessageListener.cs)
+[MessageListener.cs](https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/CoreServer/MessageListener.cs)
 
 The clients use a Sender and Receiver threads for sending and receiving messages in a similar fashion.
 
@@ -231,8 +231,8 @@ Within the server, Register/Unregister messages are used maintain a list of conn
 
 When a message is received, the *RulesManager* checks _fromDevice & _toDevice_ properties values against all rules to build the list of *Device*s to which that message shall be "routed". 
 
-[Device.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Device.cs)
-[Rule.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/Rule.cs)
-[RulesManager.cs](http://monitorandcommand.codeplex.com/SourceControl/latest#CodeAbility.MonitorAndCommand/CoreServer/RulesManager.cs)
+[Device.cs](https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/CoreServer/Device.cs)
+[Rule.cs](https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/CoreServer/Rule.cs)
+[RulesManager.cs](https://github.com/codeabilitynet/monitorandcommand/blob/master/CodeAbility.MonitorAndCommand/CoreServer/RulesManager.cs)
 
 
