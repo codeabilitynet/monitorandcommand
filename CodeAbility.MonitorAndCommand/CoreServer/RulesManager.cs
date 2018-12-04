@@ -77,64 +77,64 @@ namespace CodeAbility.MonitorAndCommand.Server
 
         public IEnumerable<string> GetAuthorizedDeviceNames(ContentTypes contentType, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataNameOrCommandName)
         {
-			IEnumerable<string> deviceNames = null; 
+            IEnumerable<string> deviceNames = null; 
 
-			if (contentType == ContentTypes.COMMAND)
-				deviceNames = GetAuthorizedDeviceNamesForCommand (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
-			else if (contentType == ContentTypes.DATA)
-				deviceNames = GetAuthorizedDeviceNamesForData (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
-			else
-				throw new NotSupportedException ();
+            if (contentType == ContentTypes.COMMAND)
+                deviceNames = GetAuthorizedDeviceNamesForCommand (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
+            else if (contentType == ContentTypes.DATA)
+                deviceNames = GetAuthorizedDeviceNamesForData (fromDevice, toDevice, dataSourceOrCommandTarget, dataNameOrCommandName);
+            else
+                throw new NotSupportedException ();
 
             return deviceNames.Distinct(); 
         }
 
-		protected IEnumerable<string> GetAuthorizedDeviceNamesForCommand(string fromDevice, string toDevice, string commandTarget, string commandName)
-		{
-			IEnumerable<string> deviceNames = null; 
+        protected IEnumerable<string> GetAuthorizedDeviceNamesForCommand(string fromDevice, string toDevice, string commandTarget, string commandName)
+        {
+            IEnumerable<string> deviceNames = null; 
 
-			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForCommand (toDevice, commandTarget, commandName);
-			IEnumerable<Rule> publishRules = GetPublishRulesForCommand (fromDevice, commandTarget, commandName);
+            IEnumerable<Rule> subscribeRules = GetSubscribeRulesForCommand (toDevice, commandTarget, commandName);
+            IEnumerable<Rule> publishRules = GetPublishRulesForCommand (fromDevice, commandTarget, commandName);
 
-			if (ContainsFromAllDevicesStar (subscribeRules)) 
-			{
-				deviceNames = from rule in subscribeRules
+            if (ContainsFromAllDevicesStar (subscribeRules)) 
+            {
+                deviceNames = from rule in subscribeRules
                              where !rule.OriginatorDevice.Equals(fromDevice)
-				            select rule.OriginatorDevice; 
-			} 
-			else 
-			{
+                            select rule.OriginatorDevice; 
+            } 
+            else 
+            {
                 deviceNames = from rule in subscribeRules
                               select rule.OriginatorDevice; 
-			}
+            }
 
 //#if DEBUG
 //            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForCommand for {0} {1} {2} {3}", fromDevice, toDevice, commandTarget, commandName));
 //            foreach (string device in deviceNames)
 //                Trace.WriteLine(String.Format("Device: {0} ", device));
-//#endif				
+//#endif                
 
             return deviceNames.Distinct();
-		}
+        }
 
-		protected IEnumerable<string> GetAuthorizedDeviceNamesForData(string fromDevice, string toDevice, string dataSource, string dataName)
-		{
-			IEnumerable<string> deviceNames = null; 
+        protected IEnumerable<string> GetAuthorizedDeviceNamesForData(string fromDevice, string toDevice, string dataSource, string dataName)
+        {
+            IEnumerable<string> deviceNames = null; 
 
-			IEnumerable<Rule> subscribeRules = GetSubscribeRulesForData (fromDevice, dataSource, dataName);
-			IEnumerable<Rule> publishRules = GetPublishRulesForData (fromDevice, dataSource, dataName);
+            IEnumerable<Rule> subscribeRules = GetSubscribeRulesForData (fromDevice, dataSource, dataName);
+            IEnumerable<Rule> publishRules = GetPublishRulesForData (fromDevice, dataSource, dataName);
 
-			if (ContainsToAllDevicesStar (publishRules)) 
-			{
-				deviceNames = from rule in subscribeRules
+            if (ContainsToAllDevicesStar (publishRules)) 
+            {
+                deviceNames = from rule in subscribeRules
                              where !rule.OriginatorDevice.Equals(fromDevice)
-							select rule.OriginatorDevice; 
-			} 
-			else 
-			{ 
-				deviceNames = from rule in subscribeRules
+                        	select rule.OriginatorDevice; 
+            } 
+            else 
+            { 
+                deviceNames = from rule in subscribeRules
                               select rule.OriginatorDevice;  
-			}
+            }
 
 //#if DEBUG
 //            Trace.WriteLine(String.Format("AuthorizedDeviceNamesForData for {0} {1} {2} {3}", fromDevice, toDevice, dataSource, dataName));
@@ -143,51 +143,51 @@ namespace CodeAbility.MonitorAndCommand.Server
 //#endif
 
             return deviceNames;
-		}
+        }
 
-		#region Publish/Subscribe rules for Command/Data 
+        #region Publish/Subscribe rules for Command/Data 
 
         protected IEnumerable<Rule> GetSubscribeRulesForData(string fromDevice, string dataSource, string dataName)
         {
-			return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
+            return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
                                     (x.DataSourceOrCommandTarget.Equals(dataSource) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
                                     (x.DataOrCommandName.Equals(dataName) || x.DataOrCommandName.Equals(ALL)));
         }
-			
+            
         protected IEnumerable<Rule> GetSubscribeRulesForCommand(string toDevice, string commandTarget, string commandName)
         {
             return rules.Where(x => (x.ToDevice.Equals(toDevice) || x.ToDevice.Equals(ALL)) &&
-	                                (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
-	                                (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
+                                    (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
+                                    (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
         }
 
-		protected IEnumerable<Rule> GetPublishRulesForData(string fromDevice, string dataSource, string dataName)
+        protected IEnumerable<Rule> GetPublishRulesForData(string fromDevice, string dataSource, string dataName)
         {
             return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
-	                                  (x.DataSourceOrCommandTarget.Equals(dataSource) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
-	                                  (x.DataOrCommandName.Equals(dataName) || x.DataOrCommandName.Equals(ALL)));
+                                      (x.DataSourceOrCommandTarget.Equals(dataSource) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
+                                      (x.DataOrCommandName.Equals(dataName) || x.DataOrCommandName.Equals(ALL)));
         }
 
         protected IEnumerable<Rule> GetPublishRulesForCommand(string fromDevice, string commandTarget, string commandName)
         {
             return rules.Where(x => (x.FromDevice.Equals(fromDevice) || x.FromDevice.Equals(ALL)) &&
-							          (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
-							          (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
-    	}
+                                    (x.DataSourceOrCommandTarget.Equals(commandTarget) || x.DataSourceOrCommandTarget.Equals(ALL)) &&
+                                    (x.DataOrCommandName.Equals(commandName) || x.DataOrCommandName.Equals(ALL)));
+        }
 
-		#endregion
+        #endregion
 
-		#region Helpers
+        #region Helpers
 
-		protected bool ContainsToAllDevicesStar(IEnumerable<Rule> rules)
-		{
-			return rules.Count (x => x.ToDevice.Equals (ALL)) > 0;
-		}
+        protected bool ContainsToAllDevicesStar(IEnumerable<Rule> rules)
+        {
+            return rules.Count (x => x.ToDevice.Equals (ALL)) > 0;
+        }
 
-		protected bool ContainsFromAllDevicesStar(IEnumerable<Rule> rules)
-		{
-			return rules.Count (x => x.FromDevice.Equals (ALL)) > 0;
-		}
+        protected bool ContainsFromAllDevicesStar(IEnumerable<Rule> rules)
+        {
+            return rules.Count (x => x.FromDevice.Equals (ALL)) > 0;
+        }
 
         protected bool Exists(string originator, string fromDevice, string toDevice, string dataSourceOrCommandTarget, string dataOrCommandName)
         {
@@ -205,7 +205,7 @@ namespace CodeAbility.MonitorAndCommand.Server
             return (rule != null);
         }
 
-		#endregion 
+        #endregion 
 
         public override string ToString()
         {
